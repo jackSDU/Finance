@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from Main import views
+from Main import views,views_user,views_jobs,views_data,views_apps
 
 urlpatterns = [
     url(r'^login/$',views.login),
