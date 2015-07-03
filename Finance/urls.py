@@ -25,5 +25,26 @@ urlpatterns = [
 
     url(r'^$',views.home),
 
+    url(r'^user/$',views.home),                 #my user info
+    url(r'^user/edit/$',views.home),            #edit user info
+    url(r'^user/list/$',views.home),            #list users
+    url(r'^user/verify/$',views.home),          #verify user
+    url(r'^user/delete/([0-9]+)/$',views.home), #delete user
+
+    url(r'^jobs/$',views.home),                 #jobs list
+    url(r'^jobs/([0-9]+)/$',views.home),        #detail of job
+    url(r'^jobs/submit/$',views.home),          #select app
+    url(r'^jobs/submit/([0-9]+)/$',views.home), #add job using specified app
+
+    url(r'^data/iv_record/$',views.home),
+    url(r'^data/iv_index/$',views.home),
+    url(r'^data/interest_rate/$',views.home),
+    url(r'^data/yield_rate/$',views.home),
+    url(r'^data/download/$',views.home),        #data download
+
+    url(r'^apps/$',views.home),                 #apps list
+    url(r'^apps/deploy/$',views.home),          #deploy app
+    url(r'^apps/modify/([0-9]+)/$',views.home), #modify specified app
+
     url(r'^admin/', include(admin.site.urls)),
 ]
