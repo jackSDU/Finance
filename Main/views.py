@@ -24,7 +24,7 @@ def register(req):
         return ren2res("register.html",req)
     elif req.method=='POST':
         try:
-            u=User.objects.create_user(req.POST['name'],password=req.POST['pw'])
+            u=User.objects.create_user(req.POST['name'],password=req.POST['pw'],email=req.POST['email'])
         except Exception:
             return ren2res("register.html",req,{'err':"The username has been used."})
         p=Priv(uid=u)

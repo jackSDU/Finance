@@ -23,12 +23,14 @@ urlpatterns = [
     url(r'^logout/$',views.logout),
     url(r'^register/$',views.register),
 
+#user
+
     url(r'^$',views.home),
 
-    url(r'^user/$',views.home),                 #my user info
+    url(r'^user/$',views_user.info),                 #my user info
     url(r'^user/([0-9]+)/$',views.home),        #specified user info
-    url(r'^user/edit/$',views.home),            #edit user info
-    url(r'^user/list/$',views.home),            #list users
+    url(r'^user/edit/$',views_user.change),            #edit user info
+    url(r'^user/list/$',views_user.list),            #list users
     url(r'^user/verify/$',views.home),          #verify user
     url(r'^user/delete/([0-9]+)/$',views.home), #delete user
 
