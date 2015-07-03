@@ -5,15 +5,11 @@ from Finance.settings import APP_DEPLOY_DIR
 
 # Create your models here.
 
-#暂时不使用
 class Priv(models.Model):
     uid=models.OneToOneField(User,primary_key=True)
 
-    user_detail=models.BooleanField(default=False)
     user_manage=models.BooleanField(default=False)
 
-    jobs_max_num=models.PositiveSmallIntegerField(default=1)
-    jobs_max_core=models.PositiveSmallIntegerField(default=1)
     jobs_manage=models.BooleanField(default=False)
 
     data_query=models.BooleanField(default=True)
@@ -24,9 +20,6 @@ class Priv(models.Model):
 
     def __str__(self):
         return str(self.uid)
-
-    class Meta:
-        managed=False
 
 class Host(models.Model):
     name=models.CharField(max_length=30)
@@ -45,7 +38,6 @@ class App(models.Model):
     path=models.FilePathField(APP_DEPLOY_DIR,recursive=True)
 
     hide=models.BooleanField(default=False)
-    used=models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)

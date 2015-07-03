@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^$',views.home),
 
     url(r'^user/$',views.home),                 #my user info
+    url(r'^user/([0-9]+)/$',views.home),        #specified user info
     url(r'^user/edit/$',views.home),            #edit user info
     url(r'^user/list/$',views.home),            #list users
     url(r'^user/verify/$',views.home),          #verify user
@@ -43,6 +44,7 @@ urlpatterns = [
     url(r'^data/download/$',views.home),        #data download
 
     url(r'^apps/$',views.home),                 #apps list
+    url(r'^apps/([0-9]+)/$',views.home),        #detail of specified app
     url(r'^apps/deploy/$',views.home),          #deploy app
     url(r'^apps/modify/([0-9]+)/$',views.home), #modify specified app
 
