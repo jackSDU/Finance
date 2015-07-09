@@ -5,6 +5,7 @@ from Finance.settings import APP_DEPLOY_DIR
 
 # Create your models here.
 
+"""Priv in heaven
 class Priv(models.Model):
     uid=models.OneToOneField(User,primary_key=True)
 
@@ -20,6 +21,7 @@ class Priv(models.Model):
 
     def __str__(self):
         return str(self.uid)
+"""
 
 class Host(models.Model):
     name=models.CharField(max_length=30)

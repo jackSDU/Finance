@@ -27,8 +27,6 @@ def register(req):
             u=User.objects.create_user(req.POST['name'],password=req.POST['pw'])
         except Exception:
             return ren2res("register.html",req,{'err':"The username has been used."})
-        p=Priv(uid=u)
-        p.save()
         auth.login(req,auth.authenticate(username=req.POST['name'],password=req.POST['pw']))
         return HttpResponseRedirect("/")
 
