@@ -14,8 +14,14 @@ class IVIndex(models.Model):
         managed=False
 
 class InterestRate(models.Model):
+    trade_date=models.DateField()
+    currency=models.CharField(max_length=3)
+    period=models.IntegerField()
+    rate=models.FloatField()
+    calc_date=models.DateField()
 
     class Meta:
+        db_table='interest_rate'
         managed=False
 
 class YieldRate(models.Model):
