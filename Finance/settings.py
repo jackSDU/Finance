@@ -108,4 +108,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-APP_DEPLOY_DIR = '/home/shixun'
+APP_DEPLOY_DIR = '/'
+
+MASTER_PORT=2233
+
+SERVANT_PORT=2333
