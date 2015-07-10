@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>
+
+
+{% extends "base.html" %}
+
+{% block header %}
+审核用户
+{% endblock %}
+
+{% block sidebar %}
+{% include "user/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>待审核用户</h1>
+    </div>
+    <div class="panel panel-default">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <td>用户名</td>
+                <td></td>
+            </tr>
+            {% for aa in a %}
+                <form method="post">
+                    <tr>
+                        <input type="hidden" value="{{ aa.id }}" />
+                        <td><a href="/user/{{ aa.id }}/" >{{ aa.username }}</a></td>
+                        <td><input type="submit" name="button" />通过</td>
+                    </tr>
+                </form>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

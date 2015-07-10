@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="user.css" />
 </head>
 {% block header %}
-info
+个人信息
 {% endblock %}
 
 {% block sidebar %}
@@ -18,7 +18,7 @@ info
         <h1>个人资料</h1>
     </div>
     <div>
-        <table border="3" width="800" >
+        <table class="table table-bordered" width="800" >
             <tr >
                 <td width="200">user name</td><td width="200">{{ user.name }}</td>
                 <td width="200"> name  </td><td width="200">{{ user.firstname }}&nbsp;</td>
@@ -29,13 +29,7 @@ info
         </table>
     </div>
     <div>
-        <h3>self introduction</h3>
-        <table border="3" width="800" >
-            <tr>
-                <td></td>
-            </tr>
 
-        </table>
     </div>
 </div>
 {% endblock %}

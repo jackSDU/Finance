@@ -6,9 +6,10 @@
                 <ul class="list-group">
                     <a class="list-group-item" href="/user/">个人资料</a>
                     <a class="list-group-item" href="/user/edit/">资料修改</a>
-                    {% if a %}
+                    {% if super %}
                     <a class="list-group-item" href="/user/list/">用户列表</a>
-                    <a class="list-group-item">待激活用户</a>
+                    <a class="list-group-item" href="/user/verify/">待激活用户</a>
+
                     {% endif %}
                 </ul>
             </div>
