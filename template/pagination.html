@@ -1,0 +1,15 @@
+{% if pgc > 1 %}
+<nav>
+    <ul class="pagination">
+        {% for p in pgs %}
+        {% if forloop.first and p > 1 %}
+        <li><a href="{{ href }}"><span>&laquo;</span></a></li>
+        {% endif %}
+        <li {% ifequal p pg %}class="active"{% endifequal %}><a href="{{ href }}pg={{ p }}">{{ p }}</a></li>
+        {% if forloop.last and p < pgc %}
+        <li><a href="{{ href }}pg={{ pgc }}">{{ pgc }}<span>&raquo;</span></a></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}

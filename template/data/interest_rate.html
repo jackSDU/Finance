@@ -1,0 +1,29 @@
+{% extends "data/base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block header %}
+利率
+{% endblock %}
+
+{% block table %}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>交易日期</th>
+        <th>货币</th>
+        <th>周期</th>
+        <th>比率</th>
+        <th>结算日期</th>
+    </tr>
+    {% for i in item %}
+    <tr>
+        <td>{{ i.trade_date }}</td>
+        <td>{{ i.currency }}</td>
+        <td>{{ i.period }}</td>
+        <td>{{ i.rate }}</td>
+        <td>{{ i.calc_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
