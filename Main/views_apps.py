@@ -6,8 +6,7 @@ from Main.models import *
 # Create your views here.
 
 def apps(req):##the main page of app,show the app list>>>>>
-    x=priv.objects.filter(uid_id=req.user.id)
-    if priv.objects.filter(uid_id=req.user.id) !=None
+
 
     return ren2res("apps/apps_list.html",req)
 
@@ -15,7 +14,7 @@ def app(req,n):
     return
 
 def deploy(req):
-    return ren2res("apps/apps_deploy.html",req)
+            return ren2res("apps/apps_deploy.html",req)
 
 def modify(req,n):
     return
