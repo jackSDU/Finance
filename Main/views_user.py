@@ -43,7 +43,7 @@ def list(req):
     b=req.user
     super=b.is_superuser
     a=User.objects.all()
-    o=paginate(req,a)
+    o=paginate(req,a,8)
     dict={'super':super}
     dict.update(o)
    # b=Priv.objects.all()
@@ -66,7 +66,7 @@ def verify(req):
     dict={'super':super}
     if req.method=='GET':
         a=User.objects.filter(is_active=False)
-        o=paginate(req,a)
+        o=paginate(req,a,8)
         dict.update(o)
         return ren2res("user/verify.html",req,dict)
     if req.method=='POST':
