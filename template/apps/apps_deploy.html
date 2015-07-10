@@ -9,23 +9,25 @@ appDeploy
 {% endblock %}
 
 {% block script %}
-$(document).ready(function(){
+    var add_row = function(){
+            var _len = $("#tab tr").length;
+            $("#tab").append("<tr id="+_len+" align='center'>"
+                                +"<td>"+_len+"</td>"
+                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control'/></td>"
+                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control'/></td>"
+                                +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>False</option><option>True</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>Del</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>Insert</a></td>"
+                            +"</tr>");
+    }
+
+    $(document).ready(function(){
+
         //<tr/>居中
         $("#tab tr").attr("align","center");
 
         //增加<tr/>
-        $("#but").click(function(){
-            var _len = $("#tab tr").length;
-            $("#tab").append("<tr id="+_len+" align='center'>"
-                                +"<td>"+_len+"</td>"
-                                +"<td><select name='select"+_len+"' id='select"+_len+"' class='form-control' onchange =\'disableText("+_len+")\'><option>static</option><option>dynamic</option></select></td>"
-                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control' placeholder='name'/></td>"
-                                +"<td><input type='text'  name='specify"+_len+"' id='specify"+_len+"' class='form-control' placeholder='-example'/></td>"
-                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control' placeholder='value'/></td>"
-
-                                +"<td><a href=\'#\' onclick=\'deltr("+_len+")\'>Del</a></td>"
-                            +"</tr>");
-        })
+        $("#but").click(add_row)
     })
 
     //删除<tr/>
@@ -33,53 +35,65 @@ $(document).ready(function(){
     {
         var _len = $("#tab tr").length;
         $("tr[id='"+index+"']").remove();//删除当前行
-        for(var i=index+1,j=_len;i< j ;i++)
+        for(var i=index+1,j=_len;i< j;i++)
         {
             var nextTxtVal1 = $("#argname"+i).val();
-            var nextTxtVal2 = $("#specify"+i).val();
-            var nextTxtVal3 = $("#value"+i).val();
-            var nextisDynamic=$("#select"+i).val();
+            var nextTxtVal2 = $("#value"+i).val();
+            var nextBlankVal =$("#blank"+i).val();
             $("tr[id=\'"+i+"\']")
                 .replaceWith("<tr id="+(i-1)+" align='center'>"
                                 +"<td>"+(i-1)+"</td>"
-                                +"<td><select id='select"+(i-1)+"' class='form-control' onchange =\'disableText("+(i-1)+")\'><option>static</option><option>dynamic</option></select></td>"
 
-                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control' placeholder='name'/></td>"
-                                +"<td><input type='text' name='specify"+(i-1)+"' value='"+nextTxtVal2+"' id='specify"+(i-1)+"' class='form-control' placeholder='-example'/> </td>"
-                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal3+"' id='value"+(i-1)+"' class='form-control' placeholder='value'/></td>"
-                                +"<td><a href=\'#\' onclick=\'deltr("+(i-1)+")\'>Del</a></td>"
+                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control'/></td>"
+                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control'/></td>"
+                                +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>False</option><option>True</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>Del</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>Insert</a></td>"
                             +"</tr>");
 
-                if(nextisDynamic=="dynamic")
-                {
-                        $("#value"+(i-1)).attr("disabled","disabled");
-                        $("#specify"+(i-1)).attr("disabled","disabled");
-                        $("#select"+(i-1)).val("dynamic");
-                }
+            $("#blank"+(i-1)).val(nextBlankVal);
+                //if(nextisDynamic=="dynamic")
+                //{
+                //        $("#value"+(i-1)).attr("disabled","disabled");
+                //        //$("#specify"+(i-1)).attr("disabled","disabled");
+                //        //$("#select"+(i-1)).val("dynamic");
+                //}
         }
     }
-    var disableText=function(index)
-    {
-         var value= $("#select"+index).val();
-        if(value=="dynamic")
-        {
-           // alert(value);
-            $("#value"+index).attr("disabled","disabled");
-            $("#specify"+index).attr("disabled","disabled");
-        }else{
+
+    var ins_above_cur = function(index){
+        add_row();
+        var len = $("#tab tr").length;
+        for(i = len - 1; i > index; i--){
+            $("#argname"+i).val($("#argname"+(i-1)).val());
+            $("#value"+i).val($("#value"+(i-1)).val());
+            $("#blank"+i).val($("#blank"+(i-1)).val());
+        }
+        $("#argname"+index).val("");
+        $("#value"+index).val("");
+        $("#blank"+index).val("False");
+    }
+    //var disableText=function(index)
+    //{
+    //     var value= $("#select"+index).val();
+    //    if(value=="dynamic")
+    //    {
+            //alert(value);
+    //        $("#value"+index).attr("disabled","disabled");
+            //$("#specify"+index).attr("disabled","disabled");
+    //    }else{
             // alert(value);
-            $("#value"+index).removeAttr("disabled");
-            $("#specify"+index).removeAttr("disabled");
-        }
-    }
+    //        $("#value"+index).removeAttr("disabled");
+            //$("#specify"+index).removeAttr("disabled");
+    //    }
+    //}
     function argck()
     {
         //var value= $("#select"+index).val();
         //var _len = $("#tab tr").length;
         //var nextTxtVal1 = $("#argname"+i).val();
-           // var nextTxtVal2 = $("#value"+i).val();
-            //var nextisStatic=$("#select"+i).val();
-
+        // var nextTxtVal2 = $("#value"+i).val();
+        //var nextisStatic=$("#select"+i).val();
     }
 {% endblock %}
 
@@ -91,9 +105,20 @@ $(document).ready(function(){
 <form class="form-horizontal container-fluid" action="" method="POST" onsubmit="return argck()">
 {% csrf_token %}
 <div class="form-group">
-    <h1>Wa ha ha ha ha h....</h1>
-    <label for="app_name">File input</label>
-    <input name="name" class="form-control" type="text" id="app_name" placeholder="type the app name here">
+    <h1>应用部署</h1>
+    <label for="app_name">Name</label>
+    <input name="name" class="form-control" type="text" id="app_name">
+    <br />
+    <label for="app_host">Host</label>
+    <select name="host" class="form-control" id="app_host">
+    <option>host1</option>
+    <option>host2</option>
+    <option>host3</option>
+    <option>host4</option>
+    <option>host5</option>
+    </select>
+    <label for="app_path">Path</label>
+    <input name="path" class="form-control" type="text" id="app_path">
     <br />
     <label for="app_description">Application Description</label>
     <textarea name="description" class="form-control" rows="3" id="app_description"></textarea>
@@ -103,11 +128,12 @@ $(document).ready(function(){
 <table name="arglist" class="table table-hover" id="tab"  width="60%" align="center" style="margin-top:20px">
         <tr>
             <td width="10%">No.</td>
-            <td>arg type</td>
             <td>arg name</td>
-            <td>arg specify</td>
+            <!--td>arg specify</td-->
             <td>arg value</td>
-            <td>op</td>
+            <td>blank</td>
+            <td>op1</td>
+            <td>op2</td>
        </tr>
 </table>
 
@@ -122,7 +148,7 @@ $(document).ready(function(){
 </form>
 
 <div class="page-header">
-    <h1>Wa ha ha ha ha h....</h1>
+    <h1>应用部署</h1>
 
 
 </div>
