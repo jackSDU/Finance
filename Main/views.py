@@ -1,9 +1,6 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response,Http404,HttpResponseRedirect
+from django.shortcuts import render_to_response,HttpResponseRedirect
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
-
-from django.db.models import Q
 
 from Main.models import *
 
@@ -11,11 +8,34 @@ def ren2res(template,req,dict={}):
     if req.user.is_authenticated():
         dict.update({'user':{'id':req.user.id,'name':req.user.get_username()}})
     else:
-        dict.update({'user':False})
+        dict.update(user=False)
     if req:
         return render_to_response(template,dict,context_instance=RequestContext(req))
     else:
         return render_to_response(template,dict)
+
+def paginate(req,qs,r=5):
+    cur=req.GET.get('pg')
+    cur=int(cur)if cur else 1
+    num=req.COOKIES.get('pgnum')
+    num=int(num)if num else 10
+    if num<1:
+        num=10
+    cnt=int(qs.count()/num+1)
+    min=cur-r
+    max=cur+r
+    if min<1:
+        max+=(1-min)
+        min=1
+    if max>cnt:
+        max=cnt
+    q=req.GET.copy()
+    q.setlist('pg',[])
+    href=q.urlencode()
+    if len(href)>0:
+        href=href+"&"
+    href=req.path+"?"+href
+    return {'href':href,'pg':cur,'pgc':cnt,'pgs':range(min,max+1),'item':qs[num*cur-num:num*cur]}
 
 # Create your views here.
 
@@ -24,10 +44,9 @@ def register(req):
         return ren2res("register.html",req)
     elif req.method=='POST':
         try:
-            u=User.objects.create_user(req.POST['name'],password=req.POST['pw'],email=req.POST['email'])
+            u=User.objects.create_user(req.POST['name'],password=req.POST['pw'])
         except Exception:
             return ren2res("register.html",req,{'err':"The username has been used."})
-
         auth.login(req,auth.authenticate(username=req.POST['name'],password=req.POST['pw']))
         return HttpResponseRedirect("/")
 
