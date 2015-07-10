@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 
-from Main.views import ren2res
+from Main.views import ren2res,paginate
 from Main.models import *
 from django.shortcuts import render_to_response,Http404,HttpResponseRedirect
 from django.contrib import auth
@@ -43,9 +43,12 @@ def list(req):
     b=req.user
     super=b.is_superuser
     a=User.objects.all()
+    o=paginate(req,a)
+    dict={'super':super}
+    dict.update(o)
    # b=Priv.objects.all()
     if req.method=='GET':
-        return ren2res("user/list.html",req,{'a':a,'super':super})
+        return ren2res("user/list.html",req,dict)
  #   if req.method=='POST':
 #        c=User.objects.get(uid_id=req.POST['id'])
  #       c.user_manage=bool(req.POST.get('user_manage'))
