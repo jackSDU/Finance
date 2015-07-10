@@ -14,10 +14,11 @@ def ren2res(template,req,dict={}):
     else:
         return render_to_response(template,dict)
 
-def paginate(req,qs,r=5):
+def paginate(req,qs,num=None,r=5):
     cur=req.GET.get('pg')
     cur=int(cur)if cur else 1
-    num=req.COOKIES.get('pgnum')
+    if not num:
+        num=req.COOKIES.get('pgnum')
     num=int(num)if num else 10
     if num<1:
         num=10
