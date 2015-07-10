@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 
-from Main.views import ren2res
+from Main.views import ren2res,paginate
 from Main.models import *
 from django.shortcuts import render_to_response,Http404,HttpResponseRedirect
 from django.contrib import auth
@@ -43,9 +43,12 @@ def list(req):
     b=req.user
     super=b.is_superuser
     a=User.objects.all()
+    o=paginate(req,a)
+    dict={'super':super}
+    dict.update(o)
    # b=Priv.objects.all()
     if req.method=='GET':
-        return ren2res("user/list.html",req,{'a':a,'super':super})
+        return ren2res("user/list.html",req,dict)
  #   if req.method=='POST':
 #        c=User.objects.get(uid_id=req.POST['id'])
  #       c.user_manage=bool(req.POST.get('user_manage'))
@@ -60,15 +63,20 @@ def verify(req):
 
     b=req.user
     super=b.is_superuser
+    dict={'super':super}
     if req.method=='GET':
         a=User.objects.filter(is_active=False)
-        return ren2res("user/verify.html",req,{'a':a,'super':super})
+        o=paginate(req,a)
+        dict.update(o)
+        return ren2res("user/verify.html",req,dict)
     if req.method=='POST':
         a=User.objects.filter(id=req.POST['id'])
         a.is_active=True
         a.save()
         b=User.objects.filter(is_active=False)
-        return ren2res("user/verify.html",req,{'a':b,'super':super})
+        o=paginate(req,b)
+        dict.update(o)
+        return ren2res("user/verify.html",req,dict)
 
 def infocheck(req,id):
     b=req.user

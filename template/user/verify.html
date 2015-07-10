@@ -30,7 +30,7 @@
                 <td>用户名</td>
                 <td></td>
             </tr>
-            {% for aa in a %}
+            {% for aa in item %}
                 <form method="post">
                     <tr>
                         <input type="hidden" value="{{ aa.id }}" />
@@ -41,4 +41,6 @@
             {% endfor %}
         </table>
     </div>
+
+{% include "pagination.html" %}
 {% endblock %}
