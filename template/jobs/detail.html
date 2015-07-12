@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block header %}
+Job List
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+{% if job %}
+<center>
+    <h1>Detail of Job{{ job.id }}</h1>
+</center>
+<table class="table">
+    <tr>
+        <th>SUBMIT_TIME</th>
+        <td>{{ job.add_time }}</td>
+    </tr>
+    <tr>
+        <th>APP_NAME</th>
+        <td>{{ job.app.name }}</td>
+    </tr>
+    <tr>
+        <th>STATUS</th>
+        {% if job.status == 0 %}
+        <td>Finished</td>
+        {% elif job.status == 1 %}
+        <td>Waiting</td>
+        {% elif job.status == 2 %}
+        <td>Running</td>
+        {% else %}
+        <td>Wrong</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th>START_TIME</th>
+        {% if job.start_time %}
+        <td>{{ job.start_time }}</td>
+        {% else %}
+        <td>/</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th>END_TIME</th>
+        {% if job.end_time %}
+        <td>{{ job.end_time }}</td>
+        {% else %}
+        <td>/</td>
+        {% endif %}
+    </tr>
+    {% for param in params %}
+        <tr>
+            <th>{{ param.param.name }}</th>
+            <td>{{ param.value }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <th>RESULT</th>
+        <td><pre>{{ result }}</pre></td>
+    </tr>
+</table>
+{% endif %}
+{% endblock %}

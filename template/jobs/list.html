@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block header %}
+Job List
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+{% if jobs %}
+<table class="table table-striped">
+  <tr>
+    <th>SUBMIT_TIME</th>
+    <th>APP_NAME</th>
+    <th>STATUS</th>
+    <th>VIEW</th>
+  </tr>
+  {% for job in jobs %}
+  <tr>
+    <td>{{ job.add_time }}</td>
+    <td>{{ job.app.name }}</td>
+    {% if job.status == 0 %}
+        <td>Finished</td>
+    {% elif job.status == 1 %}
+        <td>Waiting</td>
+    {% elif job.status == 2 %}
+        <td>Running</td>
+    {% else %}
+        <td>Wrong</td>
+    {% endif %}
+    <td><a href="/jobs/{{ job.id }}"><button class="btn btn-link btn-sm">view</button></a></td>
+  </tr>
+  {% endfor %}
+</table>
+<center>
+<nav>
+  <ul class="pagination">
+    {% if first %}
+      <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+    {% else %}
+      <li><a href="/jobs?page={{ pre }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+    {% endif %}
+    {% for i in lpages %}
+      <li><a href="/jobs?page={{ i }}">{{ i }} <span class="sr-only">(page {{ i }})</span></a></li>
+    {% endfor %}
+    <li class="active"><a href="#">{{ current }} <span class="sr-only">(current)</span></a></li>
+    {% for i in rpages %}
+      <li><a href="/jobs?page={{ i }}">{{ i }} <span class="sr-only">(page {{ i }})</span></a></li>
+    {% endfor %}
+    {% if last %}
+      <li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+    {% else %}
+      <li><a href="/jobs?page={{ next }}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+    {% endif %}
+  </ul>
+</nav>
+<a href="/jobs?page={{ current }}">
+  <button class="btn btn-default">refresh</button>
+</a>
+</center>
+{% endif %}
+{% endblock %}

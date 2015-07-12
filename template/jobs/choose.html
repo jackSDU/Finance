@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block header %}
+Job Submit
+{% endblock %}
+
+{% block script %}
+    function check(){
+        var checked = false;
+        var app = document.getElementsByName('app');
+        for (var i=0;i<app.length;i++) {
+            checked = checked || (app[i].checked==true);
+        }
+        if (!checked) {
+            alert("Please choose an application!");
+            return false;
+        }
+        return true;
+    }
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+{% if apps %}
+    <center>
+    <div class="page-header">
+        <h1>Applications</h1>
+    </div>
+    </center>
+    <table class="table table-striped">
+    <tr>
+        <th>application</th>
+        <th>introduction</th>
+    </tr>
+    {% for ap in apps %}
+    <tr>
+        <td>
+            <a href="/jobs/submit/{{ ap.id }}"><button type="button" class="btn btn-link">{{ ap.name }}</button></a>
+        </td>
+        <td>{{ ap.desc }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}
