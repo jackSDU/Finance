@@ -81,6 +81,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'data':{
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'finance',
+        'USER': 'finance',
+        'PASSWORD': 'finance',
     }
 }
 
@@ -108,4 +114,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-APP_DEPLOY_DIR = '/home/shixun'
+APP_DEPLOY_DIR = '/'
+
+MASTER_PORT=2233
+
+SERVANT_PORT=2333

@@ -23,14 +23,16 @@ urlpatterns = [
     url(r'^logout/$',views.logout),
     url(r'^register/$',views.register),
 
+#user
+
     url(r'^$',views.home),
 
-    url(r'^user/$',views.home),                 #my user info
-    url(r'^user/([0-9]+)/$',views.home),        #specified user info
-    url(r'^user/edit/$',views.home),            #edit user info
-    url(r'^user/list/$',views.home),            #list users
-    url(r'^user/verify/$',views.home),          #verify user
-    url(r'^user/delete/([0-9]+)/$',views.home), #delete user
+    url(r'^user/$',views_user.info),                 #my user info
+    url(r'^user/([0-9]+)/$',views_user.infocheck),        #specified user info
+    url(r'^user/edit/$',views_user.change),            #edit user info
+    url(r'^user/list/$',views_user.list),            #list users
+    url(r'^user/verify/$',views_user.verify),          #verify user
+    url(r'^user/([0-9]+)/delete/$',views_user.delete), #delete user
 
     url(r'^jobs/$',views.home),                 #jobs list
     url(r'^jobs/([0-9]+)/$',views.home),        #detail of job
@@ -39,7 +41,7 @@ urlpatterns = [
 
     url(r'^data/iv_record/$',views.home),
     url(r'^data/iv_index/$',views.home),
-    url(r'^data/interest_rate/$',views.home),
+    url(r'^data/interest_rate/$',views_data.interest_rate),
     url(r'^data/yield_rate/$',views.home),
     url(r'^data/download/$',views.home),        #data download
 
