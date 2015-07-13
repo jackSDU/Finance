@@ -34,10 +34,10 @@ urlpatterns = [
     url(r'^user/verify/$',views_user.verify),          #verify user
     url(r'^user/([0-9]+)/delete/$',views_user.delete), #delete user
 
-    url(r'^jobs/$',views.home),                 #jobs list
-    url(r'^jobs/([0-9]+)/$',views.home),        #detail of job
-    url(r'^jobs/submit/$',views.home),          #select app
-    url(r'^jobs/submit/([0-9]+)/$',views.home), #add job using specified app
+    url(r'^jobs/$',views_jobs.list),                 #jobs list
+    url(r'^jobs/([0-9]+)/$',views_jobs.detail),        #detail of job
+    url(r'^jobs/submit/$',views_jobs.choose),          #select app
+    url(r'^jobs/submit/([0-9]+)/$',views_jobs.submit), #add job using specified app
 
     url(r'^data/iv_record/$',views.home),
     url(r'^data/iv_index/$',views.home),

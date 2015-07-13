@@ -1,22 +1,10 @@
 {% extends "base.html" %}
 
 {% block header %}
-Job Submit
+作业提交
 {% endblock %}
 
 {% block script %}
-    function check(){
-        var checked = false;
-        var app = document.getElementsByName('app');
-        for (var i=0;i<app.length;i++) {
-            checked = checked || (app[i].checked==true);
-        }
-        if (!checked) {
-            alert("Please choose an application!");
-            return false;
-        }
-        return true;
-    }
 {% endblock %}
 
 {% block sidebar %}
@@ -27,13 +15,13 @@ Job Submit
 {% if apps %}
     <center>
     <div class="page-header">
-        <h1>Applications</h1>
+        <h1>应用选择</h1>
     </div>
     </center>
     <table class="table table-striped">
     <tr>
-        <th>application</th>
-        <th>introduction</th>
+        <th>应用</th>
+        <th>简介</th>
     </tr>
     {% for ap in apps %}
     <tr>

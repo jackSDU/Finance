@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block header %}
-Job List
+作业查看
 {% endblock %}
 
 {% block script %}
@@ -15,23 +15,23 @@ Job List
 {% if jobs %}
 <table class="table table-striped">
   <tr>
-    <th>SUBMIT_TIME</th>
-    <th>APP_NAME</th>
-    <th>STATUS</th>
-    <th>VIEW</th>
+    <th>提交时间</th>
+    <th>应用名称</th>
+    <th>作业状态</th>
+    <th>详情</th>
   </tr>
   {% for job in jobs %}
   <tr>
     <td>{{ job.add_time }}</td>
     <td>{{ job.app.name }}</td>
     {% if job.status == 0 %}
-        <td>Finished</td>
+        <td>完成</td>
     {% elif job.status == 1 %}
-        <td>Waiting</td>
+        <td>等待</td>
     {% elif job.status == 2 %}
-        <td>Running</td>
+        <td>运行</td>
     {% else %}
-        <td>Wrong</td>
+        <td>出错</td>
     {% endif %}
     <td><a href="/jobs/{{ job.id }}"><button class="btn btn-link btn-sm">view</button></a></td>
   </tr>
@@ -60,7 +60,7 @@ Job List
   </ul>
 </nav>
 <a href="/jobs?page={{ current }}">
-  <button class="btn btn-default">refresh</button>
+  <button class="btn btn-default">刷新</button>
 </a>
 </center>
 {% endif %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block header %}
-Job List
+作业查看
 {% endblock %}
 
 {% block script %}
@@ -14,31 +14,33 @@ Job List
 {% block content %}
 {% if job %}
 <center>
-    <h1>Detail of Job{{ job.id }}</h1>
+    <div class="page-header">
+    <h1>作业{{ job.id }}详情</h1>
+    </div>
 </center>
 <table class="table">
     <tr>
-        <th>SUBMIT_TIME</th>
+        <th>提交时间</th>
         <td>{{ job.add_time }}</td>
     </tr>
     <tr>
-        <th>APP_NAME</th>
+        <th>应用名称</th>
         <td>{{ job.app.name }}</td>
     </tr>
     <tr>
-        <th>STATUS</th>
+        <th>作业状态</th>
         {% if job.status == 0 %}
-        <td>Finished</td>
+        <td>完成</td>
         {% elif job.status == 1 %}
-        <td>Waiting</td>
+        <td>等待</td>
         {% elif job.status == 2 %}
-        <td>Running</td>
+        <td>运行</td>
         {% else %}
-        <td>Wrong</td>
+        <td>出错</td>
         {% endif %}
     </tr>
     <tr>
-        <th>START_TIME</th>
+        <th>开始时间</th>
         {% if job.start_time %}
         <td>{{ job.start_time }}</td>
         {% else %}
@@ -46,7 +48,7 @@ Job List
         {% endif %}
     </tr>
     <tr>
-        <th>END_TIME</th>
+        <th>结束时间</th>
         {% if job.end_time %}
         <td>{{ job.end_time }}</td>
         {% else %}
@@ -60,7 +62,7 @@ Job List
         </tr>
     {% endfor %}
     <tr>
-        <th>RESULT</th>
+        <th>运行结果</th>
         <td><pre>{{ result }}</pre></td>
     </tr>
 </table>
