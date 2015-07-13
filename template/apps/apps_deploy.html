@@ -9,6 +9,7 @@ appDeploy
 {% endblock %}
 
 {% block script %}
+
     var add_row = function(){
             var _len = $("#tab tr").length;
             $("#tab").append("<tr id="+_len+" align='center'>"
@@ -52,12 +53,7 @@ appDeploy
                             +"</tr>");
 
             $("#blank"+(i-1)).val(nextBlankVal);
-                //if(nextisDynamic=="dynamic")
-                //{
-                //        $("#value"+(i-1)).attr("disabled","disabled");
-                //        //$("#specify"+(i-1)).attr("disabled","disabled");
-                //        //$("#select"+(i-1)).val("dynamic");
-                //}
+
         }
     }
 
@@ -73,20 +69,6 @@ appDeploy
         $("#value"+index).val("");
         $("#blank"+index).val("否");
     }
-    //var disableText=function(index)
-    //{
-    //     var value= $("#select"+index).val();
-    //    if(value=="dynamic")
-    //    {
-            //alert(value);
-    //        $("#value"+index).attr("disabled","disabled");
-            //$("#specify"+index).attr("disabled","disabled");
-    //    }else{
-            // alert(value);
-    //        $("#value"+index).removeAttr("disabled");
-            //$("#specify"+index).removeAttr("disabled");
-    //    }
-    //}
 
 {% endblock %}
 
@@ -110,6 +92,7 @@ appDeploy
         <option>{{ x.name }} ({{ x.id }})</option>
         {% endfor %}
     </select>
+    <br />
     <label for="app_path">路径</label>
     <input name="path" class="form-control" type="text" id="app_path">
     <br />
@@ -124,7 +107,7 @@ appDeploy
             <td>名称</td>
             <!--td>arg specify</td-->
             <td>值</td>
-            <td>空值</td>
+            <td>允许空值</td>
             <td>删除</td>
             <td>插入</td>
        </tr>

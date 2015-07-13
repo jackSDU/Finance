@@ -5,32 +5,32 @@ from Main.views import paginate
 from Main.models import *
 
 # Create your views here.
-##DJangoÊý¾Ý¿â²Ù×÷
+##DJangoï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½
 ##p1 = Publisher(name='Apress', address='2855 Telegraph Avenue',
 #       city='Berkeley', state_province='CA', country='U.S.A.',
 #       website='http://www.apress.com/')
-# p1.save()//²åÈëÊý¾Ý
+# p1.save()//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-# Publisher.objects.all()//²éÑ¯
+# Publisher.objects.all()//ï¿½ï¿½Ñ¯
 
-#Publisher.objects.get(name="Apress")//»ñÈ¡µ¥¸ö¶ÔÏó
+#Publisher.objects.get(name="Apress")//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 #Publisher.objects.filter(name='Apress')//É¸Ñ¡
 #Publisher.objects.filter(name__contains="press")
 
-#Publisher.objects.order_by("name") //ÅÅÐò
+#Publisher.objects.order_by("name") //ï¿½ï¿½ï¿½ï¿½
 #Publisher.objects.order_by("-name")
 
-#Publisher.objects.order_by('name')[0]//ÏÞÖÆ·µÊý¾Ý
+#Publisher.objects.order_by('name')[0]//ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½
 #Publisher.objects.order_by('name')[0:2]
 
-#Publisher.objects.filter(id=52).update(name='Apress Publishing')//¸üÐÂ
-#>>> p = Publisher.objects.get(name='Apress') #ÏÈ²éÑ¯
-#>>> p.name = 'Apress Publishing' #¸üÐÂ
-#>>> p.save()  #±£´æ
+#Publisher.objects.filter(id=52).update(name='Apress Publishing')//ï¿½ï¿½ï¿½ï¿½
+#>>> p = Publisher.objects.get(name='Apress') #ï¿½È²ï¿½Ñ¯
+#>>> p.name = 'Apress Publishing' #ï¿½ï¿½ï¿½ï¿½
+#>>> p.save()  #ï¿½ï¿½ï¿½ï¿½
 
 
-#//É¾³ý
+#//É¾ï¿½ï¿½
 #Publisher.objects.filter(country='USA').delete()
 #>>> p = Publisher.objects.get(name="O'Reilly")
 #>>> p.delete()
@@ -48,7 +48,8 @@ def apps(req):##the main page of app,show the app list>>>>>
 def app(req,n):
     a=App.objects.get(id=n)
     p=Param.objects.filter(app_id=n).order_by("order")
-    return ren2res("apps/apps_detail.html",req,{"app_i":a,"param_i":p})
+    hostlist = Host.objects.all()
+    return ren2res("apps/apps_detail.html",req,{"app_i":a,"param_i":p,'host':hostlist})
 
 def deploy(req):
     #get list of all hosts
@@ -78,7 +79,7 @@ def deploy(req):
             value = req.POST.get('value'+str(i))
             print(req.POST.get('blank'+str(i)))
             print(req.POST.get('blank'+str(i) == 'True'))
-            blank =  1 if req.POST.get('blank'+str(i)) == 'æ˜?' else 0
+            blank =  1 if req.POST.get('blank'+str(i)) == 'æ˜¯' else 0
             submit = Param(order = order, name = argname, value = value, blank = blank, app_id = app_id)
             submit.save()
             i += 1
@@ -105,7 +106,7 @@ def modify(req,n):
                 bv=1
             else:
                 bv=0
-            arr.append({"name"+si:req.POST.get("argname"+si,"noname"),"value"+si:req.POST.get("value"+si,"novalue"),"blank"+si:req.POST.get("blank"+si,"novalue")})
+            #arr.append({"name"+si:req.POST.get("argname"+si,"noname"),"value"+si:req.POST.get("value"+si,"novalue"),"blank"+si:req.POST.get("blank"+si,"novalue")})
             p=Param(order=i,name=req.POST["argname"+si],value=req.POST["value"+si],blank=bv,app_id=n)
             p.save()
         return apps(req)
