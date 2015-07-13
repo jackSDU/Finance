@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+
 from Main.views import ren2res,paginate
 from Main.models import *
-from django.shortcuts import render_to_response,Http404,HttpResponseRedirect
-from django.contrib import auth
 
 # Create your views here.
 def info(req,id=None):
@@ -12,7 +13,7 @@ def info(req,id=None):
             u=User.objects.get(id=id)
         else:
             u=req.user
-        super=u.is_superuser
+        super=req.user.is_superuser
 
         return ren2res("user/info.html",req,{'super':super,'u':u})
 
@@ -41,32 +42,26 @@ def change(req):
 
 
 def list(req):
-
-    b=req.user
-    super=b.is_superuser
-    a=User.objects.all()
-    o=paginate(req,a,8)
-    dict={'super':super}
-    dict.update(o)
+    dict={'super':req.user.is_superuser}
+    dict.update(paginate(req,User.objects.all(),8))
     if req.method=='GET':
         return ren2res("user/list.html",req,dict)
 
 def verify(req):
-    b=req.user
-    super=b.is_superuser
-    dict={'super':super}
+    dict={'super':req.user.is_superuser}
     if req.method=='GET':
-        a=User.objects.filter(is_active=False)
-        o=paginate(req,a,8)
-        dict.update(o)
+        dict.update(paginate(req,User.objects.filter(is_active=False),8))
         return ren2res("user/verify.html",req,dict)
     if req.method=='POST':
-        a=User.objects.filter(id=req.POST['id'])
+        try:
+            a=User.objects.get(id=req.POST['id'])
+        except ObjectDoesNotExist:
+            dict.update(err="用户不存在")
+            return ren2res("user/verify.html",req,dict)
         a.is_active=True
         a.save()
-        b=User.objects.filter(is_active=False)
-        o=paginate(req,b)
-        dict.update(o)
+        dict.update(paginate(req,User.objects.filter(is_active=False),8))
+        dict.update(info="修改成功")
         return ren2res("user/verify.html",req,dict)
 
 def delete(req,id):
