@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from Finance.settings import APP_DEPLOY_DIR
+from Finance.settings import APP_DEPLOY_DIR,SERVANT_PORT
 
 # Create your models here.
 
+"""Priv in heaven
 class Priv(models.Model):
     uid=models.OneToOneField(User,primary_key=True)
 
@@ -20,10 +21,12 @@ class Priv(models.Model):
 
     def __str__(self):
         return str(self.uid)
+"""
 
 class Host(models.Model):
     name=models.CharField(max_length=30)
-    ip=models.IPAddressField()
+    ip=models.GenericIPAddressField()
+    port=models.PositiveSmallIntegerField(default=SERVANT_PORT)
 
     def __str__(self):
         return str(self.name)

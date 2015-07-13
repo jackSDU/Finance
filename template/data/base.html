@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+{% include "data/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <form class="form-inline" method="get">
+      <div class="form-group">
+        <label>开始日期:</label>
+        <input type="date" class="form-control" name="sdate" value="{{ sdate }}">
+      </div>
+      <div class="form-group">
+        <label>结束日期:</label>
+        <input type="date" class="form-control" name="edate" value="{{ edate }}">
+      </div>
+      <button type="submit" class="btn btn-default">查询</button>
+    </form>
+</div>
+{% block table %}{% endblock %}
+{% endblock %}
