@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from Main.views import ren2res
 from Main.models import *
-from math import ceil
+from Main.views import paginate
 
 # Create your views here.
 @login_required
@@ -12,6 +12,7 @@ def choose(req):
         return ren2res("jobs/choose.html",req,{'apps':App.objects.all()})
     else:
         return ren2res("jobs/choose.html",req,{'info':"抱歉，还没有可用的应用！"})
+
 @login_required
 def submit(req,aid='1'):
     if req.method == 'GET':
@@ -35,6 +36,7 @@ def submit(req,aid='1'):
             JobParam(job=job,param=param,value=req.POST[param.name]).save()
         #     启动后台线程处理job
         return HttpResponseRedirect("/jobs?page=1&msg=info")
+
 @login_required
 def list(req):
     if req.user.is_superuser and Job.objects.all().exists():
@@ -43,13 +45,11 @@ def list(req):
         job=Job.objects.filter(uid=req.user).order_by("-add_time")
     else:
         return ren2res("jobs/list.html", req, {'info':"没有提交的作业！"})
-    limit=10
-    page=int(req.GET.get("page"))
-    dict={'lpages':range(1,page),'rpages':range(page+1,ceil(job.count()/limit)+1),'current':page,'pre':page-1,'next':page+1,'first':page==1,'last':page==ceil(job.count()/limit)}
-    dict.update({'jobs':job[(page-1)*limit:min(page*limit,job.count())]})
+    dict=paginate(req,job)
     if req.GET.get("msg"):
         dict.update({'info':"作业提交成功!"})
     return ren2res("jobs/list.html",req,dict)
+
 @login_required
 def detail(req,jid='1'):
     job=Job.objects.get(id=jid)
