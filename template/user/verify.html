@@ -30,9 +30,8 @@
                     <tr>
                         <input type="hidden" name="id" value="{{ aa.id }}" />
                         <td><a href="/user/{{ aa.id }}/" >{{ aa.username }}</a></td>
-                        <td width="1"><input class="btn btn-primary" type="submit" value="通过" />
-                            </td><td width="1"><a class="btn btn-default" href="/user/{{ aa.id }}/delete">拒绝</a>
-                        </td>
+                        <td width="1"><input class="btn btn-primary" type="submit" value="通过" /></td>
+                        <td width="1"><a class="btn btn-default" href="/user/{{ aa.id }}/delete">拒绝</a></td>
                     </tr>
                 </form>
             {% endfor %}
