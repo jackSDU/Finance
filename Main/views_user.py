@@ -6,12 +6,15 @@ from django.shortcuts import render_to_response,Http404,HttpResponseRedirect
 from django.contrib import auth
 
 # Create your views here.
-def info(req):
+def info(req,id=None):
     if req.method=='GET':
-        b=req.user
-        super=b.is_superuser
-        email=b.email
-        return ren2res("user/info.html",req,{'super':super,'email':email})
+        if id:
+            u=User.objects.get(id=id)
+        else:
+            u=req.user
+        super=u.is_superuser
+
+        return ren2res("user/info.html",req,{'super':super,'u':u})
 
 def change(req):
 
@@ -65,13 +68,6 @@ def verify(req):
         o=paginate(req,b)
         dict.update(o)
         return ren2res("user/verify.html",req,dict)
-
-def infocheck(req,id):
-    b=req.user
-    super=b.is_superuser
-    if req.method=='GET':
-        u=User.objects.get(id=id)
-        return ren2res("user/info_check.html",req,{'u':u,'super':super})
 
 def delete(req,id):
     if req.method=='GET':
