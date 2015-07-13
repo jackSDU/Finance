@@ -1,17 +1,54 @@
 from django.contrib.auth.decorators import login_required
 
 from Main.views import ren2res
+from Main.views import paginate
 from Main.models import *
 
 # Create your views here.
+##DJangoÊý¾Ý¿â²Ù×÷
+##p1 = Publisher(name='Apress', address='2855 Telegraph Avenue',
+#       city='Berkeley', state_province='CA', country='U.S.A.',
+#       website='http://www.apress.com/')
+# p1.save()//²åÈëÊý¾Ý
+
+# Publisher.objects.all()//²éÑ¯
+
+#Publisher.objects.get(name="Apress")//»ñÈ¡µ¥¸ö¶ÔÏó
+
+#Publisher.objects.filter(name='Apress')//É¸Ñ¡
+#Publisher.objects.filter(name__contains="press")
+
+#Publisher.objects.order_by("name") //ÅÅÐò
+#Publisher.objects.order_by("-name")
+
+#Publisher.objects.order_by('name')[0]//ÏÞÖÆ·µÊý¾Ý
+#Publisher.objects.order_by('name')[0:2]
+
+#Publisher.objects.filter(id=52).update(name='Apress Publishing')//¸üÐÂ
+#>>> p = Publisher.objects.get(name='Apress') #ÏÈ²éÑ¯
+#>>> p.name = 'Apress Publishing' #¸üÐÂ
+#>>> p.save()  #±£´æ
+
+
+#//É¾³ý
+#Publisher.objects.filter(country='USA').delete()
+#>>> p = Publisher.objects.get(name="O'Reilly")
+#>>> p.delete()
+
+#request.POST.get('nonexistent_field', 'Nowhere Man')
+#request.POST['your_name']
+##has_key(key)
+#request.POST.getlist('bands')
+
 
 def apps(req):##the main page of app,show the app list>>>>>
-
-
-    return ren2res("apps/apps_list.html",req)
+    p=App.objects.filter(hide=False).order_by("id")
+    return ren2res("apps/apps_list.html",req,paginate(req,p))
 
 def app(req,n):
-   return
+    a=App.objects.get(id=n)
+    p=Param.objects.filter(app_id=n).order_by("order")
+    return ren2res("apps/apps_detail.html",req,{"app_i":a,"param_i":p})
 
 def deploy(req):
     #get list of all hosts
@@ -41,15 +78,39 @@ def deploy(req):
             value = req.POST.get('value'+str(i))
             print(req.POST.get('blank'+str(i)))
             print(req.POST.get('blank'+str(i) == 'True'))
-            blank =  1 if req.POST.get('blank'+str(i)) == 'æ˜¯' else 0
+            blank =  1 if req.POST.get('blank'+str(i)) == 'æ˜?' else 0
             submit = Param(order = order, name = argname, value = value, blank = blank, app_id = app_id)
             submit.save()
             i += 1
         return ren2res("apps/apps_deploy.html",req,{'host':hostlist})
 
-
 def modify(req,n):
-    return
+    a=App.objects.get(id=n)
+    del_flag=req.POST.get("delete","False")
+    if del_flag=="True":
+        a.hide=1
+        a.save()
+        return apps(req)
+    else:
+        len_arg=req.POST["arg_len"]
+        arr=[]
+        a.name=req.POST["name"]
+        a.path=req.POST["path"]
+        a.desc=req.POST["description"]
+        a.save()
+        Param.objects.filter(app_id=n).delete()
+        for i in range(1,int(len_arg)+1):
+            si=str(i)
+            if req.POST["blank"+si]=="True":
+                bv=1
+            else:
+                bv=0
+            arr.append({"name"+si:req.POST.get("argname"+si,"noname"),"value"+si:req.POST.get("value"+si,"novalue"),"blank"+si:req.POST.get("blank"+si,"novalue")})
+            p=Param(order=i,name=req.POST["argname"+si],value=req.POST["value"+si],blank=bv,app_id=n)
+            p.save()
+        return apps(req)
+
+    #return ren2res("apps/apps_list.html",req,{"length":len_arg,"arr":arr})
 
 ##url(r'^apps/$',views.home),                 #apps list
 ##url(r'^apps/([0-9]+)/$',views.home),        #detail of specified app

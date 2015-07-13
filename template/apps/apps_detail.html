@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block header %}
+application
+{% endblock %}
+
+{% block sidebar %}
+{% include "apps/sidebar.html" %}
+{% endblock %}
+
+
+{% block script %}
+    var add_row = function(){
+            var _len = $("#tab tr").length;
+            $("#tab").append("<tr id="+_len+" align='center'>"
+                                +"<td>"+_len+"</td>"
+                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control'/></td>"
+                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control'/></td>"
+                                +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>False</option><option>True</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>Del</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>Insert</a></td>"
+                            +"</tr>");
+            $("#length").val(_len);
+            alert($("#length").val());
+    }
+
+    $(document).ready(function(){
+        var _len = $("#tab tr").length;
+        $("#length").val(_len-1);
+        //<tr/>居中
+        $("#tab tr").attr("align","center");
+
+        //增加<tr/>
+        $("#but").click(add_row)
+    })
+
+    //删除<tr/>
+    var deltr =function(index)
+    {
+        var _len = $("#tab tr").length;
+        $("tr[id='"+index+"']").remove();//删除当前行
+        for(var i=index+1,j=_len;i< j;i++)
+        {
+            var nextTxtVal1 = $("#argname"+i).val();
+            var nextTxtVal2 = $("#value"+i).val();
+            var nextBlankVal =$("#blank"+i).val();
+            $("tr[id=\'"+i+"\']")
+                .replaceWith("<tr id="+(i-1)+" align='center'>"
+                                +"<td>"+(i-1)+"</td>"
+
+                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control'/></td>"
+                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control'/></td>"
+                                +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>False</option><option>True</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>Del</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>Insert</a></td>"
+                            +"</tr>");
+
+            $("#blank"+(i-1)).val(nextBlankVal);
+                //if(nextisDynamic=="dynamic")
+                //{
+                //        $("#value"+(i-1)).attr("disabled","disabled");
+                //        //$("#specify"+(i-1)).attr("disabled","disabled");
+                //        //$("#select"+(i-1)).val("dynamic");
+                //}
+        }
+        $("#length").val(_len-2);
+        alert($("#length").val());
+    }
+
+    var ins_above_cur = function(index){
+        add_row();
+        var len = $("#tab tr").length;
+        //alert("index="+index+"lem="+len);
+       // alert($("#argname"+1).get());
+       // alert($("#argname"+2).val());
+        //alert($("#argname"+3).val());
+        //alert($("#argname"+4).val());
+        for(i = len - 1; i > index; i--){
+            $("#argname"+i).val($("#argname"+(i-1)).val());
+            $("#value"+i).val($("#value"+(i-1)).val());
+            $("#blank"+i).val($("#blank"+(i-1)).val());
+        }
+        $("#argname"+index).val("");
+        $("#value"+index).val("");
+        $("#blank"+index).val("False");
+    }
+    //var disableText=function(index)
+    //{
+    //     var value= $("#select"+index).val();
+    //    if(value=="dynamic")
+    //    {
+            //alert(value);
+    //        $("#value"+index).attr("disabled","disabled");
+            //$("#specify"+index).attr("disabled","disabled");
+    //    }else{
+            // alert(value);
+    //        $("#value"+index).removeAttr("disabled");
+            //$("#specify"+index).removeAttr("disabled");
+    //    }
+    //}
+    function argck()
+    {
+        //var value= $("#select"+index).val();
+        //var _len = $("#tab tr").length;
+        //var nextTxtVal1 = $("#argname"+i).val();
+        // var nextTxtVal2 = $("#value"+i).val();
+        //var nextisStatic=$("#select"+i).val();
+    }
+{% endblock %}
+{% block content %}
+
+<h1>gagadsfsf:{{ app_i.name }}</h1>
+    {% for p in param_i %}
+        <p1>{{ p.order }}:{{ p.name }}:{{ p.value }}</p1><br>
+    {% endfor %}
+<form class="form-horizontal container-fluid" action="/apps/modify/{{ app_i.id }}/" method="POST" onsubmit="">
+    {% csrf_token %}
+    <div class="form-group">
+    <h1>应用部署</h1>
+    <label for="app_name">Name</label>
+    <input name="name" class="form-control" type="text" id="app_name" value="{{ app_i.name }}">
+    <br />
+    <label for="app_host">Host</label>
+    <select name="host" class="form-control" id="app_host">
+    <option>host1</option>
+    <option>host2</option>
+    <option>host3</option>
+    <option>host4</option>
+    <option>host5</option>
+    </select>
+    <label for="app_path">Path</label>
+    <input name="path" class="form-control" type="text" id="app_path" value="{{ app_i.path }}">
+    <br />
+    <label for="app_description">Application Description</label>
+    <textarea name="description" class="form-control" rows="3" id="app_description" >{{ app_i.desc }}</textarea>
+     <br />
+    </div>
+    <table name="arglist" class="table table-hover" id="tab"  width="60%" align="center" style="margin-top:20px">
+        <tr>
+            <td width="10%">No.</td>
+            <td>arg name</td>
+            <!--td>arg specify</td-->
+            <td>arg value</td>
+            <td>blank</td>
+            <td>op1</td>
+            <td>op2</td>
+       </tr>
+        {% for p in param_i %}
+            <tr id="{{ p.order }}">
+                <td>{{ p.order }}</td>
+                <td><input  class='form-control' id="argname{{ p.order }}" name="argname{{ p.order }}" value="{{ p.name }}"></td>
+                <td><input class='form-control' id="value{{ p.order }}" name="value{{ p.order }}" value="{{ p.value }}"></td>
+                {% if p.blank  == True %}
+                    <td><select class='form-control' id="blank{{ p.order }}" name="blank{{ p.order }}"><option>False</option><option selected>True</option></select></td>
+                {% else %}
+                    <td><select class='form-control' id="blank{{ p.order }}" name="blank{{ p.order }}"><option>False</option><option>True</option></select></td>
+                {% endif %}
+                <td><a href="javascript:void(0)" onclick="deltr({{ p.order }})">Del</a></td>
+                <td><a href="javascript:void(0)" onclick="ins_above_cur({{ p.order }})">insert</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div>
+        <button type="button" class="btn btn-default btn-xs" id="but">add args</button>
+        <br />
+        <br />
+        <br />
+        <br />
+        <input name="delete" type="hidden" value="False">
+        <input name="arg_len" type="hidden" id="length" value="0">
+        <button type="submit" class="btn btn-warning">modify the application</button><br /><br />
+
+    </div>
+</form>
+    <p class="bg-danger">please op carefully ,if you click the below button,the app will be deleted</p>
+    <form class="form-horizontal container-fluid" action="/apps/modify/{{ app_i.id }}/" method="POST" onsubmit="">
+    {% csrf_token %}
+        <input name="delete" type="hidden" value="True">
+    <button type="submit"  class="btn btn-danger">delete the application</button>
+    </form>
+
+{% endblock %}

@@ -11,5 +11,23 @@ application
 {% block content %}
 <div class="page-header">
     <h1>当前用户部署的应用，管理员显示所有的</h1>
+
 </div>
+    <table  name="arglist" class="table table-hover" id="tab"  width="100" align="center">
+    <th>
+        <td width="10%">id</td>
+        <td width="20%">appname</td>
+        <td width="50%">appdescription</td>
+        <td>ops</td>
+    </th>
+    {% for a in item %}
+        <tr>
+            <td width="10%">{{ a.id }}</td>
+            <td width="20%">{{ a.name }}</td>
+            <td width="50%" >{{ a.desc }}</td>
+            <td><a href="/app/{{ a.id }}">details</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% include "pagination.html" %}
 {% endblock %}
