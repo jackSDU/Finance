@@ -23,8 +23,6 @@ urlpatterns = [
     url(r'^logout/$',views.logout),
     url(r'^register/$',views.register),
 
-#user
-
     url(r'^$',views.home),
 
     url(r'^user/$',views_user.info),                 #my user info
