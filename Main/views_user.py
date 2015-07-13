@@ -10,7 +10,6 @@ def info(req):
     if req.method=='GET':
         b=req.user
         super=b.is_superuser
-        #email=User.objects.get(id=req.user).email
         email=b.email
         return ren2res("user/info.html",req,{'super':super,'email':email})
 
@@ -46,21 +45,10 @@ def list(req):
     o=paginate(req,a,8)
     dict={'super':super}
     dict.update(o)
-   # b=Priv.objects.all()
     if req.method=='GET':
         return ren2res("user/list.html",req,dict)
- #   if req.method=='POST':
-#        c=User.objects.get(uid_id=req.POST['id'])
- #       c.user_manage=bool(req.POST.get('user_manage'))
- #       c.jobs_manage=bool(req.POST.get('jobs_manage'))
- #       c.data_query=bool(req.POST.get('data_query'))
-  #      c.data_down=bool(req.POST.get('data_down'))
-   #     c.apps_deploy=bool(req.POST.get('apps_deploy'))
-    #    c.apps_manage=bool(req.POST.get('apps_manage'))
-     #  return ren2res("user/list.html",req,{'a':a})
 
 def verify(req):
-
     b=req.user
     super=b.is_superuser
     dict={'super':super}

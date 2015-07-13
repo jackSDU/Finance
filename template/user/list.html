@@ -18,30 +18,11 @@
             <tr>
                 <td>用户名</td>
                 <td>e-mail</td>
-            <!--    <td>user_manage</td>
-                <td>jobs_manage</td>
-                <td>data_query</td>
-                <td>data_down</td>
-                <td>app_deploy</td>
-                <td>apps_manage</td>-->
             </tr>
             {% for aa in item %}
                 <tr>
-                   <!-- <form  method="POST" >
                     {% csrf_token %}
 
-                         <input type="hidden" name="id" value="{{ aa.id }}">
-                        <td><a href="/user/{{ aa.id }}/">{{ aa.username }}</a></td>
-                        <td>{{ aa.email }}</td>
-                        <td><input type="checkbox" name="user_manage" {% if aa.priv.user_manage %} checked="checked" {% endif %}  /></td>
-                        <td><input type="checkbox" name="jobs_manage" {% if aa.priv.jobs_manage %} checked="checked" {% endif %}  /></td>
-                        <td><input type="checkbox" name="data_query" {% if aa.priv.data_query %} checked="checked" {% endif %}  /></td>
-                        <td><input type="checkbox" name="data_down" {% if aa.priv.data_down %} checked="checked" {% endif %}  /></td>
-                        <td><input type="checkbox" name="apps_deploy" {% if aa.priv.apps_deploy %} checked="checked" {% endif %}  /></td>
-                        <td><input type="checkbox" name="apps_manage" {% if aa.priv.apps_manage %} checked="checked" {% endif %}  /></td>
-                        <td><button type="submit">修改</button></td>
-
-                    </form> -->
                     <td><a href="/user/{{ aa.id }}/">{{ aa.username }}</a></td>
                     <td>{{ aa.email }}</td>
                 </tr>
