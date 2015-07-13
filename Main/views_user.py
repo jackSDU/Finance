@@ -43,14 +43,14 @@ def change(req):
 
 def list(req):
     dict={'super':req.user.is_superuser}
-    dict.update(paginate(req,User.objects.all(),8))
+    dict.update(paginate(req,User.objects.filter(is_active=True),8))
     if req.method=='GET':
         return ren2res("user/list.html",req,dict)
 
 def verify(req):
     dict={'super':req.user.is_superuser}
     if req.method=='GET':
-        dict.update(paginate(req,User.objects.filter(is_active=False),8))
+        dict.update(paginate(req,User.objects.filter(is_active=False).filter(last_login__isnull=True),8))
         return ren2res("user/verify.html",req,dict)
     if req.method=='POST':
         try:
@@ -68,5 +68,8 @@ def delete(req,id):
     if req.method=='GET':
         a=User.objects.get(id=id)
         if a.is_superuser==False :
-            a.delete()
+            if a.last_login==None:
+                a.delete()
+            else:
+                a.is_active=False
         return HttpResponseRedirect("/user/list")

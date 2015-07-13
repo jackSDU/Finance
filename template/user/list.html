@@ -14,23 +14,22 @@
         <h1>用户列表</h1>
     </div>
     <div>
+
         <table class="table table-bordered table-hover">
             <tr>
                 <td>用户名</td>
                 <td>e-mail</td>
+                <td  width="1">操作</td>
             </tr>
             {% for aa in item %}
                 <tr>
                     {% csrf_token %}
-
                     <td><a href="/user/{{ aa.id }}/">{{ aa.username }}</a></td>
                     <td>{{ aa.email }}</td>
+                    <td><a href="/user/{{ aa.id }}/delete"  class="btn btn-danger"> 删除 </a></td>
                 </tr>
             {% endfor %}
-
         </table>
     </div>
-
-
-{% include "pagination.html" %}
+    {% include "pagination.html" %}
 {% endblock %}
