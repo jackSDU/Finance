@@ -58,7 +58,7 @@ def detail(req,jid='1'):
         with open("a.txt","r") as result:
             res=result.read()
     except IOError as error:
-        res="The job have not finished!"
+        res="作业还未执行完成！"
     dict={'job':job,'params':params,'result':res}
     return ren2res("jobs/detail.html",req,dict)
 
