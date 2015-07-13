@@ -47,8 +47,8 @@ def register(req):
         return ren2res("register.html",req)
     elif req.method=='POST':
         try:
-            u=User.objects.create_user(req.POST['name'],password=req.POST['pw'])
-        except Exception:
+            User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
+        except:
             return ren2res("register.html",req,{'err':"The username has been used."})
         auth.login(req,auth.authenticate(username=req.POST['name'],password=req.POST['pw']))
         return HttpResponseRedirect("/")
