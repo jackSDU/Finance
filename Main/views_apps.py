@@ -14,6 +14,8 @@ def apps(req):
 
 
 def app(req, n):
+    if not req.user.is_superuser:
+        return HttpResponseRedirect('/err/not_admin')
     try:
         a = App.objects.get(id=n)
     except:
@@ -43,7 +45,7 @@ def deploy(req):
         app_submit = App(name=name, desc=desc, path=path, host_id=host_id, uid_id=uid)
         app_submit.save()
         app_id = app_submit.id
-        # add parameter info to para table
+        # add parameters info to para table
         i = 1
         while not (req.POST.get('argname' + str(i)) is None):
             order = str(i)
@@ -58,6 +60,8 @@ def deploy(req):
 
 # delete an app deployed
 def delete(req, n):
+    if not req.user.is_superuser:
+        return HttpResponseRedirect('/err/not_admin')
     a = App.objects.get(id=n)
     a.hide = 1
     a.save()
@@ -66,6 +70,8 @@ def delete(req, n):
 
 # modify an app deployed
 def modify(req, n):
+    if not req.user.is_superuser:
+        return HttpResponseRedirect('/err/not_admin')
     a = App.objects.get(id=n)
     len_arg = req.POST["arg_len"]
     a.name = req.POST["name"]
@@ -81,4 +87,4 @@ def modify(req, n):
             bv = 0
         p = Param(order=i, name=req.POST["argname" + si], value=req.POST["value" + si], blank=bv, app_id=n)
         p.save()
-    return apps(req)
+    return HttpResponseRedirect("/apps/")
