@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from Main import views,views_user,views_jobs,views_data,views_apps
 
@@ -22,6 +23,9 @@ urlpatterns = [
     url(r'^login/$',views.login),
     url(r'^logout/$',views.logout),
     url(r'^register/$',views.register),
+
+    url(r'^err/not_active/$',views.not_active),
+    url(r'^err/not_admin/$',views.not_admin),
 
     url(r'^$',views.home),
 
@@ -49,4 +53,6 @@ urlpatterns = [
     url(r'^apps/modify/([0-9]+)/$',views.home), #modify specified app
 
     url(r'^admin/', include(admin.site.urls)),
-]
+] + staticfiles_urlpatterns()
+
+handler404 = 'Main.views.page_not_found'

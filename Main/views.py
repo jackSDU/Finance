@@ -1,3 +1,5 @@
+from math import ceil
+
 from django.template import RequestContext
 from django.shortcuts import render_to_response,HttpResponseRedirect
 from django.contrib import auth
@@ -9,10 +11,10 @@ def ren2res(template,req,dict={}):
         dict.update({'user':{'id':req.user.id,'name':req.user.get_username()}})
     else:
         dict.update(user=False)
-    if req:
-        return render_to_response(template,dict,context_instance=RequestContext(req))
-    else:
-        return render_to_response(template,dict)
+    return render_to_response(template,dict,context_instance=RequestContext(req))
+
+def ren2err(template,jump):
+    return render_to_response(template,{'jump':jump})
 
 def paginate(req,qs,num=None,r=5):
     cur=req.GET.get('pg')
@@ -22,7 +24,7 @@ def paginate(req,qs,num=None,r=5):
     num=int(num)if num else 10
     if num<1:
         num=10
-    cnt=int(qs.count()/num+1)
+    cnt=ceil(qs.count()/num+1)
     min=cur-r
     max=cur+r
     if min<1:
@@ -45,10 +47,11 @@ def register(req):
         return ren2res("register.html",req)
     elif req.method=='POST':
         try:
-            u=User.objects.create_user(req.POST['name'],password=req.POST['pw'])
-        except Exception:
-            return ren2res("register.html",req,{'err':"The username has been used."})
-        auth.login(req,auth.authenticate(username=req.POST['name'],password=req.POST['pw']))
+            u=User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
+        except:
+            return ren2res("register.html",req,{'err':"用户名已被使用。"})
+        u.is_active=False
+        u.save()
         return HttpResponseRedirect("/")
 
 def login(req):
@@ -62,6 +65,11 @@ def login(req):
     elif req.method=='POST':
         user=auth.authenticate(username=req.POST.get('name'),password=req.POST.get('pw'))
         if user is not None:
+            if not user.is_active:
+                if user.last_login:
+                    return ren2res("login.html",req,{'err':"用户已被删除。"})
+                else:
+                    return HttpResponseRedirect('/err/not_active/')
             auth.login(req,user)
             next=req.session.get('next')
             if next:
@@ -69,7 +77,7 @@ def login(req):
             else:
                 return HttpResponseRedirect('/')
         else:
-            return ren2res("login.html",req,{'err': "Wrong username or password!"})
+            return ren2res("login.html",req,{'err':"用户名或密码错误。"})
 
 def logout(req):
     auth.logout(req)
@@ -77,3 +85,12 @@ def logout(req):
 
 def home(req):
     return ren2res("home.html",req)
+
+def page_not_found(req):
+    return ren2err("err/404.html",False)
+
+def not_active(req):
+    return ren2err("errs/not_active.html",'/')
+
+def not_admin(req):
+    return ren2err("errs/not_admin.html",req.GET.get('next'))
