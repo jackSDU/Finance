@@ -17,11 +17,13 @@
         <table class="table table-bordered table-hover">
             <colgroup>
                 <col />
+                <col />
                 <col width="1" />
                 <col width="1" />
             </colgroup>
             <tr>
                 <td>用户名</td>
+                <td>email</td>
                 <td nowrap colspan="2">操作</td>
             </tr>
             {% for aa in item %}
@@ -30,6 +32,7 @@
                     <tr>
                         <input type="hidden" name="id" value="{{ aa.id }}" />
                         <td><a href="/user/{{ aa.id }}/" >{{ aa.username }}</a></td>
+                        <td>{{ aa.email }}</td>
                         <td width="1"><input class="btn btn-primary" type="submit" value="通过" /></td>
                         <td width="1"><a class="btn btn-default" href="/user/{{ aa.id }}/delete">拒绝</a></td>
                     </tr>
