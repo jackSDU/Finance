@@ -14,16 +14,16 @@
 {% block script %}
 function pwck(){
     if($("#name").val().length==0){
-        alert("Not input username!");
+        alert("未输入用户名!");
     }
     if($("#email").val().length==0){
-        alert("Not input email!");
+        alert("未输入邮箱!");
     }
     else if($("#pw").val().length==0){
-        alert("Not input password!");
+        alert("未输入密码!");
     }
     else if($("#pwr").val()!=$("#pw").val()){
-        alert("Password not equal!");
+        alert("密码不相等!");
     }
     else return true;
     return false;
