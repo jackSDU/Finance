@@ -50,6 +50,7 @@ def register(req):
             u=User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
         except:
             return ren2res("register.html",req,{'err':"用户名已被使用。"})
+        u.firstname=req.POST.get('real')
         u.is_active=False
         u.save()
         return HttpResponseRedirect("/info/registered/")

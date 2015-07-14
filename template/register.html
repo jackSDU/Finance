@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
+{% block head %}
+<style>
+    span{
+        color:#FF0000;
+    }
+</style>
+{% endblock %}
+
 {% block header %}注册{% endblock %}
+
 
 {% block script %}
 function pwck(){
@@ -25,21 +34,33 @@ function pwck(){
 <form class="form-horizontal container-fluid" method="POST" onsubmit="return pwck()">
     {% csrf_token %}
     <div class="row">
-        <div class=" col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3">
             <div class="form-group">
-                <label>用户名</label>
+                <label>用户名<span> *</span></label>
                 <input type="text" class="form-control" name="name" id="name">
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
             <div class="form-group">
-                <label>邮箱</label>
+                <label>真实姓名</label>
+                <input type="text" class="form-control" name="real" id="real">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="form-group">
+                <label>邮箱<span> *</span></label>
                 <input type="text" class="form-control" name="email" id="email">
             </div>
             <div class="form-group">
-                <label>密码</label>
+                <label>密码<span> *</span></label>
                 <input type="password" class="form-control" name="pw" id="pw">
             </div>
             <div class="form-group">
-                <label>确认密码</label>
+                <label>确认密码<span> *</span></label>
                 <input type="password" class="form-control" id="pwr">
             </div>
         </div>
