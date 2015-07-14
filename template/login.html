@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block header %}Register{% endblock %}
+{% block header %}登录{% endblock %}
 
 {% block script %}
 function pwck(){
@@ -21,18 +21,18 @@ function pwck(){
     <div class="row">
         <div class=" col-md-6 col-md-offset-3">
             <div class="form-group">
-                <label>User Name:</label>
+                <label>用户名</label>
                 <input type="text" class="form-control" name="name" id="name">
             </div>
             <div class="form-group">
-                <label>Password:</label>
+                <label>密码</label>
                 <input type="password" class="form-control" name="pw" id="pw">
             </div>
-            <label><input type="checkbox" name="remember"> Remember me</label>
+            <label><input type="checkbox" name="remember">记住我</label>
             <center>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <a class="btn btn-default" href="#">Forget Password</a>
+                    <button type="submit" class="btn btn-primary">登录</button>
+                    <a class="btn btn-default" href="#">忘记密码</a>
                 </div>
             </center>
         </div>
