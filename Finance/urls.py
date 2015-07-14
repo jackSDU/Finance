@@ -24,8 +24,9 @@ urlpatterns = [
     url(r'^logout/$',views.logout),
     url(r'^register/$',views.register),
 
-    url(r'^err/not_active/$',views.not_active),
-    url(r'^err/not_admin/$',views.not_admin),
+    url(r'^info/registered/$',views.registered),
+    url(r'^info/not_active/$',views.not_active),
+    url(r'^info/not_admin/$',views.not_admin),
 
     url(r'^$',views.home),
 
