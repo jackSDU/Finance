@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block header %}
+作业提交
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+{% if app %}
+<center>
+    <div class="page-header">
+        <h1>{{ app.name }}</h1>
+    </div>
+</center>
+<form class="form-horizontal" action="" method="POST">
+{% csrf_token %}
+    <input type="hidden" value="{{ app.id }}" name="id">
+  {% for param in params %}
+  <div class="form-group">
+    <label class="col-sm-4 control-label">{{ param.name }}</label>
+    <div class="col-sm-5">
+      <input type="text" class="form-control" name="{{ param.name }}">
+    </div>
+    {% if not param.blank %}
+        <a style="text-decoration:none;color:#ff0000">*</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <center>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">提交</button>
+      <button type="reset" class="btn btn-default">重置</button>
+    </div>
+  </center>
+</form>
+{% endif%}
+{% endblock %}
