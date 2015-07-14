@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^$',views.home),
 
     url(r'^user/$',views_user.info),                 #my user info
-    url(r'^user/([0-9]+)/$',views_user.infocheck),        #specified user info
+    url(r'^user/([0-9]+)/$',views_user.info),        #specified user info
     url(r'^user/edit/$',views_user.change),            #edit user info
     url(r'^user/list/$',views_user.list),            #list users
     url(r'^user/verify/$',views_user.verify),          #verify user

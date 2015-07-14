@@ -1,21 +1,25 @@
 from django.contrib.auth.decorators import login_required
 
-from Main.views import ren2res
+from django.shortcuts import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+
+from Main.views import ren2res,paginate
 from Main.models import *
-from django.shortcuts import render_to_response,Http404,HttpResponseRedirect
-from django.contrib import auth
 
 # Create your views here.
-def info(req):
+
+@login_required
+def info(req,id=None):
     if req.method=='GET':
-        b=req.user
-        super=b.is_superuser
-        #email=User.objects.get(id=req.user).email
-        email=b.email
-        return ren2res("user/info.html",req,{'super':super,'email':email})
+        if id:
+            u=User.objects.get(id=id)
+        else:
+            u=req.user
+        super=req.user.is_superuser
+        return ren2res("user/info.html",req,{'super':super,'u':u})
 
+@login_required
 def change(req):
-
     b=req.user
     super=b.is_superuser
     if req.method=='GET':
@@ -37,49 +41,43 @@ def change(req):
         else:
             return ren2res("user/change.html",req,{'err':"wrong password",'super':super})
 
-
+@login_required
 def list(req):
+    if req.user.is_superuser:
+        dict={'super':req.user.is_superuser}
+        dict.update(paginate(req,User.objects.filter(is_active=True),8))
+        if req.method=='GET':
+            return ren2res("user/list.html",req,dict)
+    else :
+        return HttpResponseRedirect("/err/not_admin/")
 
-    b=req.user
-    super=b.is_superuser
-    a=User.objects.all()
-   # b=Priv.objects.all()
-    if req.method=='GET':
-        return ren2res("user/list.html",req,{'a':a,'super':super})
- #   if req.method=='POST':
-#        c=User.objects.get(uid_id=req.POST['id'])
- #       c.user_manage=bool(req.POST.get('user_manage'))
- #       c.jobs_manage=bool(req.POST.get('jobs_manage'))
- #       c.data_query=bool(req.POST.get('data_query'))
-  #      c.data_down=bool(req.POST.get('data_down'))
-   #     c.apps_deploy=bool(req.POST.get('apps_deploy'))
-    #    c.apps_manage=bool(req.POST.get('apps_manage'))
-     #  return ren2res("user/list.html",req,{'a':a})
-
+@login_required
 def verify(req):
-
-    b=req.user
-    super=b.is_superuser
+    if not req.user.is_superuser :
+        return HttpResponseRedirect("/err/not_admin/")
+    dict={'super':req.user.is_superuser}
     if req.method=='GET':
-        a=User.objects.filter(is_active=False)
-        return ren2res("user/verify.html",req,{'a':a,'super':super})
+        dict.update(paginate(req,User.objects.filter(is_active=False).filter(last_login__isnull=True),8))
+        return ren2res("user/verify.html",req,dict)
     if req.method=='POST':
-        a=User.objects.filter(id=req.POST['id'])
+        try:
+            a=User.objects.get(id=req.POST['id'])
+        except ObjectDoesNotExist:
+            dict.update(err="用户不存在")
+            return ren2res("user/verify.html",req,dict)
         a.is_active=True
         a.save()
-        b=User.objects.filter(is_active=False)
-        return ren2res("user/verify.html",req,{'a':b,'super':super})
+        dict.update(paginate(req,User.objects.filter(is_active=False),8))
+        dict.update(info="修改成功")
+        return ren2res("user/verify.html",req,dict)
 
-def infocheck(req,id):
-    b=req.user
-    super=b.is_superuser
-    if req.method=='GET':
-        u=User.objects.get(id=id)
-        return ren2res("user/info_check.html",req,{'u':u,'super':super})
-
+@login_required
 def delete(req,id):
     if req.method=='GET':
         a=User.objects.get(id=id)
         if a.is_superuser==False :
-            a.delete()
+            if a.last_login==None:
+                a.delete()
+            else:
+                a.is_active=False
         return HttpResponseRedirect("/user/list")
