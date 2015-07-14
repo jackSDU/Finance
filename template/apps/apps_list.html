@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block header %}
-application
+    应用列表
 {% endblock %}
 
 {% block sidebar %}
@@ -10,24 +10,26 @@ application
 
 {% block content %}
 <div class="page-header">
-    <h1>当前用户部署的应用，管理员显示所有的</h1>
+    <h1>应用列表</h1>
 
 </div>
-    <table  name="arglist" class="table table-hover" id="tab"  width="100" align="center">
-    <th>
-        <td width="10%">id</td>
-        <td width="20%">appname</td>
-        <td width="50%">appdescription</td>
-        <td>ops</td>
-    </th>
+
+    <table class="table table-hover" id="tab"  align="center">
+    <tr align="center">
+
+        <td style="vertical-align:middle;">应用名称</td>
+        <td width="62%" style="vertical-align:middle;">应用描述</td>
+        <td style="vertical-align:middle;">操作</td>
+    </tr>
     {% for a in item %}
-        <tr>
-            <td width="10%">{{ a.id }}</td>
-            <td width="20%">{{ a.name }}</td>
-            <td width="50%" >{{ a.desc }}</td>
-            <td><a href="/apps/{{ a.id }}">details</a></td>
+        <tr align="center" valign="middle">
+
+            <td style="vertical-align:middle;">{{ a.name }}</td>
+            <td style="vertical-align:middle;">{{ a.desc }}</td>
+            <td style="vertical-align:middle;" ><a href="/apps/{{ a.id }}" class="btn btn-primary  active">details</a></td>
         </tr>
     {% endfor %}
     </table>
+
     {% include "pagination.html" %}
 {% endblock %}
