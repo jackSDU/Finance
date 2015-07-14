@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if jump %}
+    <meta http-equiv="refresh" content="5;url={{ jump }}" />
+    {% endif %}
+    <title>{% block title %}错误{% endblock %}</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>
+            {% block error %}{% endblock %}
+            <small class="pull-right">高性能金融计算平台</small>
+        </h1>
+    </div>
+    {% if jump %}
+    <h4 class="pull-right">
+        <small>
+        将在5秒后跳转...
+        </small>
+    </h4>
+    {% endif %}
+    {% block detail %}{% endblock %}
+</div>
+</body>
+</html>
