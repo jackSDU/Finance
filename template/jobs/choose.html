@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block header %}
+作业提交
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+{% if apps %}
+    <center>
+    <div class="page-header">
+        <h1>应用选择</h1>
+    </div>
+    </center>
+    <table class="table table-striped">
+    <tr>
+        <th>应用</th>
+        <th>简介</th>
+    </tr>
+    {% for ap in apps %}
+    <tr>
+        <td>
+            <a href="/jobs/submit/{{ ap.id }}"><button type="button" class="btn btn-link">{{ ap.name }}</button></a>
+        </td>
+        <td>{{ ap.desc }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}

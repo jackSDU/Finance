@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block header %}
+作业查看
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+
+{% block sidebar %}
+{% include "jobs/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+{% if item %}
+<table class="table table-striped">
+  <tr>
+    <th>提交时间</th>
+    <th>应用名称</th>
+    <th>作业状态</th>
+    <th>详情</th>
+  </tr>
+  {% for job in item %}
+  <tr>
+    <td>{{ job.add_time }}</td>
+    <td>{{ job.app.name }}</td>
+    {% if job.status == 0 %}
+        <td>完成</td>
+    {% elif job.status == 1 %}
+        <td>等待</td>
+    {% elif job.status == 2 %}
+        <td>运行</td>
+    {% else %}
+        <td>出错</td>
+    {% endif %}
+    <td><a href="/jobs/{{ job.id }}"><button class="btn btn-link btn-sm">查看</button></a></td>
+  </tr>
+  {% endfor %}
+</table>
+<center>
+{% include "pagination.html" %}
+<a href="/jobs?pg={{ pg }}">
+  <button class="btn btn-default">刷新</button>
+</a>
+</center>
+{% endif %}
+{% endblock %}
