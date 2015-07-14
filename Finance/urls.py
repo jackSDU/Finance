@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^apps/([0-9]+)/$',views_apps.app),        #detail of specified app
     url(r'^apps/deploy/$',views_apps.deploy),          #deploy app
     url(r'^apps/modify/([0-9]+)/$',views_apps.modify), #modify specified app
+    url(r'^apps/delete/([0-9]+)/$',views_apps.delete),
 
     url(r'^admin/', include(admin.site.urls)),
 ]
