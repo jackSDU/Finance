@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-
+from django.http import Http404
 from django.shortcuts import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -12,7 +12,10 @@ from Main.models import *
 def info(req,id=None):
     if req.method=='GET':
         if id:
-            u=User.objects.get(id=id)
+            try:
+                u=User.objects.get(id=id)
+            except:
+                raise Http404()
         else:
             u=req.user
         super=req.user.is_superuser
@@ -74,7 +77,10 @@ def verify(req):
 @login_required
 def delete(req,id):
     if req.method=='GET':
-        a=User.objects.get(id=id)
+        try:
+            a=User.objects.get(id=id)
+        except:
+            raise Http404()
         if a.is_superuser==False :
             if a.last_login==None:
                 a.delete()
