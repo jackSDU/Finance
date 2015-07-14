@@ -11,10 +11,10 @@ def ren2res(template,req,dict={}):
         dict.update({'user':{'id':req.user.id,'name':req.user.get_username()}})
     else:
         dict.update(user=False)
-    if req:
-        return render_to_response(template,dict,context_instance=RequestContext(req))
-    else:
-        return render_to_response(template,dict)
+    return render_to_response(template,dict,context_instance=RequestContext(req))
+
+def ren2err(template,jump):
+    return render_to_response(template,{'jump':jump})
 
 def paginate(req,qs,num=None,r=5):
     cur=req.GET.get('pg')
@@ -47,10 +47,11 @@ def register(req):
         return ren2res("register.html",req)
     elif req.method=='POST':
         try:
-            User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
+            u=User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
         except:
             return ren2res("register.html",req,{'err':"The username has been used."})
-        auth.login(req,auth.authenticate(username=req.POST['name'],password=req.POST['pw']))
+        u.is_active=False
+        u.save()
         return HttpResponseRedirect("/")
 
 def login(req):
@@ -79,3 +80,12 @@ def logout(req):
 
 def home(req):
     return ren2res("home.html",req)
+
+def page_not_found(req):
+    return ren2err("err/404.html",False)
+
+def not_active(req):
+    return ren2err("errs/not_active.html",'/')
+
+def not_admin(req):
+    return ren2err("errs/not_admin.html",req.GET.get('next'))
