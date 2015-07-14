@@ -68,6 +68,11 @@ class InterestRate(models.Model):
         managed=False
 
 class YieldRate(models.Model):
+    trade_date=models.DateField()
+    symbol=models.CharField(max_length=3)
+    yield_rate=models.FloatField()
+    calc_date=models.DateField()
 
     class Meta:
+        db_table='yield_rate'
         managed=False

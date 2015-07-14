@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^data/iv_record/$',views_data.iv_record),
     url(r'^data/iv_index/$',views_data.iv_index),
     url(r'^data/interest_rate/$',views_data.interest_rate),
-    url(r'^data/yield_rate/$',views.home),
+    url(r'^data/yield_rate/$',views_data.yield_rate),
     url(r'^data/download/$',views.home),        #data download
 
     url(r'^apps/$',views_apps.apps),                 #apps list
