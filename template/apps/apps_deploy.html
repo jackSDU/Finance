@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block header %}
-appDeploy
+应用部署
 {% endblock %}
 
 {% block sidebar %}
@@ -9,13 +9,12 @@ appDeploy
 {% endblock %}
 
 {% block script %}
-
     var add_row = function(){
             var _len = $("#tab tr").length;
             $("#tab").append("<tr id="+_len+" align='center'>"
                                 +"<td><label name ='order"+_len+"' id='order"+_len+"'>"+_len+"</label></td>"
-                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control'/></td>"
-                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control'/></td>"
+                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control' maxlength='50'/></td>"
+                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control' maxlength='200'/></td>"
                                 +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>否</option><option>是</option></select></td>"
                                 +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>删除</a></td>"
                                 +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>插入</a></td>"
@@ -45,8 +44,8 @@ appDeploy
                 .replaceWith("<tr id="+(i-1)+" align='center'>"
                                 +"<td><label name ='order"+(i-1)+"' id='order"+(i-1)+"'>"+(i-1)+"</label></td>"
 
-                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control'/></td>"
-                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control'/></td>"
+                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control' maxlength='50'/></td>"
+                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control' maxlength='200'/></td>"
                                 +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>否</option><option>是</option></select></td>"
                                 +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>删除</a></td>"
                                 +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>插入</a></td>"
@@ -77,14 +76,14 @@ appDeploy
 
 
 
-<form class="form-horizontal container-fluid" action="" method="POST" onsubmit="return argck()">
+<form class="form-horizontal container-fluid" action="" method="POST">
 {% csrf_token %}
 <div class="form-group">
     <h1>应用部署</h1>
 
     <input name="uid" type="hidden" id ="app_uid" value={{ user.id }}>
     <label for="app_name">应用名称</label>
-    <input name="name" class="form-control" type="text" id="app_name">
+    <input name="name" class="form-control" type="text" id="app_name" maxlength="30">
     <br />
     <label for="app_host">主机</label>
     <select name="host" class="form-control" id="app_host">
@@ -97,11 +96,11 @@ appDeploy
     <input name="path" class="form-control" type="text" id="app_path">
     <br />
     <label for="app_description">应用描述</label>
-    <textarea name="description" class="form-control" rows="3" id="app_description"></textarea>
+    <textarea name="description" class="form-control" rows="3" id="app_description" maxlength="200"></textarea>
      <br />
  </div>
 
-<table name="arglist" class="table table-hover" id="tab"  width="60%" align="center" style="margin-top:20px">
+<table name="arglist" class="table table-hover" id="tab" align="center" style="margin-top:20px">
         <tr>
             <td width="10%">序号</td>
             <td>名称</td>
@@ -114,11 +113,11 @@ appDeploy
 </table>
 
     <div>
-        <table class="table table-hover" width="60%" align="center">
+        <table class="table table-hover">
         <tr>
             <td align="right"><button type="button" class="btn btn-default" id="but">添加参数</button></td>
         </tr>
-        <tr >
+        <tr>
             <td align="center"><button type="submit" class="btn btn-primary btn-lg" id="but_dep">部署</button></td>
         </tr>
         </table>
