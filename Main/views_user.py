@@ -7,6 +7,8 @@ from Main.views import ren2res,paginate
 from Main.models import *
 
 # Create your views here.
+
+@login_required
 def info(req,id=None):
     if req.method=='GET':
         if id:
@@ -14,11 +16,10 @@ def info(req,id=None):
         else:
             u=req.user
         super=req.user.is_superuser
-
         return ren2res("user/info.html",req,{'super':super,'u':u})
 
+@login_required
 def change(req):
-
     b=req.user
     super=b.is_superuser
     if req.method=='GET':
@@ -40,14 +41,20 @@ def change(req):
         else:
             return ren2res("user/change.html",req,{'err':"wrong password",'super':super})
 
-
+@login_required
 def list(req):
-    dict={'super':req.user.is_superuser}
-    dict.update(paginate(req,User.objects.filter(is_active=True),8))
-    if req.method=='GET':
-        return ren2res("user/list.html",req,dict)
+    if req.user.is_superuser:
+        dict={'super':req.user.is_superuser}
+        dict.update(paginate(req,User.objects.filter(is_active=True),8))
+        if req.method=='GET':
+            return ren2res("user/list.html",req,dict)
+    else :
+        return HttpResponseRedirect("/err/not_admin/")
 
+@login_required
 def verify(req):
+    if not req.user.is_superuser :
+        return HttpResponseRedirect("/err/not_admin/")
     dict={'super':req.user.is_superuser}
     if req.method=='GET':
         dict.update(paginate(req,User.objects.filter(is_active=False).filter(last_login__isnull=True),8))
@@ -64,6 +71,7 @@ def verify(req):
         dict.update(info="修改成功")
         return ren2res("user/verify.html",req,dict)
 
+@login_required
 def delete(req,id):
     if req.method=='GET':
         a=User.objects.get(id=id)
