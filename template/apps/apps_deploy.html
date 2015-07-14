@@ -23,18 +23,17 @@
 
     $(document).ready(function(){
 
-        //<tr/>居中
         $("#tab tr").attr("align","center");
 
-        //增加<tr/>
         $("#but").click(add_row)
     })
 
-    //删除<tr/>
+    //delete a row
     var deltr =function(index)
     {
         var _len = $("#tab tr").length;
-        $("tr[id='"+index+"']").remove();//删除当前行
+        $("tr[id='"+index+"']").remove();//delete current row
+        //replace old rows with new rows which have correct name and id
         for(var i=index+1,j=_len;i< j;i++)
         {
             var nextTxtVal1 = $("#argname"+i).val();
@@ -55,7 +54,7 @@
 
         }
     }
-
+    //insert a row above current row
     var ins_above_cur = function(index){
         add_row();
         var len = $("#tab tr").length;
