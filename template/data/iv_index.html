@@ -1,0 +1,63 @@
+{% extends "data/base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block header %}
+隐含波动率
+{% endblock %}
+
+{% block table %}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>符号</th>
+        <th>交换</th>
+        <th>交易日期</th>
+        <th>价格</th>
+        <th>ivCall30</th>
+        <th>ivPut30</th>
+        <th>ivMean30</th>
+        <th>ivCall60</th>
+        <th>ivPut60</th>
+        <th>ivMean60</th>
+        <th>ivCall90</th>
+        <th>ivPut90</th>
+        <th>ivMean90</th>
+        <th>ivCall120</th>
+        <th>ivPut120</th>
+        <th>ivMean120</th>
+        <th>ivCall150</th>
+        <th>ivPut150</th>
+        <th>ivMean150</th>
+        <th>ivCall180</th>
+        <th>ivPut180</th>
+        <th>ivMean180</th>
+    </tr>
+    {% for i in item %}
+    <tr>
+        <td>{{ i.symbol }}</td>
+        <td>{{ i.exchange }}</td>
+        <td>{{ i.trade_date }}</td>
+        <td>{{ i.price }}</td>
+        <td>{{ i.ivCall30 }}</td>
+        <td>{{ i.ivPut30 }}</td>
+        <td>{{ i.ivMean30 }}</td>
+        <td>{{ i.ivCall60 }}</td>
+        <td>{{ i.ivPut60 }}</td>
+        <td>{{ i.ivMean60 }}</td>
+        <td>{{ i.ivCall90 }}</td>
+        <td>{{ i.ivPut90 }}</td>
+        <td>{{ i.ivMean90 }}</td>
+        <td>{{ i.ivCall120 }}</td>
+        <td>{{ i.ivPut120 }}</td>
+        <td>{{ i.ivMean120 }}</td>
+        <td>{{ i.ivCall150 }}</td>
+        <td>{{ i.ivPut150 }}</td>
+        <td>{{ i.ivMean150 }}</td>
+        <td>{{ i.ivCall180 }}</td>
+        <td>{{ i.ivPut180 }}</td>
+        <td>{{ i.ivMean180 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

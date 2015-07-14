@@ -4,19 +4,37 @@
 {% include "data/sidebar.html" %}
 {% endblock %}
 
+{% block script %}
+function pgnum(num)
+{
+    if(num<1)return
+    document.cookie='pgnum='+num
+    location.reload()
+}
+{% endblock %}
+
 {% block content %}
 <div class="page-header">
     <form class="form-inline" method="get">
-      <div class="form-group">
-        <label>开始日期:</label>
-        <input type="date" class="form-control" name="sdate" value="{{ sdate }}">
-      </div>
-      <div class="form-group">
-        <label>结束日期:</label>
-        <input type="date" class="form-control" name="edate" value="{{ edate }}">
-      </div>
-      <button type="submit" class="btn btn-default">查询</button>
+        <div class="form-group">
+            <label>开始日期:</label>
+            <input type="date" class="form-control" name="sdate" value="{{ sdate }}">
+        </div>
+        <div class="form-group">
+            <label>结束日期:</label>
+            <input type="date" class="form-control" name="edate" value="{{ edate }}">
+        </div>
+        <button type="submit" class="btn btn-default">查询</button>
+        <div class="pull-right">
+            <select class="form-control" onclick="pgnum(this.value)">
+                <option value="0">每页显示条数</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+        </div>
     </form>
 </div>
 {% block table %}{% endblock %}
+{% include 'pagination.html' %}
 {% endblock %}
