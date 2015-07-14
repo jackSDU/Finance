@@ -49,7 +49,7 @@ def register(req):
         try:
             u=User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
         except:
-            return ren2res("register.html",req,{'err':"The username has been used."})
+            return ren2res("register.html",req,{'err':"用户名已被使用。"})
         u.is_active=False
         u.save()
         return HttpResponseRedirect("/")
@@ -65,6 +65,11 @@ def login(req):
     elif req.method=='POST':
         user=auth.authenticate(username=req.POST.get('name'),password=req.POST.get('pw'))
         if user is not None:
+            if not user.is_active:
+                if user.last_login:
+                    return ren2res("login.html",req,{'err':"用户已被删除。"})
+                else:
+                    return HttpResponseRedirect('/err/not_active/')
             auth.login(req,user)
             next=req.session.get('next')
             if next:
@@ -72,7 +77,7 @@ def login(req):
             else:
                 return HttpResponseRedirect('/')
         else:
-            return ren2res("login.html",req,{'err': "Wrong username or password!"})
+            return ren2res("login.html",req,{'err':"用户名或密码错误。"})
 
 def logout(req):
     auth.logout(req)
