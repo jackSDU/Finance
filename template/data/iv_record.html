@@ -1,0 +1,56 @@
+{% extends "data/base.html" %}
+
+{% block header %}
+IV 记录
+{% endblock %}
+
+{% block table %}
+    <tr>
+        <th>符号</th>
+        <th>交换</th>
+        <th>交易日期</th>
+        <th>stock_close_price</th>
+        <th>option_symbol</th>
+        <th>expiration</th>
+        <th>strike</th>
+        <th>call_or_put</th>
+        <th>ask</th>
+        <th>bid</th>
+        <th>mean_price</th>
+        <th>iv</th>
+        <th>volume</th>
+        <th>open_interest</th>
+        <th>stock_price_for_iv</th>
+        <th>isinterpolated</th>
+        <th>delta</th>
+        <th>vega</th>
+        <th>gamma</th>
+        <th>theta</th>
+        <th>rho</th>
+    </tr>
+    {% for i in item %}
+    <tr>
+        <td>{{ i.symbol }}</td>
+        <td>{{ i.exchange }}</td>
+        <td>{{ i.trade_date }}</td>
+        <td>{{ i.stock_close_price }}</td>
+        <td>{{ i.option_symbol }}</td>
+        <td>{{ i.expiration }}</td>
+        <td>{{ i.strike }}</td>
+        <td>{{ i.call_or_put }}</td>
+        <td>{{ i.ask }}</td>
+        <td>{{ i.bid }}</td>
+        <td>{{ i.mean_price }}</td>
+        <td>{{ i.iv }}</td>
+        <td>{{ i.volume }}</td>
+        <td>{{ i.open_interest }}</td>
+        <td>{{ i.stock_price_for_iv }}</td>
+        <td>{{ i.isinterpolated }}</td>
+        <td>{{ i.delta }}</td>
+        <td>{{ i.vega }}</td>
+        <td>{{ i.gamma }}</td>
+        <td>{{ i.theta }}</td>
+        <td>{{ i.rho }}</td>
+    </tr>
+    {% endfor %}
+{% endblock %}

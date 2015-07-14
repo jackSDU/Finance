@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^jobs/submit/$',views_jobs.choose),          #select app
     url(r'^jobs/submit/([0-9]+)/$',views_jobs.submit), #add job using specified app
 
-    url(r'^data/iv_record/$',views.home),
+    url(r'^data/iv_record/$',views_data.iv_record),
     url(r'^data/iv_index/$',views_data.iv_index),
     url(r'^data/interest_rate/$',views_data.interest_rate),
     url(r'^data/yield_rate/$',views.home),

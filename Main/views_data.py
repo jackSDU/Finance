@@ -37,3 +37,8 @@ def interest_rate(req):
 def iv_index(req):
     if req.method=='GET':
         return render('data/iv_index.html',req,IVIndex.objects.using('data'))
+
+@login_required
+def iv_record(req):
+    if req.method=='GET':
+        return render('data/iv_record.html',req,RawIV.objects.using('data'))

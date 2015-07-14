@@ -3,8 +3,29 @@ from django.db import models
 # Create your models here.
 
 class RawIV(models.Model):
+    symbol=models.CharField(max_length=3)
+    exchange=models.CharField(max_length=4)
+    trade_date=models.DateField()
+    stock_close_price=models.FloatField()
+    option_symbol=models.CharField(max_length=5)
+    expiration=models.DateField()
+    strike=models.FloatField()
+    call_or_put=models.CharField(max_length=1)
+    ask=models.FloatField()
+    bid=models.FloatField()
+    mean_price=models.FloatField()
+    iv=models.FloatField()
+    volume=models.IntegerField()
+    stock_price_for_iv=models.FloatField()
+    isinterpolated=models.CharField(max_length=1)
+    delta=models.FloatField()
+    vega=models.FloatField()
+    gamma=models.FloatField()
+    theta=models.FloatField()
+    rho=models.FloatField()
 
     class Meta:
+        db_table='raw_iv'
         managed=False
 
 class IVIndex(models.Model):
