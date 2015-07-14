@@ -49,3 +49,8 @@ def iv_record(req):
 def yield_rate(req):
     if req.method=='GET':
         return render('data/yield_rate.html',req,YieldRate.objects.all())
+
+@login_required
+def download(req):
+    if req.method=='GET':
+        return ren2res('data/download.html',req)
