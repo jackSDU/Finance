@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import Http404,HttpResponseRedirect
 
 from Main.views import ren2res
 from Main.views import paginate
@@ -6,18 +7,25 @@ from Main.models import *
 
 ##the main page of app,show the app list
 def apps(req):
+    if not req.user.is_superuser:
+        return HttpResponseRedirect('/err/not_admin')
     p = App.objects.filter(hide=False).order_by("id")
     return ren2res("apps/apps_list.html", req, paginate(req, p))
 
 
 def app(req, n):
-    a = App.objects.get(id=n)
+    try:
+        a = App.objects.get(id=n)
+    except:
+        raise Http404()
     p = Param.objects.filter(app_id=n).order_by("order")
     hostlist = Host.objects.all()
     return ren2res("apps/apps_detail.html", req, {"app_i": a, "param_i": p, 'host': hostlist})
 
 
 def deploy(req):
+    if not req.user.is_superuser:
+        return HttpResponseRedirect('/err/not_admin')
     # get list of all hosts
     hostlist = Host.objects.all()
     # request to deploy page
@@ -53,7 +61,7 @@ def delete(req, n):
     a = App.objects.get(id=n)
     a.hide = 1
     a.save()
-    return apps(req)
+    return HttpResponseRedirect('/apps/')
 
 
 # modify an app deployed
