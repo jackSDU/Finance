@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block header %}
+应用部署
+{% endblock %}
+
+{% block sidebar %}
+{% include "apps/sidebar.html" %}
+{% endblock %}
+
+{% block script %}
+    var add_row = function(){
+            var _len = $("#tab tr").length;
+            $("#tab").append("<tr id="+_len+" align='center'>"
+                                +"<td><label name ='order"+_len+"' id='order"+_len+"'>"+_len+"</label></td>"
+                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control' maxlength='50'/></td>"
+                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control' maxlength='200'/></td>"
+                                +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>删除</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>插入</a></td>"
+                            +"</tr>");
+    }
+
+    $(document).ready(function(){
+
+        $("#tab tr").attr("align","center");
+
+        $("#but").click(add_row)
+    })
+
+    //delete a row
+    var deltr =function(index)
+    {
+        var _len = $("#tab tr").length;
+        $("tr[id='"+index+"']").remove();//delete current row
+        //replace old rows with new rows which have correct name and id
+        for(var i=index+1,j=_len;i< j;i++)
+        {
+            var nextTxtVal1 = $("#argname"+i).val();
+            var nextTxtVal2 = $("#value"+i).val();
+            var nextBlankVal =$("#blank"+i).val();
+            $("tr[id=\'"+i+"\']")
+                .replaceWith("<tr id="+(i-1)+" align='center'>"
+                                +"<td><label name ='order"+(i-1)+"' id='order"+(i-1)+"'>"+(i-1)+"</label></td>"
+
+                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control' maxlength='50'/></td>"
+                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control' maxlength='200'/></td>"
+                                +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>删除</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>插入</a></td>"
+                            +"</tr>");
+
+            $("#blank"+(i-1)).val(nextBlankVal);
+
+        }
+    }
+    //insert a row above current row
+    var ins_above_cur = function(index){
+        add_row();
+        var len = $("#tab tr").length;
+        for(i = len - 1; i > index; i--){
+            $("#argname"+i).val($("#argname"+(i-1)).val());
+            $("#value"+i).val($("#value"+(i-1)).val());
+            $("#blank"+i).val($("#blank"+(i-1)).val());
+        }
+        $("#argname"+index).val("");
+        $("#value"+index).val("");
+        $("#blank"+index).val("否");
+    }
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<form class="form-horizontal container-fluid" action="" method="POST">
+{% csrf_token %}
+<div class="form-group">
+    <h1>应用部署</h1>
+
+    <input name="uid" type="hidden" id ="app_uid" value={{ user.id }}>
+    <label for="app_name">应用名称</label>
+    <input name="name" class="form-control" type="text" id="app_name" maxlength="30">
+    <br />
+    <label for="app_host">主机</label>
+    <select name="host" class="form-control" id="app_host">
+        {% for x in host %}
+        <option>{{ x.name }} ({{ x.id }})</option>
+        {% endfor %}
+    </select>
+    <br />
+    <label for="app_path">路径</label>
+    <input name="path" class="form-control" type="text" id="app_path">
+    <br />
+    <label for="app_description">应用描述</label>
+    <textarea name="description" class="form-control" rows="3" id="app_description" maxlength="200"></textarea>
+     <br />
+ </div>
+
+<table name="arglist" class="table table-hover" id="tab" align="center" style="margin-top:20px">
+        <tr>
+            <td width="10%">序号</td>
+            <td>名称</td>
+            <!--td>arg specify</td-->
+            <td>值</td>
+            <td>允许空值</td>
+            <td>删除</td>
+            <td>插入</td>
+       </tr>
+</table>
+
+    <div>
+        <table class="table table-hover">
+        <tr>
+            <td align="right"><button type="button" class="btn btn-default" id="but">添加参数</button></td>
+        </tr>
+        <tr>
+            <td align="center"><button type="submit" class="btn btn-primary btn-lg" id="but_dep">部署</button></td>
+        </tr>
+        </table>
+    </div>
+</form>
+{% endblock %}

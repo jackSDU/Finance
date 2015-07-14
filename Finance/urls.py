@@ -47,10 +47,11 @@ urlpatterns = [
     url(r'^data/yield_rate/$',views.home),
     url(r'^data/download/$',views.home),        #data download
 
-    url(r'^apps/$',views.home),                 #apps list
-    url(r'^apps/([0-9]+)/$',views.home),        #detail of specified app
-    url(r'^apps/deploy/$',views.home),          #deploy app
-    url(r'^apps/modify/([0-9]+)/$',views.home), #modify specified app
+    url(r'^apps/$',views_apps.apps),                 #apps list
+    url(r'^apps/([0-9]+)/$',views_apps.app),        #detail of specified app
+    url(r'^apps/deploy/$',views_apps.deploy),          #deploy app
+    url(r'^apps/modify/([0-9]+)/$',views_apps.modify), #modify specified app
+    url(r'^apps/delete/([0-9]+)/$',views_apps.delete),
 
     url(r'^admin/', include(admin.site.urls)),
 ] + staticfiles_urlpatterns()

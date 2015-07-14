@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block header %}
+    应用列表
+{% endblock %}
+
+{% block sidebar %}
+{% include "apps/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>应用列表</h1>
+
+</div>
+
+    <table class="table table-hover" id="tab"  align="center">
+    <tr align="center">
+
+        <td style="vertical-align:middle;">应用名称</td>
+        <td width="62%" style="vertical-align:middle;">应用描述</td>
+        <td style="vertical-align:middle;">操作</td>
+    </tr>
+    {% for a in item %}
+        <tr align="center" valign="middle">
+
+            <td style="vertical-align:middle;">{{ a.name }}</td>
+            <td style="vertical-align:middle;">{{ a.desc }}</td>
+            <td style="vertical-align:middle;" ><a href="/apps/{{ a.id }}" class="btn btn-primary  active">details</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    {% include "pagination.html" %}
+{% endblock %}

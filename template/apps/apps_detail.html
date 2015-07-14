@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block header %}
+    应用修改
+{% endblock %}
+
+{% block sidebar %}
+{% include "apps/sidebar.html" %}
+{% endblock %}
+
+
+{% block script %}
+    //add a row below at the bottom of the table
+    var add_row = function(){
+            var _len = $("#tab tr").length;
+            $("#tab").append("<tr id="+_len+" align='center'>"
+                                +"<td>"+_len+"</td>"
+                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control'maxlength='50'/></td>"
+                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control'maxlength='200'/></td>"
+                                +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>删除</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>插入</a></td>"
+                            +"</tr>");
+            $("#length").val(_len);
+    }
+
+    $(document).ready(function(){
+        document.getElementById("app_host")[{{ app_i.host_id }}-1].selected = true; //make correct host selected
+        var _len = $("#tab tr").length;
+        $("#length").val(_len-1);
+
+        $("#tab tr").attr("align","center");
+
+        $("#but").click(add_row)
+    })
+    //delete a row
+    var deltr =function(index)
+    {
+        var _len = $("#tab tr").length;
+        $("tr[id='"+index+"']").remove();//remove current row
+        for(var i=index+1,j=_len;i< j;i++)
+        {
+            var nextTxtVal1 = $("#argname"+i).val();
+            var nextTxtVal2 = $("#value"+i).val();
+            var nextBlankVal =$("#blank"+i).val();
+            $("tr[id=\'"+i+"\']")
+                .replaceWith("<tr id="+(i-1)+" align='center'>"
+                                +"<td>"+(i-1)+"</td>"
+                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control'maxlength='50'/></td>"
+                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control'maxlength='200'/></td>"
+                                +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>删除</a></td>"
+                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>插入</a></td>"
+                            +"</tr>");
+
+            $("#blank"+(i-1)).val(nextBlankVal);
+        }
+        $("#length").val(_len-2);
+    }
+    //insert a row above current row
+    var ins_above_cur = function(index){
+        add_row();
+        var len = $("#tab tr").length;
+        for(i = len - 1; i > index; i--){
+            $("#argname"+i).val($("#argname"+(i-1)).val());
+            $("#value"+i).val($("#value"+(i-1)).val());
+            $("#blank"+i).val($("#blank"+(i-1)).val());
+        }
+        $("#argname"+index).val("");
+        $("#value"+index).val("");
+        $("#blank"+index).val("False");
+    }
+{% endblock %}
+{% block content %}
+
+<h1>{{ app_i.name }}</h1>
+<form class="form-horizontal container-fluid" action="/apps/modify/{{ app_i.id }}/" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+    <label for="app_name">应用名称</label>
+    <input name="name" class="form-control" type="text" id="app_name" value="{{ app_i.name }}" maxlength="30">
+    <br />
+    <label for="app_host">主机</label>
+    <select name="host" class="form-control" id="app_host">
+    {% for x in host %}
+        <option>{{ x.name }} ({{ x.id }})</option>
+    {% endfor %}
+    </select>
+    <br />
+    <label for="app_path">路径</label>
+    <input name="path" class="form-control" type="text" id="app_path" value="{{ app_i.path }}">
+    <br />
+    <label for="app_description">应用描述</label>
+    <textarea name="description" class="form-control" rows="3" id="app_description" maxlength="200">{{ app_i.desc }}</textarea>
+     <br />
+    </div>
+    <table name="arglist" class="table table-hover" id="tab" align="center" style="margin-top:20px">
+        <tr>
+            <td>序号</td>
+            <td>参数名称</td>
+            <!--td>arg specify</td-->
+            <td>值</td>
+            <td>允许空值</td>
+            <td>删除</td>
+            <td>插入</td>
+       </tr>
+        {% for p in param_i %}
+            <tr id="{{ p.order }}">
+                <td>{{ p.order }}</td>
+                <td><input  class='form-control' id="argname{{ p.order }}" name="argname{{ p.order }}" value="{{ p.name }}" maxlength="50"></td>
+                <td><input class='form-control' id="value{{ p.order }}" name="value{{ p.order }}" value="{{ p.value }}" maxlength="200"></td>
+                {% if p.blank  == True %}
+                    <td><select class='form-control' id="blank{{ p.order }}" name="blank{{ p.order }}"><option>否</option><option selected>是</option></select></td>
+                {% else %}
+                    <td><select class='form-control' id="blank{{ p.order }}" name="blank{{ p.order }}"><option>否</option><option>是</option></select></td>
+                {% endif %}
+                <td><a href="javascript:void(0)" onclick="deltr({{ p.order }})">删除</a></td>
+                <td><a href="javascript:void(0)" onclick="ins_above_cur({{ p.order }})">插入</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div>
+        <input name="delete" type="hidden" value="False">
+        <input name="arg_len" type="hidden" id="length" value="0">
+        <table class="table">
+        <tr>
+            <td align="right" colspan="2"><button type="button" class="btn btn-default" id="but">添加参数</button></td>
+        </tr>
+        <tr>
+            <td align="right" ><button type="submit" class="btn btn-primary btn-lg">重新部署</button></td>
+            <td align="left"><a href="/apps/delete/{{ app_i.id }}" class="btn btn btn-danger btn-lg">删除应用</a></td>
+        </tr>
+        </table>
+    </div>
+</form>
+
+{% endblock %}
