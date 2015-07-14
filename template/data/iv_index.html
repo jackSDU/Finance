@@ -1,14 +1,10 @@
 {% extends "data/base.html" %}
 
-{% block head %}
-{% endblock %}
-
 {% block header %}
 隐含波动率
 {% endblock %}
 
 {% block table %}
-<table class="table table-hover table-condensed">
     <tr>
         <th>符号</th>
         <th>交换</th>
@@ -59,5 +55,4 @@
         <td>{{ i.ivMean180 }}</td>
     </tr>
     {% endfor %}
-</table>
 {% endblock %}
