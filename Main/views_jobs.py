@@ -1,5 +1,6 @@
 from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from Main.views import ren2res
 from Main.models import *
@@ -8,15 +9,19 @@ from Main.views import paginate
 # Create your views here.
 @login_required
 def choose(req):
-    if App.objects.exists():
-        return ren2res("jobs/choose.html",req,{'apps':App.objects.all()})
-    else:
-        return ren2res("jobs/choose.html",req,{'info':"抱歉，还没有可用的应用！"})
+    if req.method=='GET':
+        if App.objects.exists():
+            return ren2res("jobs/choose.html",req,{'apps':App.objects.all()})
+        else:
+            return ren2res("jobs/choose.html",req,{'info':"抱歉，还没有可用的应用！"})
 
 @login_required
-def submit(req,aid='1'):
+def submit(req,aid):
     if req.method == 'GET':
-        app = App.objects.get(id=aid)
+        try:
+            app = App.objects.get(id=aid)
+        except:
+            raise Http404
         params = Param.objects.filter(app=app)
         dict={'app':app,'params':params,'length':params.count()}
         if req.GET.get("msg"):
@@ -39,28 +44,33 @@ def submit(req,aid='1'):
 
 @login_required
 def list(req):
-    if req.user.is_superuser and Job.objects.all().exists():
-        job=Job.objects.all().order_by("-add_time")
-    elif Job.objects.filter(uid=req.user).exists():
-        job=Job.objects.filter(uid=req.user).order_by("-add_time")
-    else:
-        return ren2res("jobs/list.html", req, {'info':"没有提交的作业！"})
-    dict=paginate(req,job)
-    if req.GET.get("msg"):
-        dict.update({'info':"作业提交成功!"})
-    return ren2res("jobs/list.html",req,dict)
+    if req.method=='GET':
+        if req.user.is_superuser and Job.objects.all().exists():
+            job=Job.objects.all().order_by("-add_time")
+        elif Job.objects.filter(uid=req.user).exists():
+            job=Job.objects.filter(uid=req.user).order_by("-add_time")
+        else:
+            return ren2res("jobs/list.html", req, {'info':"没有提交的作业！"})
+        dict=paginate(req,job)
+        if req.GET.get("msg"):
+            dict.update({'info':"作业提交成功!"})
+        return ren2res("jobs/list.html",req,dict)
 
 @login_required
-def detail(req,jid='1'):
-    job=Job.objects.get(id=jid)
-    params=JobParam.objects.filter(job=job)
-    try:
-        with open("a.txt","r") as result:
-            res=result.read()
-    except IOError as error:
-        res="作业还未执行完成！"
-    dict={'job':job,'params':params,'result':res}
-    return ren2res("jobs/detail.html",req,dict)
+def detail(req,jid):
+    if req.method=='GET':
+        try:
+            job=Job.objects.get(id=jid)
+        except:
+            raise Http404
+        params=JobParam.objects.filter(job=job)
+        try:
+            with open("a.txt","r") as result:
+                res=result.read()
+        except IOError as error:
+            res="作业还未执行完成！"
+        dict={'job':job,'params':params,'result':res}
+        return ren2res("jobs/detail.html",req,dict)
 
 
 
