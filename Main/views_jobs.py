@@ -31,14 +31,14 @@ def submit(req,aid):
         id = req.POST['id']
         params = Param.objects.filter(app=App.objects.get(id=id))
         for param in params:
-           value=req.POST[param.name]
+           value=req.POST.get(str(param.order))
            if value.strip()=="" and param.blank==False:
                return HttpResponseRedirect("?msg=err")
         #     检验有效性
         job=Job(uid=req.user,app=App.objects.get(id=id))
         job.save()
         for param in params:
-            JobParam(job=job,param=param,value=req.POST[param.name]).save()
+            JobParam(job=job,param=param,value=req.POST[str(param.order)]).save()
         #     启动后台线程处理job
         return HttpResponseRedirect("/jobs?page=1&msg=info")
 
