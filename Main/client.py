@@ -1,22 +1,23 @@
-from multiprocessing import Queue,Process
-from urllib import request
+from multiprocessing import Pipe,Process
 
-from Main.models import Job,Host,App
+import requests
+
+from Main.models import Job
 
 COUNT_MAX = 3
 
-queue = Queue()
-
 count=0
+
+rcon,scon=Pipe(False)
 
 def start(id):
     job=Job.objects.get(pk=int(id))
-    queue.put_nowait((do_start,(str(job.app.host.ip),int(job.app.host.port),
+    scon.send((do_start,(str(job.app.host.ip),int(job.app.host.port),
                       int(job.pk),str(job.app.path),str(job.cmd))))
 
 def stop(id):
     job=Job.objects.get(pk=int(id))
-    queue.put_nowait((do_stop,(str(job.app.host.ip),int(job.app.host.port),int(job.pk))))
+    scon.send((do_stop,(str(job.app.host.ip),int(job.app.host.port),int(job.pk))))
 
 def do_start(ip,port,id,exec,param):
     pass
@@ -24,11 +25,14 @@ def do_start(ip,port,id,exec,param):
 def do_stop(ip,port,id):
     pass
 
-def worker():
-    while True:
-        op=queue.get()
-        op[0](*op[1])
+def worker(rcon):
+    try:
+        while True:
+            o=rcon.recv()
+            o[0](*o[1])
+    except:
+        return
 
-proc = Process(name="process",target=worker,daemon=True)
-
-proc.start()
+p=Process(name="client daemon",target=worker,args=(rcon))
+p.daemon=True
+p.start()
