@@ -19,6 +19,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from Main import views,views_user,views_jobs,views_data,views_apps
 
+import Client.urls
+
 urlpatterns = [
     url(r'^login/$',views.login),
     url(r'^logout/$',views.logout),
@@ -53,6 +55,8 @@ urlpatterns = [
     url(r'^apps/deploy/$',views_apps.deploy),          #deploy app
     url(r'^apps/modify/([0-9]+)/$',views_apps.modify), #modify specified app
     url(r'^apps/delete/([0-9]+)/$',views_apps.delete),
+
+    url(r'^api/',include(Client.urls.urlpatterns)),
 
     url(r'^admin/', include(admin.site.urls)),
 ] + staticfiles_urlpatterns()
