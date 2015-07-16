@@ -61,6 +61,7 @@ class Job(models.Model):
     )
 
     status=models.SmallIntegerField(default=1,choices=JOB_STATUS_CHOICES)
+    ret=models.IntegerField(null=True)
 
     def __str__(self):
         return str(self.uid).join(' -- ').join(str(self.app))

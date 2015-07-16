@@ -105,7 +105,7 @@ def not_admin(req):
     return ren2err("info/not_admin.html",req.GET.get('next'))
 
 @require_POST
-def finished(req,id):
+def finished(req,id,status):
     try:
         job=Job.objects.get(pk=id)
     except:
@@ -118,7 +118,16 @@ def finished(req,id):
     f=open(RESULT_DIR+'err_'+str(id),mode='w')
     f.write(req.POST.get('err'))
     f.close()
-    job.status=0
+    ret=req.POST.get('ret')
+    try:
+        ret=int(ret)
+        job.ret=ret
+    except:
+        pass
+    if status:
+        job.status=0
+    else:
+        job.status=-2
     job.end_time=datetime.utcnow()
     job.save()
     return HttpResponse()
