@@ -4,6 +4,20 @@
 {% include "data/sidebar.html" %}
 {% endblock %}
 
+{% block head %}
+<style>
+    th{
+        white-space:nowrap;
+    }
+    td{
+        white-space:nowrap;
+    }
+    .scroll-table{
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}
+
 {% block script %}
 function pgnum(num)
 {
@@ -35,6 +49,10 @@ function pgnum(num)
         </div>
     </form>
 </div>
+<div class="scroll-table">
+    <table class="table table-hover table-condensed table-bordered">
 {% block table %}{% endblock %}
+    </table>
+</div>
 {% include 'pagination.html' %}
 {% endblock %}

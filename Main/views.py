@@ -50,9 +50,10 @@ def register(req):
             u=User.objects.create_user(req.POST['name'],req.POST['email'],req.POST['pw'])
         except:
             return ren2res("register.html",req,{'err':"用户名已被使用。"})
+        u.firstname=req.POST.get('real')
         u.is_active=False
         u.save()
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/info/registered/")
 
 def login(req):
     if req.method=='GET':
@@ -87,10 +88,13 @@ def home(req):
     return ren2res("home.html",req)
 
 def page_not_found(req):
-    return ren2err("err/404.html",False)
+    return ren2err("info/404.html",False)
+
+def registered(req):
+    return ren2err("info/registered.html",'/')
 
 def not_active(req):
-    return ren2err("errs/not_active.html",'/')
+    return ren2err("info/not_active.html",'/')
 
 def not_admin(req):
-    return ren2err("errs/not_admin.html",req.GET.get('next'))
+    return ren2err("info/not_admin.html",req.GET.get('next'))
