@@ -29,16 +29,18 @@ def submit(req,aid):
         return ren2res("jobs/submit.html",req,dict)
     elif req.method == 'POST':
         id = req.POST['id']
-        params = Param.objects.filter(app=App.objects.get(id=id))
+        params = Param.objects.filter(app=App.objects.get(id=id)).order_by("order")
         for param in params:
            value=req.POST.get(str(param.order))
            if value.strip()=="" and param.blank==False:
                return HttpResponseRedirect("?msg=err")
         #     检验有效性
-        job=Job(uid=req.user,app=App.objects.get(id=id))
-        job.save()
+        cmd=""
         for param in params:
-            JobParam(job=job,param=param,value=req.POST[str(param.order)]).save()
+            cmd += req.POST[str(param.order)]
+            cmd += " "
+        job=Job(uid=req.user,app=App.objects.get(id=id),cmd=cmd.strip())
+        job.save()
         #     启动后台线程处理job
         return HttpResponseRedirect("/jobs?page=1&msg=info")
 
@@ -63,13 +65,12 @@ def detail(req,jid):
             job=Job.objects.get(id=jid)
         except:
             raise Http404
-        params=JobParam.objects.filter(job=job)
         try:
             with open("a.txt","r") as result:
                 res=result.read()
         except IOError as error:
             res="作业还未执行完成！"
-        dict={'job':job,'params':params,'result':res}
+        dict={'job':job,'result':res}
         return ren2res("jobs/detail.html",req,dict)
 
 
