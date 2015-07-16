@@ -19,6 +19,7 @@
     <th>应用名称</th>
     <th>作业状态</th>
     <th>详情</th>
+    <th>停止任务</th>
   </tr>
   {% for job in item %}
   <tr>
@@ -34,6 +35,7 @@
         <td>出错</td>
     {% endif %}
     <td><a href="/jobs/{{ job.id }}"><button class="btn btn-link btn-sm">查看</button></a></td>
+    <td><a href="/jobs/{{ job.id }}/stop">停止</a></td>
   </tr>
   {% endfor %}
 </table>

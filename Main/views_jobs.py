@@ -73,5 +73,13 @@ def detail(req,jid):
         dict={'job':job,'result':res}
         return ren2res("jobs/detail.html",req,dict)
 
+def stop(req,jid):
+    if req.method=='GET':
+        try:
+            job=Job.objects.get(id=jid)
+        except:
+            raise Http404
+        # 停止作业
+
 
 

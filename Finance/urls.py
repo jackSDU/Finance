@@ -39,6 +39,7 @@ urlpatterns = [
 
     url(r'^jobs/$',views_jobs.list),                 #jobs list
     url(r'^jobs/([0-9]+)/$',views_jobs.detail),        #detail of job
+    url(r'^jobs/([0-9]+)/stop/$',views_jobs.stop),        #stop job
     url(r'^jobs/submit/$',views_jobs.choose),          #select app
     url(r'^jobs/submit/([0-9]+)/$',views_jobs.submit), #add job using specified app
 
