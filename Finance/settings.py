@@ -120,6 +120,4 @@ APP_DEPLOY_DIR = '/'
 
 RESULT_DIR = os.path.join(BASE_DIR, "result")
 
-MASTER_PORT=2233
-
 SERVANT_PORT=2333
