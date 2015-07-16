@@ -5,24 +5,6 @@ from Finance.settings import APP_DEPLOY_DIR,SERVANT_PORT
 
 # Create your models here.
 
-"""Priv in heaven
-class Priv(models.Model):
-    uid=models.OneToOneField(User,primary_key=True)
-
-    user_manage=models.BooleanField(default=False)
-
-    jobs_manage=models.BooleanField(default=False)
-
-    data_query=models.BooleanField(default=True)
-    data_down=models.BooleanField(default=False)
-
-    apps_deploy=models.BooleanField(default=False)
-    apps_manage=models.BooleanField(default=False)
-
-    def __str__(self):
-        return str(self.uid)
-"""
-
 class Host(models.Model):
     name=models.CharField(max_length=30)
     ip=models.GenericIPAddressField()
@@ -64,6 +46,8 @@ class Job(models.Model):
     uid=models.ForeignKey(User)
     app=models.ForeignKey(App)
 
+    cmd=models.TextField()
+
     add_time=models.DateTimeField(auto_now_add=True)
     start_time=models.DateTimeField(null=True)
     end_time=models.DateTimeField(null=True)
@@ -79,9 +63,3 @@ class Job(models.Model):
 
     def __str__(self):
         return str(self.uid).join(' -- ').join(str(self.app))
-
-class JobParam(models.Model):
-    job=models.ForeignKey(Job)
-    param=models.ForeignKey(Param)
-
-    value=models.CharField(max_length=200)
