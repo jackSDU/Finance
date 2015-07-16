@@ -58,7 +58,6 @@ class Job(models.Model):
         (0,'Finished'),
         (1,'Waiting'),
         (2,'Running'),
-        (3,'Stopping'),
     )
 
     status=models.SmallIntegerField(default=1,choices=JOB_STATUS_CHOICES)
