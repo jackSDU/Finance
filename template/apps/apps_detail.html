@@ -1,82 +1,12 @@
-{% extends "base.html" %}
+{% extends "apps/apps_deploy.html" %}
 
-{% block header %}
-    应用修改
-{% endblock %}
-
-{% block sidebar %}
-{% include "apps/sidebar.html" %}
-{% endblock %}
-
-
-{% block script %}
-    //add a row below at the bottom of the table
-    var add_row = function(){
-            var _len = $("#tab tr").length;
-            $("#tab").append("<tr id="+_len+" align='center'>"
-                                +"<td>"+_len+"</td>"
-                                +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control'maxlength='50'/></td>"
-                                +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control'maxlength='200'/></td>"
-                                +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>否</option><option>是</option></select></td>"
-                                +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>删除</a></td>"
-                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>插入</a></td>"
-                            +"</tr>");
-            $("#length").val(_len);
-    }
-
-    $(document).ready(function(){
-        document.getElementById("app_host")[{{ app_i.host_id }}-1].selected = true; //make correct host selected
-        var _len = $("#tab tr").length;
-        $("#length").val(_len-1);
-
-        $("#tab tr").attr("align","center");
-
-        $("#but").click(add_row)
-    })
-    //delete a row
-    var deltr =function(index)
-    {
-        var _len = $("#tab tr").length;
-        $("tr[id='"+index+"']").remove();//remove current row
-        for(var i=index+1,j=_len;i< j;i++)
-        {
-            var nextTxtVal1 = $("#argname"+i).val();
-            var nextTxtVal2 = $("#value"+i).val();
-            var nextBlankVal =$("#blank"+i).val();
-            $("tr[id=\'"+i+"\']")
-                .replaceWith("<tr id="+(i-1)+" align='center'>"
-                                +"<td>"+(i-1)+"</td>"
-                                +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control'maxlength='50'/></td>"
-                                +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control'maxlength='200'/></td>"
-                                +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>否</option><option>是</option></select></td>"
-                                +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>删除</a></td>"
-                                +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>插入</a></td>"
-                            +"</tr>");
-
-            $("#blank"+(i-1)).val(nextBlankVal);
-        }
-        $("#length").val(_len-2);
-    }
-    //insert a row above current row
-    var ins_above_cur = function(index){
-        add_row();
-        var len = $("#tab tr").length;
-        for(i = len - 1; i > index; i--){
-            $("#argname"+i).val($("#argname"+(i-1)).val());
-            $("#value"+i).val($("#value"+(i-1)).val());
-            $("#blank"+i).val($("#blank"+(i-1)).val());
-        }
-        $("#argname"+index).val("");
-        $("#value"+index).val("");
-        $("#blank"+index).val("False");
-    }
-{% endblock %}
 {% block content %}
 
-<h1>{{ app_i.name }}</h1>
-<form class="form-horizontal container-fluid" action="/apps/modify/{{ app_i.id }}/" method="POST">
+<form class="form-horizontal container-fluid" action="/apps/modify/{{ app_i.id }}/" method="POST" onsubmit="return check()">
     {% csrf_token %}
-    <div class="form-group">
+
+    <div class="form-group" id="info">
+        <h1>{{ app_i.name }}</h1>
     <label for="app_name">应用名称</label>
     <input name="name" class="form-control" type="text" id="app_name" value="{{ app_i.name }}" maxlength="30">
     <br />
@@ -134,5 +64,4 @@
         </table>
     </div>
 </form>
-
 {% endblock %}

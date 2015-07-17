@@ -5,20 +5,20 @@ from Main.views import ren2res
 from Main.views import paginate
 from Main.models import *
 
-##the main page of app,show the app list
+# the main page of app,show the app list
 @login_required
 def apps(req):
+    if not req.user.is_superuser:
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
-        if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
         p = App.objects.filter(hide=False).order_by("id")
         return ren2res("apps/apps_list.html", req, paginate(req, p))
 
 @login_required
 def app(req, n):
+    if not req.user.is_superuser:
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
-        if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
         try:
             a = App.objects.get(id=n)
         except:
@@ -30,68 +30,127 @@ def app(req, n):
 @login_required
 def deploy(req):
     if not req.user.is_superuser:
-        return HttpResponseRedirect('/err/not_admin')
-    # get list of all hosts
+        return HttpResponseRedirect('/info/not_admin')
     hostlist = Host.objects.all()
-    # request to deploy page
+    # GET method requests a deploy page
     if req.method == 'GET':
         return ren2res("apps/apps_deploy.html", req, {'host': hostlist})
     # request to deploy a new application
     elif req.method == 'POST':
         # add application info to app table
-        name = req.POST.get('name')
-        host = req.POST.get('host')
-        host_id = host[host.rfind('(') + 1:-1]
-        path = req.POST.get('path')
-        desc = req.POST.get('description')
-        uid = req.POST.get('uid')
-        app_submit = App(name=name, desc=desc, path=path, host_id=host_id, uid_id=uid)
+        info = app_info_check(req)
+        if info['err']:
+            return ren2res("apps/apps_deploy.html",req,{'host': hostlist, 'err': info['err']})
+        uid = req.user.id
+        app_submit = info['submit']
+        app_submit.uid_id = uid
+        # add valid args to para table
+        args = app_arg_check(req)
+        if args['err']:
+            return ren2res("apps/apps_deploy.html", req, {'host': hostlist, 'err': args['err']})
         app_submit.save()
         app_id = app_submit.id
-        # add parameters info to para table
-        i = 1
-        while not (req.POST.get('argname' + str(i)) is None):
-            order = str(i)
-            argname = req.POST.get('argname' + order)
-            value = req.POST.get('value' + order)
-            blank = 1 if req.POST.get('blank' + order) == '是' else 0
-            submit = Param(order=order, name=argname, value=value, blank=blank, app_id=app_id)
-            submit.save()
-            i += 1
-        return ren2res("apps/apps_deploy.html", req, {'host': hostlist})
+        for x in args['list_submit']:
+            x.app_id = app_id
+            x.save()
+        return ren2res("apps/apps_deploy.html", req, {'host': hostlist, 'info': "部署成功"})
 
 
 # delete an app deployed
 @login_required
 def delete(req, n):
+    if not req.user.is_superuser:
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
-        if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
-        a = App.objects.get(id=n)
-        a.hide = 1
-        a.save()
+    # If there is not an app whose id = n ,raise 404
+        try:
+            app = App.objects.get(id=n)
+        except:
+            raise Http404()
+        app.hide = 1
+        app.save()
         return HttpResponseRedirect('/apps/')
 
 
 # modify an app deployed
 @login_required
 def modify(req, n):
+    if not req.user.is_superuser:
+            return HttpResponseRedirect('/info/not_admin')
+    # ignore GET method
     if req.method == 'POST':
-        if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
-        a = App.objects.get(id=n)
-        len_arg = req.POST["arg_len"]
-        a.name = req.POST["name"]
-        a.path = req.POST["path"]
-        a.desc = req.POST["description"]
-        a.save()
-        Param.objects.filter(app_id=n).delete()
-        for i in range(1, int(len_arg) + 1):
-            si = str(i)
-            if req.POST["blank" + si] == "True":
-                bv = 1
-            else:
-                bv = 0
-            p = Param(order=i, name=req.POST["argname" + si], value=req.POST["value" + si], blank=bv, app_id=n)
-            p.save()
+        # If there is not an app whose id = n ,raise 404
+        try:
+            app = App.objects.get(id=n)
+        except:
+            raise Http404()
+        # check the info
+        info = app_info_check(req, n)
+        param = Param.objects.filter(app_id=n).order_by("order")
+        # if some errors, return error warning
+        if info['err']:
+            hostlist = Host.objects.all().order_by("id")
+            dict = {"app_i": app, "param_i": param, 'host': hostlist, 'err':info['err']}
+            return ren2res("apps/apps_detail.html", req, dict)
+        app_submit = info['submit']
+        # check the parameters
+        args = app_arg_check(req)
+        if args['err']:
+            hostlist = Host.objects.all()
+            dict = {"app_i": app, "param_i": param, 'host': hostlist, 'err': args['err']}
+            return ren2res("apps/apps_detail.html", req, dict)
+        # uid is id of who deploy the app at first
+        app_submit.uid_id = app.uid_id
+        app_submit.save()
+        param.delete()
+        for x in args['list_submit']:
+            x.app_id = n
+            x.save()
         return HttpResponseRedirect("/apps/")
+
+# check name,path, if one is empty, return error in err field, else insert or update a record without save()
+# save() will be executed after passing parameters check
+# note:same name is allowed
+def app_info_check(req, app_id=None):
+    dict = {'err': ""}
+    name = req.POST.get('name').strip()
+    if name == "":
+        dict.update(err="无效的应用名称")
+        return dict
+    host = req.POST.get('host')
+    host_id = host[host.rfind('(') + 1:-1]
+    path = req.POST.get('path').strip()
+    if path == "":
+        dict.update(err="无效的路径")
+        return dict
+    desc = req.POST.get('description').strip()
+    submit = App(id=app_id, name=name, host_id=host_id, path=path, desc=desc)
+    dict.update(submit=submit)
+    return dict
+
+# check parameters, if a empty name or same names found, return error warning
+# else insert records without save()
+# save() will be executed after save() of info executed and an ID returned(deploy)
+# or old parameters deleted(modify)
+def app_arg_check(req):
+    i = 1
+    dict = {'err': ""}
+    list_submit = []
+    list_name = []
+    while not (req.POST.get('argname' + str(i)) is None):
+        order = str(i)
+        argname = req.POST.get('argname' + order).strip()
+        if argname == "":
+            dict.update(err="无效的参数名称")
+            return dict
+        if argname in list_name:
+            dict.update(err="重复的参数名称")
+            return dict
+        list_name.append(argname)
+        value = req.POST.get('value' + order).strip()
+        blank = 1 if req.POST.get('blank' + order) == '是' else 0
+        submit = Param(order=order, name=argname, value=value, blank=blank)
+        list_submit.append(submit)
+        i += 1
+    dict.update(list_submit=list_submit)
+    return dict
