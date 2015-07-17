@@ -37,10 +37,11 @@ def worker_daemon(cmd,stop):
             id =stop.recv()#id
             p=dict.get(id)
             if(p!=None):
-                dict.get(id).terminate()
-            dict.get(id).terminate()
-            dict.pop(id)
-            result_dict.pop(id)
+                p.terminate()
+                print("terminated")
+                dict.pop(id)
+                result_dict.pop(id)
+
         for id,popen in dict.items():
             ret=popen.poll()
             if ret==0:
@@ -54,12 +55,12 @@ def worker_daemon(cmd,stop):
                 requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+"/wrong/"+str(id),
                               {"out":files[0].read(),"err":files[1].read(),"ret":ret})
 
-        time.sleep(4)
+        time.sleep(1)
         print("helo")
     pass
 app=Flask('Server')
 
-@app.route('/start/<int:id>',methods=['POST'])#
+@app.route('/start/<int:id>',methods=['POST'])
 def start(id):
     if request.method == 'POST':
         cmd_write.send([id,request.form["cmd"]])
