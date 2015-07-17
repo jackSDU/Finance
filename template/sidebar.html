@@ -2,25 +2,55 @@
 <script>
     $(document).ready(function()
     {
-        var image=new Array();
-        image[0]="/static/img/app.gif";
-        image[1]="/static/img/app_selected.gif";
-        image[2]="/static/img/data.gif";
-        image[3]="/static/img/data_selected.gif";
-        image[4]="/static/img/job.gif";
-        image[5]="/static/img/job_selected.gif";
-        image[6]="/static/img/user.gif";
-        image[7]="/static/img/user_selected.gif";
-        $(".panel-heading").mouseover(function()
+        $("#img11,#img21,#img31,#img41").hide();
+        $("#heading1").mouseover(function()
         {
             $(this).next('.collapse').collapse('show');
-        })
-        $("#heading1.panel-heading").click(function(){
-            document.getElementById("img1").src=document.getElementById("img1").src==image[6]?image[7]:image[6];
-        })
-        $('#one,#two,#three,#four').bind("mouseleave",function(){
-             $(this).children('.collapse').collapse('hide')
-        })
+            $("#img10").hide();
+            $("#img11").show();
+        });
+        $("#heading2").mouseover(function()
+        {
+            $(this).next('.collapse').collapse('show');
+            $("#img20").hide();
+            $("#img21").show();
+        });
+        $("#heading3").mouseover(function()
+        {
+            $(this).next('.collapse').collapse('show');
+            $("#img30").hide();
+            $("#img31").show();
+        });
+        $("#heading4").mouseover(function()
+        {
+            $(this).next('.collapse').collapse('show');
+            $("#img40").hide();
+            $("#img41").show();
+        });
+        $("#one").mouseleave(function()
+        {
+            $(this).children('.collapse').collapse('hide');
+            $("#img11").hide();
+            $("#img10").show();
+        });
+        $("#two").mouseleave(function()
+        {
+            $(this).children('.collapse').collapse('hide');
+            $("#img21").hide();
+            $("#img20").show();
+        });
+        $("#three").mouseleave(function()
+        {
+            $(this).children('.collapse').collapse('hide');
+            $("#img31").hide();
+            $("#img30").show();
+        });
+        $("#four").mouseleave(function()
+        {
+            $(this).children('.collapse').collapse('hide');
+            $("#img41").hide();
+            $("#img40").show();
+        });
     })
 </script>
 {% endblock %}
@@ -30,7 +60,8 @@
                 <!--<a href="/user/" class="list-group-item">用户管理</a>-->
             <div id="one" class="panel panel-default" role="tab">
                  <div id="heading1" class="panel-heading" role="button" data-toggle="collapse" href="/user/" data-parent="#all" data-target="#list1" aria-expanded="true" aria-controls="list1">
-                     <img id="img1" class="img" src="/static/img/user.gif">
+                     <img id="img10" class="img" src="/static/img/user.gif">
+                     <img id="img11" class="img" src="/static/img/user_selected.gif">
                      用户管理
                 </div>
                 <div id="list1" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
@@ -47,7 +78,8 @@
                 <!--<a href="/jobs/" class="list-group-item">作业管理</a>-->
                 <div id="two" class="panel panel-default" role="tab">
                     <div id="heading2" class="panel-heading" role="button" data-toggle="collapse" href="/jobs/" data-parent="#all" data-target="#list2" aria-expanded="true" aria-controls="list2">
-                        <img class="img" src="/static/img/job.gif">
+                        <img id="img20" class="img" src="/static/img/job.gif">
+                        <img id="img21" class="img" src="/static/img/job_selected.gif">
                         作业管理
                     </div>
                     <div id="list2" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
@@ -60,7 +92,8 @@
                 <!--<a href="/data/iv_record/" class="list-group-item">数据管理</a>-->
                 <div id="three" class="panel panel-default" role="tab">
                 <div id="heading3" class="panel-heading" role="button" data-toggle="collapse" href="/data/iv_record/" data-parent="#all" data-target="#list3" aria-expanded="true" aria-controls="list3">
-                    <img class="img" src="/static/img/data.gif">
+                    <img id="img30" class="img" src="/static/img/data.gif">
+                    <img id="img31" class="img" src="/static/img/data_selected.gif">
                     数据管理
                 </div>
                 <div id="list3" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
@@ -76,7 +109,8 @@
                 <!--<a href="/apps/" class="list-group-item">应用管理</a>-->
                 <div id="four" class="panel panel-default" role="tab">
                 <div id="heading4" class="panel-heading" role="button" data-toggle="collapse" href="/apps/" data-parent="#all" data-target="#list4" aria-expanded="true" aria-controls="list4">
-                    <img class="img" src="/static/img/app.gif">
+                    <img id="img40" class="img" src="/static/img/app.gif">
+                    <img id="img41" class="img" src="/static/img/app_selected.gif">
                     应用管理
                 </div>
                     <div id="list4" class="panel-collapse collapse" role="tabpanel"aria-expanded="true">
