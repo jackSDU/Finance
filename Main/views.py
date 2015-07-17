@@ -14,7 +14,7 @@ from Main import client
 
 def ren2res(template,req,dict={}):
     if req.user.is_authenticated():
-        dict.update({'user':{'id':req.user.id,'name':req.user.get_username()}})
+        dict.update({'user':{'id':req.user.id,'name':req.user.get_username(),'super':req.user.is_superuser}})
     else:
         dict.update(user=False)
     return render_to_response(template,dict,context_instance=RequestContext(req))

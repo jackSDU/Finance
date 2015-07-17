@@ -5,3 +5,18 @@
 td{
     vertical-align: middle !important;
 }
+
+div.panel-heading:hover{ background: #0066cc }
+div.panel-heading{
+    background: #FFFFFF !important;
+    color:#000000 !important;
+    border-style: solid !important;
+    border-width: 1px;
+    border-color: #bdbdbd
+}
+
+div.panel ul.list-group a.list-group-item{ background: #d0d0d0 !important;}
+.a{
+    background: #d0d0d0;
+    height: 1000px;
+}

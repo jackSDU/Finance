@@ -1,14 +1,89 @@
+{% block head %}
+<script>
+    $(document).ready(function()
+    {
+        var image=new Array();
+        image[0]="/static/img/app.gif";
+        image[1]="/static/img/app_selected.gif";
+        image[2]="/static/img/data.gif";
+        image[3]="/static/img/data_selected.gif";
+        image[4]="/static/img/job.gif";
+        image[5]="/static/img/job_selected.gif";
+        image[6]="/static/img/user.gif";
+        image[7]="/static/img/user_selected.gif";
+        $(".panel-heading").mouseover(function()
+        {
+            $(this).next('.collapse').collapse('show');
+        })
+        $("#heading1.panel-heading").click(function(){
+            document.getElementById("img1").src=document.getElementById("img1").src==image[6]?image[7]:image[6];
+        })
+        $('#one,#two,#three,#four').bind("mouseleave",function(){
+             $(this).children('.collapse').collapse('hide')
+        })
+    })
+</script>
+{% endblock %}
 
-
-            <ul class="list-group">
-                <a href="/user/" class="list-group-item">用户管理</a>
-            </ul>
-            <ul class="list-group">
-                <a href="/jobs/" class="list-group-item">作业管理</a>
-            </ul>
-            <ul class="list-group">
-                <a href="/data/iv_record/" class="list-group-item">数据管理</a>
-            </ul>
-            <ul class="list-group">
-                <a href="/apps/" class="list-group-item">应用管理</a>
-            </ul>
+        <div class="a" id="all" role="tablist" aria-multiselectable="true">
+            <div>&nbsp;</div>
+                <!--<a href="/user/" class="list-group-item">用户管理</a>-->
+            <div id="one" class="panel panel-default" role="tab">
+                 <div id="heading1" class="panel-heading" role="button" data-toggle="collapse" href="/user/" data-parent="#all" data-target="#list1" aria-expanded="true" aria-controls="list1">
+                     <img id="img1" class="img" src="/static/img/user.gif">
+                     用户管理
+                </div>
+                <div id="list1" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
+                <ul class="list-group">
+                    <a class="list-group-item" href="/user/">个人资料</a>
+                    <a class="list-group-item" href="/user/edit/">资料修改</a>
+                    {% if user.super %}
+                    <a class="list-group-item" href="/user/list/">用户列表</a>
+                    <a class="list-group-item" href="/user/verify/">待审核用户</a>
+                    {% endif %}
+                </ul>
+                </div>
+            </div>
+                <!--<a href="/jobs/" class="list-group-item">作业管理</a>-->
+                <div id="two" class="panel panel-default" role="tab">
+                    <div id="heading2" class="panel-heading" role="button" data-toggle="collapse" href="/jobs/" data-parent="#all" data-target="#list2" aria-expanded="true" aria-controls="list2">
+                        <img class="img" src="/static/img/job.gif">
+                        作业管理
+                    </div>
+                    <div id="list2" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
+                        <ul class="list-group">
+                            <a class="list-group-item" href="/jobs/submit">作业提交</a>
+                            <a class="list-group-item" href="/jobs">作业查看</a>
+                        </ul>
+                    </div>
+                </div>
+                <!--<a href="/data/iv_record/" class="list-group-item">数据管理</a>-->
+                <div id="three" class="panel panel-default" role="tab">
+                <div id="heading3" class="panel-heading" role="button" data-toggle="collapse" href="/data/iv_record/" data-parent="#all" data-target="#list3" aria-expanded="true" aria-controls="list3">
+                    <img class="img" src="/static/img/data.gif">
+                    数据管理
+                </div>
+                <div id="list3" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
+                <ul class="list-group">
+                    <a href="/data/iv_record/" class="list-group-item">原始交易记录</a>
+                    <a href="/data/iv_index/" class="list-group-item">隐含波动率</a>
+                    <a href="/data/interest_rate/" class="list-group-item">利率</a>
+                    <a href="/data/yield_rate/" class="list-group-item">收益率</a>
+                    <a href="/data/download/" class="list-group-item">数据下载</a>
+                </ul>
+            </div>
+                </div>
+                <!--<a href="/apps/" class="list-group-item">应用管理</a>-->
+                <div id="four" class="panel panel-default" role="tab">
+                <div id="heading4" class="panel-heading" role="button" data-toggle="collapse" href="/apps/" data-parent="#all" data-target="#list4" aria-expanded="true" aria-controls="list4">
+                    <img class="img" src="/static/img/app.gif">
+                    应用管理
+                </div>
+                    <div id="list4" class="panel-collapse collapse" role="tabpanel"aria-expanded="true">
+                        <ul class="list-group">
+                        <a class="list-group-item" href="/apps">应用列表</a>
+                        <a class="list-group-item" href="/apps/deploy">应用部署</a>
+                        </ul>
+                    </div>
+            </div>
+        </div>
