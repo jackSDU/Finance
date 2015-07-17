@@ -5,8 +5,7 @@ from django.http import Http404
 from Main.views import ren2res
 from Main.models import *
 from Main.views import paginate
-from Main.client import start
-from main.client import stop
+from Main.client import start,stop
 
 # Create your views here.
 @login_required
