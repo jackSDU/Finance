@@ -5,6 +5,8 @@ from django.http import Http404
 from Main.views import ren2res
 from Main.models import *
 from Main.views import paginate
+from Main.client import start
+from main.client import stop
 
 # Create your views here.
 @login_required
@@ -34,14 +36,13 @@ def submit(req,aid):
            value=req.POST.get(str(param.order))
            if value.strip()=="" and param.blank==False:
                return HttpResponseRedirect("?msg=err")
-        #     检验有效性
         cmd=""
         for param in params:
             cmd += req.POST[str(param.order)]
             cmd += " "
         job=Job(uid=req.user,app=App.objects.get(id=id),cmd=cmd.strip())
         job.save()
-        #     启动后台线程处理job
+        start(job.id)
         return HttpResponseRedirect("/jobs?page=1&msg=info")
 
 @login_required
@@ -75,11 +76,7 @@ def detail(req,jid):
 
 def stop(req,jid):
     if req.method=='GET':
-        try:
-            job=Job.objects.get(id=jid)
-        except:
-            raise Http404
-        # 停止作业
+        stop(jid)
 
 
 
