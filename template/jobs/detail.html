@@ -29,14 +29,16 @@
     </tr>
     <tr>
         <th>作业状态</th>
-        {% if job.status == 0 %}
+        {% if job.status == -2 %}
+        <td>错误</td>
+        {% elif job.status == -1 %}
+        <td>停止</td>
+        {% elif job.status == 0 %}
         <td>完成</td>
         {% elif job.status == 1 %}
         <td>等待</td>
-        {% elif job.status == 2 %}
-        <td>运行</td>
         {% else %}
-        <td>出错</td>
+        <td>运行</td>
         {% endif %}
     </tr>
     <tr>
@@ -55,12 +57,10 @@
         <td>/</td>
         {% endif %}
     </tr>
-    {% for param in params %}
-        <tr>
-            <th>{{ param.param.name }}</th>
-            <td>{{ param.value }}</td>
-        </tr>
-    {% endfor %}
+    <tr>
+        <th>作业参数</th>
+        <td>{{ job.cmd }}</td>
+    </tr>
     <tr>
         <th>运行结果</th>
         <td><pre>{{ result }}</pre></td>

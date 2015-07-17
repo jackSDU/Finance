@@ -19,21 +19,25 @@
     <th>应用名称</th>
     <th>作业状态</th>
     <th>详情</th>
+    <th>停止任务</th>
   </tr>
   {% for job in item %}
   <tr>
     <td>{{ job.add_time }}</td>
     <td>{{ job.app.name }}</td>
-    {% if job.status == 0 %}
-        <td>完成</td>
+    {% if job.status == -2 %}
+    <td>错误</td>
+    {% elif job.status == -1 %}
+    <td>停止</td>
+    {% elif job.status == 0 %}
+    <td>完成</td>
     {% elif job.status == 1 %}
-        <td>等待</td>
-    {% elif job.status == 2 %}
-        <td>运行</td>
+    <td>等待</td>
     {% else %}
-        <td>出错</td>
+    <td>运行</td>
     {% endif %}
     <td><a href="/jobs/{{ job.id }}"><button class="btn btn-link btn-sm">查看</button></a></td>
+    <td><a href="/jobs/{{ job.id }}/stop">停止</a></td>
   </tr>
   {% endfor %}
 </table>
