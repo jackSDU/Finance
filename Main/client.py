@@ -25,14 +25,14 @@ def do_start(ip,port,id,exec,param):
 def do_stop(ip,port,id):
     pass
 
-def worker(rcon):
-    try:
-        while True:
-            o=rcon.recv()
+def daemon(rcon):
+    while True:
+        o=rcon.recv()
+        try:
             o[0](*o[1])
-    except:
-        return
+        except:
+            pass
 
-p=Process(name="client daemon",target=worker,args=(rcon))
+p=Process(name="daemon",target=daemon,args=(rcon))
 p.daemon=True
 p.start()
