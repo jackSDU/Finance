@@ -9,7 +9,7 @@ from Main.models import *
 @login_required
 def apps(req):
     if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
         p = App.objects.filter(hide=False).order_by("id")
         return ren2res("apps/apps_list.html", req, paginate(req, p))
@@ -17,7 +17,7 @@ def apps(req):
 @login_required
 def app(req, n):
     if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
         try:
             a = App.objects.get(id=n)
@@ -30,7 +30,7 @@ def app(req, n):
 @login_required
 def deploy(req):
     if not req.user.is_superuser:
-        return HttpResponseRedirect('/err/not_admin')
+        return HttpResponseRedirect('/info/not_admin')
     hostlist = Host.objects.all()
     # GET method requests a deploy page
     if req.method == 'GET':
@@ -60,7 +60,7 @@ def deploy(req):
 @login_required
 def delete(req, n):
     if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
     # If there is not an app whose id = n ,raise 404
         try:
@@ -76,7 +76,7 @@ def delete(req, n):
 @login_required
 def modify(req, n):
     if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
+            return HttpResponseRedirect('/info/not_admin')
     # ignore GET method
     if req.method == 'POST':
         # If there is not an app whose id = n ,raise 404
