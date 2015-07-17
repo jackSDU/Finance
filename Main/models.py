@@ -53,13 +53,15 @@ class Job(models.Model):
     end_time=models.DateTimeField(null=True)
 
     JOB_STATUS_CHOICES=(
+        (-2,'Wrong'),
+        (-1,'Stopped'),
         (0,'Finished'),
         (1,'Waiting'),
         (2,'Running'),
-        (3,'Wrong'),
     )
 
-    status=models.PositiveSmallIntegerField(default=1,choices=JOB_STATUS_CHOICES)
+    status=models.SmallIntegerField(default=1,choices=JOB_STATUS_CHOICES)
+    ret=models.IntegerField(null=True)
 
     def __str__(self):
         return str(self.uid).join(' -- ').join(str(self.app))
