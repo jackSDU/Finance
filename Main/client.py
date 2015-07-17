@@ -1,4 +1,4 @@
-from multiprocessing import Pipe,Process
+from multiprocessing import Pipe
 
 import requests
 
@@ -51,13 +51,12 @@ def do_stop(ip,port,id):
     r=requests.post(url)
 
 def daemon(rcon):
-    while True:
-        o=rcon.recv()
-        try:
-            o[0](*o[1])
-        except:
-            pass
-
-p=Process(name="daemon",target=daemon,args=(rcon,))
-p.daemon=True
-p.start()
+    try:
+        while True:
+            o=rcon.recv()
+            try:
+                o[0](*o[1])
+            except:
+                pass
+    except:
+        pass
