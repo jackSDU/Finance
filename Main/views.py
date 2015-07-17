@@ -10,6 +10,7 @@ from django.contrib import auth
 from Finance.settings import RESULT_DIR
 
 from Main.models import *
+from Main import client
 
 def ren2res(template,req,dict={}):
     if req.user.is_authenticated():
@@ -130,4 +131,6 @@ def finished(req,id,status):
         job.status=-2
     job.end_time=datetime.utcnow()
     job.save()
+    client.count-=1
+    client.start()
     return HttpResponse()
