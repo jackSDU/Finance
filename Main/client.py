@@ -20,12 +20,12 @@ def start(id=None):
         id=list.pop(0)
         job=Job.objects.get(pk=int(id))
         scon.send((do_start,(str(job.app.host.ip),int(job.app.host.port),
-                          int(job.pk),str(job.app.path),str(job.cmd))))
+                          int(job.pk),str(job.app.path),str(job.cmd),),))
         count+=1
 
 def stop(id):
     job=Job.objects.get(pk=int(id))
-    scon.send((do_stop,(str(job.app.host.ip),int(job.app.host.port),int(job.pk))))
+    scon.send((do_stop,(str(job.app.host.ip),int(job.app.host.port),int(job.pk),),))
 
 def do_start(ip,port,id,exec,param):
     url="http://"
@@ -58,6 +58,6 @@ def daemon(rcon):
         except:
             pass
 
-p=Process(name="daemon",target=daemon,args=(rcon))
+p=Process(name="daemon",target=daemon,args=(rcon,))
 p.daemon=True
 p.start()
