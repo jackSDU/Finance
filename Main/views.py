@@ -1,10 +1,16 @@
 from math import ceil
+from datetime import datetime
 
+from django.http import HttpResponse,HttpResponseBadRequest,HttpResponseNotFound
+from django.views.decorators.http import require_POST
 from django.template import RequestContext
 from django.shortcuts import render_to_response,HttpResponseRedirect
 from django.contrib import auth
 
+from Finance.settings import RESULT_DIR
+
 from Main.models import *
+from Main import client
 
 def ren2res(template,req,dict={}):
     if req.user.is_authenticated():
@@ -98,3 +104,33 @@ def not_active(req):
 
 def not_admin(req):
     return ren2err("info/not_admin.html",req.GET.get('next'))
+
+@require_POST
+def finished(req,id,status):
+    try:
+        job=Job.objects.get(pk=id)
+    except:
+        return HttpResponseNotFound()
+    if job.status != 2:
+        return HttpResponseBadRequest()
+    f=open(RESULT_DIR+'out_'+str(id),mode='w')
+    f.write(req.POST.get('out'))
+    f.close()
+    f=open(RESULT_DIR+'err_'+str(id),mode='w')
+    f.write(req.POST.get('err'))
+    f.close()
+    ret=req.POST.get('ret')
+    try:
+        ret=int(ret)
+        job.ret=ret
+    except:
+        pass
+    if status:
+        job.status=0
+    else:
+        job.status=-2
+    job.end_time=datetime.utcnow()
+    job.save()
+    client.count-=1
+    client.start()
+    return HttpResponse()

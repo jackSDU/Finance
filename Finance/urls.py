@@ -55,6 +55,9 @@ urlpatterns = [
     url(r'^apps/modify/([0-9]+)/$',views_apps.modify), #modify specified app
     url(r'^apps/delete/([0-9]+)/$',views_apps.delete),
 
+    url(r'^api/right/([0-9]+)/$',views.finished,{'status':True}),
+    url(r'^api/wrong/([0-9]+)/$',views.finished,{'status':False}),
+
     url(r'^admin/', include(admin.site.urls)),
 ] + staticfiles_urlpatterns()
 
