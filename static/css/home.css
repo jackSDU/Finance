@@ -1,0 +1,151 @@
+body{
+    background: url("/static/image/homebkg.gif") fixed;
+}
+
+.home-div-outer{
+    width: 979px;
+    margin:0 auto;
+}
+
+.home-div-left{
+    float: left;
+    margin-top:90px;
+    margin-left: 50px;
+    width:200px;
+    height:200px;
+}
+
+.home-div-right{
+    float: left;
+    position: relative;
+    margin-top:0px;
+    margin-left: 0px;
+}
+
+.home-footer{
+    position: fixed;
+    bottom:60px;
+    left: 500px;
+}
+
+.home-img{
+    position: absolute;
+    left: 0px;
+    top:0px;
+}
+
+.home-dot1{
+    position: absolute;
+    left: 78px;
+    top:124px;
+}
+.home-dot2{
+    position: absolute;
+    left: 287px;
+    top:89px;
+}
+.home-dot3{
+    position: absolute;
+    left: 346px;
+    top:245px;
+}
+.home-dot4{
+    position: absolute;
+    left: 475px;
+    top:136px;
+}
+.home-dot5{
+    position: absolute;
+    left: 659px;
+    top:164px;
+}
+.home-dot6{
+    position: absolute;
+    left: 68px;
+    top:114px;
+    width:40px;
+    height: 40px;
+}
+.home-dot7{
+    position: absolute;
+    left: 282px;
+    top:84px;
+    width:30px;
+    height: 30px;
+}
+.home-dot8{
+    position: absolute;
+    left: 326px;
+    top:225px;
+}
+.home-dot9{
+    position: absolute;
+    left: 465px;
+    top:126px;
+    width:40px;
+    height: 40px;
+}
+.home-dot10{
+    position: absolute;
+    left: 644px;
+    top: 149px;
+    width: 50px;
+    height: 50px;
+}
+
+.home-hide{
+    opacity: 0.4;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    min-height: 470px;
+    min-width: 1029px;
+}
+
+.home-login{
+    background: url("/static/image/logframe.gif");
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: auto auto;
+}
+
+.home-login-usr{
+    position: absolute;
+    top: 80px;
+    left: 50px;
+}
+
+.home-login-pwd{
+    position: absolute;
+    top: 130px;
+    left: 50px;
+}
+
+.home-login-ckb{
+    position: absolute;
+    top: 175px;
+    left: 110px;
+}
+
+.home-login-err{
+    position: absolute;
+    top: 200px;
+    left: 100px;
+}
+
+.home-login-sub{
+    position: absolute;
+    top:220px;
+    left: 50px;
+}
+
+.home-login-fgt{
+    position: absolute;
+    top: 220px;
+    left: 160px;
+}
+
+

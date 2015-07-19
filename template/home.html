@@ -1,5 +1,57 @@
 {% extends "base.html" %}
 
+{% block css %}
+<link rel="stylesheet" href="/static/css/home.css">
+{% endblock %}
+
+{% block script %}
+
+$(document).ready(function(){
+    $("#dot1").mouseover(function() {
+        $("#dot1").fadeOut(1500);
+        $("#ldot1").fadeIn(1500);
+        $("#ldot1").fadeOut(3000);
+        $("#dot1").fadeIn(3500);
+    });
+    $("#dot2").mouseover(function() {
+        $("#dot2").fadeOut(1500);
+        $("#ldot2").fadeIn(1500);
+        $("#ldot2").fadeOut(3000);
+        $("#dot2").fadeIn(3500);
+    });
+    $("#dot3").mouseover(function() {
+        $("#dot3").fadeOut(1500);
+        $("#ldot3").fadeIn(1500);
+        $("#ldot3").fadeOut(3000);
+        $("#dot3").fadeIn(3500);
+    });
+    $("#dot4").mouseover(function() {
+        $("#dot4").fadeOut(1500);
+        $("#ldot4").fadeIn(1500);
+        $("#ldot4").fadeOut(3000);
+        $("#dot4").fadeIn(3500);
+    });
+    $("#dot5").mouseover(function() {
+        $("#dot5").fadeOut(1500);
+        $("#ldot5").fadeIn(1500);
+        $("#ldot5").fadeOut(3000);
+        $("#dot5").fadeIn(3500);
+    });
+
+})
+function pwck(){
+    if($("#name").val().length==0){
+        alert("未输入用户名!");
+    }
+    else if($("#pw").val().length==0){
+        alert("未输入密码!");
+    }
+    else return true;
+    return false;
+}
+
+{% endblock %}
+
 {% block header %}
 欢迎
 {% endblock %}
@@ -9,7 +61,50 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h1>这是主页。</h1>
+<div class="home-div-outer">
+    <div class="home-div-left">
+        <p class="text-hei-large">这里写上一些简介</p>
+        <p class="text-hei">some English introduction</p>
+        <br>
+        <p class="text-hei">这里写一些细节</p>
+        <p class="text-hei">这里写一些细节</p>
+        <p class="text-hei">这里写一些细节</p>
+    </div>
+    <div class="home-div-right">
+        <img src="/static/image/homeimg.gif" class="home-img">
+        <img src="/static/image/homedot.gif" class="home-dot1" name="dot" id="dot1">
+        <img src="/static/image/homedot.gif" class="home-dot2" name="dot" id="dot2">
+        <img src="/static/image/homedot.gif" class="home-dot3" name="dot" id="dot3">
+        <img src="/static/image/homedot.gif" class="home-dot4" name="dot" id="dot4">
+        <img src="/static/image/homedot.gif" class="home-dot5" name="dot" id="dot5">
+        <img src="/static/image/homedot_large.gif" class="home-dot6" name="dot_large" id="ldot1" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot7" name="dot_large" id="ldot2" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot8" name="dot_large" id="ldot3" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot9" name="dot_large" id="ldot4" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot10" name="dot_large" id="ldot5" style="display: none">
+    </div>
 </div>
+<div class="home-footer text-hei-black">版权信息@联系方式。。。。。。。。。。</div>
+{% if action %}
+<div>
+    <a href="/"><img src="/static/image/hide.gif" class="home-hide"></a>
+    <div class="home-login">
+        <form method="POST" onsubmit="return pwck()">
+            {% csrf_token %}
+            <div class="input-group inputText home-login-usr">
+                <div class="input-group-addon"><img src="/static/image/usr.gif"></div>
+                <input type="text" class="form-control" name="name" id="name" placeholder="用户名">
+            </div>
+            <div class="input-group inputText home-login-pwd">
+                <div class="input-group-addon"><img src="/static/image/pwd.gif"></div>
+                <input type="password" class="form-control" name="pw" id="pw" placeholder="密码">
+            </div>
+            <label class="text-song-small home-login-ckb"><input type="checkbox" name="remember">&nbsp;记住我</label>
+            <p class="text-err home-login-err">{% if loginerr %}{{ loginerr }}{% endif %}</p>
+            <button type="submit" class="mybutton-prim home-login-sub">登录</button>
+            <a href="#"><button class="mybutton home-login-fgt">忘记密码</button></a>
+        </form>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

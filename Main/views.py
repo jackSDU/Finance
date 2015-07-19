@@ -66,7 +66,7 @@ def login(req):
         if req.user.is_anonymous():
             if req.GET.get('next'):
                 req.session['next']=req.GET.get('next')
-            return ren2res("login.html",req)
+            return ren2res("home.html",req,{'action':"login"})
         else:
             return HttpResponseRedirect("/")
     elif req.method=='POST':
@@ -74,7 +74,7 @@ def login(req):
         if user is not None:
             if not user.is_active:
                 if user.last_login:
-                    return ren2res("login.html",req,{'err':"用户已被删除。"})
+                    return ren2res("home.html",req,{'loginerr':"用户已被删除。",'action':"login"})
                 else:
                     return HttpResponseRedirect('/err/not_active/')
             auth.login(req,user)
@@ -84,7 +84,7 @@ def login(req):
             else:
                 return HttpResponseRedirect('/')
         else:
-            return ren2res("login.html",req,{'err':"用户名或密码错误。"})
+            return ren2res("home.html",req,{'loginerr':"用户名或密码错误。",'action':"login"})
 
 def logout(req):
     auth.logout(req)
