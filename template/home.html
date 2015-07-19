@@ -41,10 +41,10 @@ $(document).ready(function(){
 })
 function pwck(){
     if($("#name").val().length==0){
-        alert("未输入用户名!");
+        $(".text-err").text("未输入用户名！");
     }
     else if($("#pw").val().length==0){
-        alert("未输入密码!");
+        $(".text-err").text("未输入密码！");
     }
     else return true;
     return false;
