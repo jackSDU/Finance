@@ -23,9 +23,9 @@ body{
 }
 
 .home-footer{
+    width:100%;
     position: fixed;
-    bottom:60px;
-    left: 500px;
+    top:550px;
 }
 
 .home-img{
