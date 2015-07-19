@@ -48,6 +48,20 @@ nav{
     top: 20px;
 }
 
+.div-outer{
+    width:1280px;
+}
+
+.div-left{
+    float: left;
+    width:200px;
+}
+
+.div-right{
+    float:left;
+    margin-left: 30px;
+}
+
 .page-header{
     margin-top:0px;
 }
