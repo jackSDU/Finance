@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block header %}
+    主机管理
+{% endblock %}
+
+{% block sidebar %}
+    {% include "apps/sidebar.html" %}
+{% endblock %}
+
+{% block script %}
+    var dict = new Array();
+
+    var modify = function(id){
+
+        html = $("#"+id).prop('outerHTML');
+        dict[id] = html;
+        var name = $("#"+id+" td:nth-child(2)")[0].innerText;
+        var ip = $("#"+id+" td:nth-child(3)")[0].innerText;
+        var port = $("#"+id+" td:nth-child(4)")[0].innerText;
+        $("#"+id).replaceWith("<tr id ="+id+"><td>"+id+"<input name='hostid"+id+"'type='hidden'value='"+id+"'></td>"
+                        +"<td width='45%'><input name='name"+id+"'id='name"+id+"' value="+name+" type='text' class='form-control' required></td>"
+                        +"<td width='22%'><input name='ip"+id+"'id='ip"+id+"' value="+ip+" type='text' class='form-control' required></td>"
+                        +"<td><input name='port"+id+"'id='port"+id+"' value="+port+" type='text' class='form-control'></td>"
+                        +"<td align='center'><button type='button' class='btn btn-danger' onclick='recover("+id+",dict["+id+"])'>放弃</button>"
+                        +"</tr>");
+    }
+    var recover = function(id, html){
+        $("#"+id).replaceWith(html);
+    }
+{% endblock %}
+{% block content %}
+    <form class="form-horizontal container-fluid" action="" method="POST" onsubmit="return check()">
+        {% csrf_token %}
+        <div>
+            <table class="table table-hover">
+                <tr>
+                    <td width="1" nowrap>ID</td>
+                    <td width="45%">主机名称</td>
+                    <td width='22%'>ip地址</td>
+                    <td>端口号</td>
+                    <td with="1" align="center">操作</td>
+                </tr>
+                {% for i in item %}
+                    <tr id="{{ i.id }}">
+                        <td>{{ i.id }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.ip }}</td>
+                        <td>{{ i.port }}</td>
+                        <td width="1" nowrap>
+                            <button type="button" class="btn btn-info" onclick="modify({{ i.id }})">修改</button>
+                            <a href="/apps/host/delete/{{ i.id }}" id="delete{{ i.id }}" type="button" class="btn btn-danger" onclick="return confirm('确定要删除{{ i.id }}号主机么？')">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% include "pagination.html" %}
+        </div>
+        <div style="text-align:center">
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-success btn-lg">保存修改</button>
+            </div>
+            <div class="col-md-6">
+                <a href="/apps/host/add" class="btn btn-primary btn-lg">添加主机</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
