@@ -18,14 +18,16 @@
             <tr>
                 <td>用户名</td>
                 <td>e-mail</td>
-                <td  width="1">操作</td>
+                <td  width="1" nowrap>操作</td>
             </tr>
             {% for aa in item %}
                 <tr>
                     {% csrf_token %}
                     <td><a href="/user/{{ aa.id }}/">{{ aa.username }}</a></td>
                     <td>{{ aa.email }}</td>
-                    <td><a href="/user/{{ aa.id }}/delete" class="btn btn-danger">删除</a></td>
+                    {% if not aa.is_superuser %}
+                        <td><a href="/user/{{ aa.id }}/delete" class="btn btn-danger">删除</a></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
