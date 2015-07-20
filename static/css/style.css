@@ -1,6 +1,6 @@
 nav{
     margin: 0px 0px auto;
-    width: 100%;
+    width: 1350px;
     height: 100px;
     background: rgb(0,130,222);
 }
@@ -60,6 +60,7 @@ nav{
 .div-right{
     float:left;
     margin-left: 30px;
+    width: 1000px;
 }
 
 .page-header{
