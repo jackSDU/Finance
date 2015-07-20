@@ -5,8 +5,7 @@ from django.http import Http404
 from Main.views import ren2res
 from Main.models import *
 from Main.views import paginate
-from Main.client import start
-from main.client import stop
+from Main import client
 
 # Create your views here.
 @login_required
@@ -42,7 +41,7 @@ def submit(req,aid):
             cmd += " "
         job=Job(uid=req.user,app=App.objects.get(id=id),cmd=cmd.strip())
         job.save()
-        start(job.id)
+        client.start(job.id)
         return HttpResponseRedirect("/jobs?page=1&msg=info")
 
 @login_required
@@ -76,7 +75,7 @@ def detail(req,jid):
 
 def stop(req,jid):
     if req.method=='GET':
-        stop(jid)
+        client.stop(jid)
 
 
 
