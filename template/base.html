@@ -39,24 +39,24 @@
     </div>
 </nav>
 <div class="container-fluid">
-    {% if err %}
-    <div class="alert alert-warning alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        <strong>{{ err }}</strong>
-    </div>
-    {% endif %}
-    {% if info %}
-    <div class="alert alert-info alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        <strong>{{ info }}</strong>
-    </div>
-    {% endif %}
     <div class="div-outer">
         {% if user %}
         <div class="div-left">
         {% block sidebar %}{% endblock %}
         </div>
         <div class="div-right">
+        {% endif %}
+        {% if err %}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <strong>{{ err }}</strong>
+        </div>
+        {% endif %}
+        {% if info %}
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <strong>{{ info }}</strong>
+        </div>
         {% endif %}
         {% block content %}{% endblock %}
         {% if user %}
