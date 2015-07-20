@@ -28,26 +28,11 @@ def stop(id):
     scon.send((do_stop,(str(job.app.host.ip),int(job.app.host.port),int(job.pk),),))
 
 def do_start(ip,port,id,exec,param):
-    url="http://"
-    url.join(ip)
-    url.join(':')
-    url.join(str(port))
-    url.join('/start/')
-    url.join(str(id))
-
-    exec.join(' ')
-    exec.join(param)
-
-    r=requests.post(url,{'cmd':exec})
+    url="http://"+ip+':'+str(port)+'/start/'+str(id)
+    r=requests.post(url,{'cmd':exec+' '+param})
 
 def do_stop(ip,port,id):
-    url="http://"
-    url.join(ip)
-    url.join(':')
-    url.join(str(port))
-    url.join('/start/')
-    url.join(str(id))
-
+    url="http://"+ip+':'+str(port)+'/start/'+str(id)
     r=requests.post(url)
 
 def daemon(rcon):
