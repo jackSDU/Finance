@@ -18,7 +18,7 @@
             var time11,time21,time12,time22,time13,time23,time14,time24;
             $("#side1").mouseover(function(){
                 clearInterval(time21);
-                time11=setInterval(move2l,30,"1");
+                time11=setInterval(move2l,10,"1");
             });
             $("#side1").mouseout(function(){
                 clearInterval(time11);
@@ -26,7 +26,7 @@
             });
             $("#side2").mouseover(function(){
                 clearInterval(time22);
-                time12=setInterval(move2l,30,"2");
+                time12=setInterval(move2l,10,"2");
             });
             $("#side2").mouseout(function(){
                 clearInterval(time12);
@@ -34,7 +34,7 @@
             });
             $("#side3").mouseover(function(){
                 clearInterval(time23);
-                time13=setInterval(move2l,30,"3");
+                time13=setInterval(move2l,10,"3");
             });
             $("#side3").mouseout(function(){
                 clearInterval(time13);
@@ -42,7 +42,7 @@
             });
             $("#side4").mouseover(function(){
                 clearInterval(time24);
-                time14=setInterval(move2l,30,"4");
+                time14=setInterval(move2l,10,"4");
             });
             $("#side4").mouseout(function(){
                 clearInterval(time14);
@@ -70,34 +70,34 @@
             }
             {% endif %}
             $("#dot1").mouseover(function() {
-                $("#dot1").fadeOut(1500);
-                $("#ldot1").fadeIn(1500);
-                $("#ldot1").fadeOut(3000);
-                $("#dot1").fadeIn(3500);
+                $("#dot1").fadeOut(1000);
+                $("#ldot1").fadeIn(1000);
+                $("#ldot1").fadeOut(2000);
+                $("#dot1").fadeIn(2500);
             });
             $("#dot2").mouseover(function() {
-                $("#dot2").fadeOut(1500);
-                $("#ldot2").fadeIn(1500);
-                $("#ldot2").fadeOut(3000);
-                $("#dot2").fadeIn(3500);
+                $("#dot2").fadeOut(1000);
+                $("#ldot2").fadeIn(1000);
+                $("#ldot2").fadeOut(2000);
+                $("#dot2").fadeIn(2500);
             });
             $("#dot3").mouseover(function() {
-                $("#dot3").fadeOut(1500);
-                $("#ldot3").fadeIn(1500);
-                $("#ldot3").fadeOut(3000);
-                $("#dot3").fadeIn(3500);
+                $("#dot3").fadeOut(1000);
+                $("#ldot3").fadeIn(1000);
+                $("#ldot3").fadeOut(2000);
+                $("#dot3").fadeIn(2500);
             });
             $("#dot4").mouseover(function() {
-                $("#dot4").fadeOut(1500);
-                $("#ldot4").fadeIn(1500);
-                $("#ldot4").fadeOut(3000);
-                $("#dot4").fadeIn(3500);
+                $("#dot4").fadeOut(1000);
+                $("#ldot4").fadeIn(1000);
+                $("#ldot4").fadeOut(2000);
+                $("#dot4").fadeIn(2500);
             });
             $("#dot5").mouseover(function() {
-                $("#dot5").fadeOut(1500);
-                $("#ldot5").fadeIn(1500);
-                $("#ldot5").fadeOut(3000);
-                $("#dot5").fadeIn(3500);
+                $("#dot5").fadeOut(1000);
+                $("#ldot5").fadeIn(1000);
+                $("#ldot5").fadeOut(2000);
+                $("#dot5").fadeIn(2500);
             });
 
         })
@@ -188,10 +188,10 @@
     </div>
 </div>
 {% if user %}
-    <div id="side1" class="home-side home-side-user"><a class="home-side-link" href="/user/">用户管理</a><img class="home-side-img" src="/static/image/user_selected.gif"></div>
-    <div id="side2" class="home-side home-side-jobs"><a class="home-side-link" href="/jobs/">作业管理</a><img class="home-side-img" src="/static/image/job_selected.gif"></div>
-    <div id="side3" class="home-side home-side-data"><a class="home-side-link" href="/data/iv_record/">数据管理</a><img class="home-side-img" src="/static/image/data_selected.gif"></div>
-    <div id="side4" class="home-side home-side-apps"><a class="home-side-link" href="/apps/">应用管理</a><img class="home-side-img" src="/static/image/app_selected.gif"></div>
+    <a href="/user/"><div id="side1" class="home-side home-side-user">用户管理<img class="home-side-img" src="/static/image/user_selected.gif"></div></a>
+    <a href="/jobs/"><div id="side2" class="home-side home-side-jobs">作业管理<img class="home-side-img" src="/static/image/job_selected.gif"></div></a>
+    <a href="/data/iv_record/"><div id="side3" class="home-side home-side-data">数据管理<img class="home-side-img" src="/static/image/data_selected.gif"></div></a>
+    <a href="/apps/"><div id="side4" class="home-side home-side-apps">应用管理<img class="home-side-img" src="/static/image/app_selected.gif"></div></a>
 {% endif %}
 </body>
 </html>

@@ -152,13 +152,9 @@ body{
     height: 50px;
     width: 150px;
     padding-top:13px;
+    padding-left: 30px;
     border-radius: 5px;
     background-color: rgba(255,255,255,0.6);
-}
-
-.home-side-link, .home-side-link:hover, .home-side-link:active{
-    margin-left: 30px;
-    text-decoration: none;
     font-family: "Î¢ÈíÑÅºÚ",Microsoft Yahei;
     font-size: larger;
     font-weight: bolder;
