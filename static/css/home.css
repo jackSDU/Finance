@@ -1,5 +1,5 @@
 body{
-    background: url("/static/image/homebkg.gif") fixed;
+    background: url("/static/image/homebkg.gif") fixed !important;
 }
 
 .home-div-outer{
@@ -148,4 +148,44 @@ body{
     left: 160px;
 }
 
+.home-side{
+    height: 50px;
+    width: 150px;
+    padding-top:13px;
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.6);
+}
 
+.home-side-link, .home-side-link:hover, .home-side-link:active{
+    margin-left: 30px;
+    text-decoration: none;
+    font-family: "Î¢ÈíÑÅºÚ",Microsoft Yahei;
+    font-size: larger;
+    font-weight: bolder;
+    color: rgb(0,130,222);
+}
+
+.home-side-img{
+    margin-left: 15px;
+}
+
+.home-side-user{
+    position: absolute;
+    left: -100px;
+    top: 170px;
+}
+.home-side-jobs{
+    position: absolute;
+    left: -100px;
+    top: 230px;
+}
+.home-side-data{
+    position: absolute;
+    left: -100px;
+    top: 290px;
+}
+.home-side-apps{
+    position: absolute;
+    left: -100px;
+    top: 350px;
+}

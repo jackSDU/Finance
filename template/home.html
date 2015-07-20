@@ -1,67 +1,143 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+{% load static from staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高性能金融计算平台</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-{% block css %}
-<link rel="stylesheet" href="/static/css/home.css">
-{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/font-awesome/css">
 
-{% block script %}
+    <script>
+        $(document).ready(function(){
+            {% if user %}
+            var time11,time21,time12,time22,time13,time23,time14,time24;
+            $("#side1").mouseover(function(){
+                clearInterval(time21);
+                time11=setInterval(move2l,30,"1");
+            });
+            $("#side1").mouseout(function(){
+                clearInterval(time11);
+                time21=setInterval(move2r,30,"1");
+            });
+            $("#side2").mouseover(function(){
+                clearInterval(time22);
+                time12=setInterval(move2l,30,"2");
+            });
+            $("#side2").mouseout(function(){
+                clearInterval(time12);
+                time22=setInterval(move2r,30,"2");
+            });
+            $("#side3").mouseover(function(){
+                clearInterval(time23);
+                time13=setInterval(move2l,30,"3");
+            });
+            $("#side3").mouseout(function(){
+                clearInterval(time13);
+                time23=setInterval(move2r,30,"3");
+            });
+            $("#side4").mouseover(function(){
+                clearInterval(time24);
+                time14=setInterval(move2l,30,"4");
+            });
+            $("#side4").mouseout(function(){
+                clearInterval(time14);
+                time24=setInterval(move2r,30,"4");
+            });
+            function move2l(id){
+                if(parseInt($("#side"+id).css("left").replace("px",""))<-5){
+                    $("#side"+id).css({"left":(parseInt($("#side"+id).css("left").replace("px",""))+5)+"px"});}
+                else{
+                    if(id=="1") clearInterval(time11);
+                    else if(id=="2") clearInterval(time12);
+                    else if(id=="3") clearInterval(time13);
+                    else clearInterval(time14);
+                }
+            }
+            function move2r(id){
+                if(parseInt($("#side"+id).css("left").replace("px",""))>-100){
+                    $("#side"+id).css({"left":(parseInt($("#side"+id).css("left").replace("px",""))-5)+"px"});}
+                else{
+                    if(id=="1") clearInterval(time21);
+                    else if(id=="2") clearInterval(time22);
+                    else if(id=="3") clearInterval(time23);
+                    else clearInterval(time24);
+                }
+            }
+            {% endif %}
+            $("#dot1").mouseover(function() {
+                $("#dot1").fadeOut(1500);
+                $("#ldot1").fadeIn(1500);
+                $("#ldot1").fadeOut(3000);
+                $("#dot1").fadeIn(3500);
+            });
+            $("#dot2").mouseover(function() {
+                $("#dot2").fadeOut(1500);
+                $("#ldot2").fadeIn(1500);
+                $("#ldot2").fadeOut(3000);
+                $("#dot2").fadeIn(3500);
+            });
+            $("#dot3").mouseover(function() {
+                $("#dot3").fadeOut(1500);
+                $("#ldot3").fadeIn(1500);
+                $("#ldot3").fadeOut(3000);
+                $("#dot3").fadeIn(3500);
+            });
+            $("#dot4").mouseover(function() {
+                $("#dot4").fadeOut(1500);
+                $("#ldot4").fadeIn(1500);
+                $("#ldot4").fadeOut(3000);
+                $("#dot4").fadeIn(3500);
+            });
+            $("#dot5").mouseover(function() {
+                $("#dot5").fadeOut(1500);
+                $("#ldot5").fadeIn(1500);
+                $("#ldot5").fadeOut(3000);
+                $("#dot5").fadeIn(3500);
+            });
 
-$(document).ready(function(){
-    $("#dot1").mouseover(function() {
-        $("#dot1").fadeOut(1500);
-        $("#ldot1").fadeIn(1500);
-        $("#ldot1").fadeOut(3000);
-        $("#dot1").fadeIn(3500);
-    });
-    $("#dot2").mouseover(function() {
-        $("#dot2").fadeOut(1500);
-        $("#ldot2").fadeIn(1500);
-        $("#ldot2").fadeOut(3000);
-        $("#dot2").fadeIn(3500);
-    });
-    $("#dot3").mouseover(function() {
-        $("#dot3").fadeOut(1500);
-        $("#ldot3").fadeIn(1500);
-        $("#ldot3").fadeOut(3000);
-        $("#dot3").fadeIn(3500);
-    });
-    $("#dot4").mouseover(function() {
-        $("#dot4").fadeOut(1500);
-        $("#ldot4").fadeIn(1500);
-        $("#ldot4").fadeOut(3000);
-        $("#dot4").fadeIn(3500);
-    });
-    $("#dot5").mouseover(function() {
-        $("#dot5").fadeOut(1500);
-        $("#ldot5").fadeIn(1500);
-        $("#ldot5").fadeOut(3000);
-        $("#dot5").fadeIn(3500);
-    });
-
-})
-function pwck(){
-    if($("#name").val().length==0){
-        $(".text-err").text("未输入用户名！");
-    }
-    else if($("#pw").val().length==0){
-        $(".text-err").text("未输入密码！");
-    }
-    else return true;
-    return false;
-}
-
-{% endblock %}
-
-{% block header %}
-欢迎
-{% endblock %}
-
-{% block sidebar %}
-{% include "sidebar.html" %}
-{% endblock %}
-
-{% block content %}
-<div class="home-div-outer">
+        })
+        function pwck(){
+            if($("#name").val().length==0){
+                $(".text-err").text("未输入用户名！");
+            }
+            else if($("#pw").val().length==0){
+                $(".text-err").text("未输入密码！");
+            }
+            else return true;
+            return false;
+        }
+    </script>
+</head>
+<body>
+<nav>
+    <a href="/"><img src="/static/image/logo.gif" class="logo"></a>
+    <p class="text-song-large nav-text">欢迎</p>
+        <div class="collapse navbar-collapse">
+        {% if user %}
+        <div class="nav-div">
+            <p class="nav-link">欢迎
+                <a href="/user/{{ user.id }}" class="nav-link">{{ user.name }}</a>
+                <a href="/logout" class="nav-link">退出</a>
+                <a href="#"><button class="nav-button">关于我们</button></a>
+            </p>
+        </div>
+        {% else %}
+        <div class="nav-div">
+            <a href="/login" class="nav-link">登录</a>
+            <a href="/register" class="nav-link">注册</a>
+            <a href="#"><button class="nav-button">关于我们</button></a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="div-outer">
+        <div class="home-div-outer">
     <div class="home-div-left">
         <p class="text-hei-large">这里写上一些简介</p>
         <p class="text-hei">some English introduction</p>
@@ -109,4 +185,13 @@ function pwck(){
     </div>
 </div>
 {% endif %}
-{% endblock %}
+    </div>
+</div>
+{% if user %}
+    <div id="side1" class="home-side home-side-user"><a class="home-side-link" href="/user/">用户管理</a><img class="home-side-img" src="/static/image/user_selected.gif"></div>
+    <div id="side2" class="home-side home-side-jobs"><a class="home-side-link" href="/jobs/">作业管理</a><img class="home-side-img" src="/static/image/job_selected.gif"></div>
+    <div id="side3" class="home-side home-side-data"><a class="home-side-link" href="/data/iv_record/">数据管理</a><img class="home-side-img" src="/static/image/data_selected.gif"></div>
+    <div id="side4" class="home-side home-side-apps"><a class="home-side-link" href="/apps/">应用管理</a><img class="home-side-img" src="/static/image/app_selected.gif"></div>
+{% endif %}
+</body>
+</html>
