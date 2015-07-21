@@ -123,16 +123,34 @@
             <p class="nav-link">欢迎
                 <a href="/user/{{ user.id }}" class="nav-link">{{ user.name }}</a>
                 <a href="/logout" class="nav-link">退出</a>
-                <a href="#"><button class="nav-button">关于我们</button></a>
+                <button class="nav-button" data-toggle="modal" data-target="#modal">关于我们</button>
             </p>
         </div>
         {% else %}
         <div class="nav-div">
             <a href="/login" class="nav-link">登录</a>
             <a href="/register" class="nav-link">注册</a>
-            <a href="#"><button class="nav-button">关于我们</button></a>
+            <button class="nav-button" data-toggle="modal" data-target="#modal">关于我们</button>
         </div>
         {% endif %}
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="modalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="modalLabel">关于我们</h4>
+                    </div>
+                    <div class="modal-body">
+                        我们是来自山东大学的一支队伍，由两位指导老师和七名大三学生组成。<br>
+                        我们对设计和编程有着浓厚的兴趣，乐于看见一个软件作品从我们手里诞生。<br>
+                        做实用、高效、友好的应用是我们的目标。<br>
+                        希望正在使用的您能感到愉悦！<br>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
 <div class="container-fluid">
