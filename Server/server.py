@@ -1,84 +1,74 @@
-from multiprocessing import Process,Pipe,Queue
-from subprocess import Popen
+import time
+import tempfile
+import subprocess
+from multiprocessing import Process,Pipe
 
 import requests
-import time
-import shlex
-import subprocess
-import tempfile
-from flask import Flask,request,make_response
-####p = subprocess.Popen(args,stdout=subprocess.DEVNULL)
-####poll([timeout])
-####Popen.poll()   running--None    success,finish--0  wrong finish--1     WINDOWS
 
+from flask import Flask,request
 
 CLIENT_HOST="127.0.0.1"
-CLIENT_PORT=8000
+CLIENT_PORT=80
 
 PORT=2333
 
+cmd_read,cmd_write=Pipe(False)
+stop_read,stop_write=Pipe(False)
 
 def worker_daemon(cmd,stop):
-    dict={}#id--popen
-    result_dict={}#id--tem_out--temp_err--ret
+    dict={}
+    result_dict={}
     while True:
-        #recv poll
-        while cmd.poll() == True:
-            c=cmd.recv()#id--cmd
-            args=c[1].split(' ')#args = shlex.split(c[1])#
-            print("exec cmd"+c[1])
-            outfile=tempfile.TemporaryFile()
-            errfile=tempfile.TemporaryFile()
-            p = subprocess.Popen(args,stdout=outfile,stderr=errfile)
-            dict[c[0]]=p
-            result_dict.update({c[0]:(outfile,errfile,)})
+        while cmd.poll():
+            c=cmd.recv()
+            if c[0] in dict:
+                continue
+            of=tempfile.TemporaryFile()
+            ef=tempfile.TemporaryFile()
+            try:
+                dict[c[0]]=subprocess.Popen(c[1].split(),stdout=of,stderr=ef)
+                result_dict[c[0]]=(of,ef,)
+                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/started/'+str(c[0]))
+            except Exception as ex:
+                of.close()
+                ef.close()
+                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/wrong/'+str(c[0]),{"err":str(ex)})
+        while stop.poll():
+            id=stop.recv()
+            try:
+                dict.pop(id).terminate()
+                of,ef=result_dict.pop(id)
+                of.close()
+                ef.close()
+                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/stopped/'+str(id))
+            except:
+                pass
+        todel=[]
+        for id,p in dict:
+            ret=p.poll()
+            if ret==None:
+                continue
+            todel.append(id)
+            of,ef=result_dict.pop(id)
+            requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+("/right/" if ret==0 else "/wrong/")+str(id),
+                          {"out":of.read(),"err":ef.read(),"ret":ret})
+            of.close()
+            ef.close()
+        for id in todel:
+            dict.pop(id)
+        time.sleep(5)
 
-        while stop.poll() == True:
-            id =stop.recv()#id
-            p=dict.get(id)
-            if(p!=None):
-                p.terminate()
-                print("terminated")
-                dict.pop(id)
-                result_dict.pop(id)
-
-        for id,popen in dict.items():
-            ret=popen.poll()
-            if ret==0:
-                dict.pop(id)
-                files=result_dict.pop(id)
-                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+"/right/"+str(id),
-                              {"out":files[0].read(),"err":files[1].read(),"ret":ret})
-            elif ret!=0:
-                dict.pop(id)
-                files=result_dict.pop(id)
-                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+"/wrong/"+str(id),
-                              {"out":files[0].read(),"err":files[1].read(),"ret":ret})
-
-        time.sleep(1)
-        print("helo")
-    pass
 app=Flask('Server')
 
 @app.route('/start/<int:id>',methods=['POST'])
 def start(id):
-    if request.method == 'POST':
-        cmd_write.send([id,request.form["cmd"]])
-        return "cmd added"
-    else:
-        return "helloworld"
+    cmd_write.send([id,request.form["cmd"]])
+    return ''
 
 @app.route('/stop/<int:id>',methods=['POST'])
 def stop(id):
-    if request.method == 'POST':
-        stop_write.send(id)
-        return "stop added"
-    else:
-        return "hellowoeld"
+    stop_write.send(id)
+    return ''
 
 if __name__ == '__main__':
-    cmd_read,cmd_write=Pipe(False)
-    stop_read,stop_write=Pipe(False)
-    w=Process(target = worker_daemon, args=(cmd_read,stop_read),daemon=True)
-    w.start()
-    app.run(port=PORT,debug=True)
+    app.run(port=PORT)
