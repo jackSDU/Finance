@@ -25,9 +25,11 @@
                     {% csrf_token %}
                     <td><a href="/user/{{ aa.id }}/">{{ aa.username }}</a></td>
                     <td>{{ aa.email }}</td>
+                    <td>
                     {% if not aa.is_superuser %}
-                        <td><a href="/user/{{ aa.id }}/delete" class="btn btn-danger">删除</a></td>
+                        <a href="/user/{{ aa.id }}/delete" class="btn btn-danger">删除</a>
                     {% endif %}
+                </td>
                 </tr>
             {% endfor %}
         </table>
