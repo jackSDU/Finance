@@ -159,7 +159,7 @@ def app_arg_check(req):
 @login_required
 def host(req):
     if not req.user.is_superuser:
-            return HttpResponseRedirect('/err/not_admin')
+            return HttpResponseRedirect('/info/not_admin')
     hostlist = Host.objects.all()
     if req.method =='GET':
         return ren2res("apps/test.html", req, paginate(req, hostlist))
@@ -194,7 +194,7 @@ def host(req):
 @login_required
 def host_add(req):
     if not req.user.is_superuser:
-        return HttpResponseRedirect('/err/not_admin')
+        return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
         return ren2res("apps/apps_host_add.html",req)
     elif req.method == 'POST':
@@ -210,7 +210,7 @@ def host_add(req):
 @login_required
 def host_delete(req, n):
     if not req.user.is_superuser:
-        return HttpResponseRedirect("/err/not_admin")
+        return HttpResponseRedirect("/info/not_admin")
     if req.method == 'GET':
         try:
             item = Host.objects.get(id=n)

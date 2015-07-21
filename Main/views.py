@@ -77,7 +77,7 @@ def login(req):
                 if user.last_login:
                     return ren2res("home.html",req,{'loginerr':"用户已被删除。",'action':"login"})
                 else:
-                    return HttpResponseRedirect('/err/not_active/')
+                    return HttpResponseRedirect('/info/not_active/')
             auth.login(req,user)
             next=req.session.get('next')
             if next:

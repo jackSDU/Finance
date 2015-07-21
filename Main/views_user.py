@@ -52,12 +52,12 @@ def list(req):
         if req.method=='GET':
             return ren2res("user/list.html",req,dict)
     else :
-        return HttpResponseRedirect("/err/not_admin/")
+        return HttpResponseRedirect("/info/not_admin/")
 
 @login_required
 def verify(req):
     if not req.user.is_superuser :
-        return HttpResponseRedirect("/err/not_admin/")
+        return HttpResponseRedirect("/info/not_admin/")
     dict={'super':req.user.is_superuser}
     if req.method=='GET':
         dict.update(paginate(req,User.objects.filter(is_active=False).filter(last_login__isnull=True),8))
