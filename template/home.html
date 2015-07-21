@@ -1,15 +1,215 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+{% load static from staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高性能金融计算平台</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-{% block header %}
-欢迎
-{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/font-awesome/css">
 
-{% block sidebar %}
-{% include "sidebar.html" %}
-{% endblock %}
+    <script>
+        $(document).ready(function(){
+            {% if user %}
+            var time11,time21,time12,time22,time13,time23,time14,time24;
+            $("#side1").mouseover(function(){
+                clearInterval(time21);
+                time11=setInterval(move2l,10,"1");
+            });
+            $("#side1").mouseout(function(){
+                clearInterval(time11);
+                time21=setInterval(move2r,30,"1");
+            });
+            $("#side2").mouseover(function(){
+                clearInterval(time22);
+                time12=setInterval(move2l,10,"2");
+            });
+            $("#side2").mouseout(function(){
+                clearInterval(time12);
+                time22=setInterval(move2r,30,"2");
+            });
+            $("#side3").mouseover(function(){
+                clearInterval(time23);
+                time13=setInterval(move2l,10,"3");
+            });
+            $("#side3").mouseout(function(){
+                clearInterval(time13);
+                time23=setInterval(move2r,30,"3");
+            });
+            $("#side4").mouseover(function(){
+                clearInterval(time24);
+                time14=setInterval(move2l,10,"4");
+            });
+            $("#side4").mouseout(function(){
+                clearInterval(time14);
+                time24=setInterval(move2r,30,"4");
+            });
+            function move2l(id){
+                if(parseInt($("#side"+id).css("left").replace("px",""))<-5){
+                    $("#side"+id).css({"left":(parseInt($("#side"+id).css("left").replace("px",""))+5)+"px"});}
+                else{
+                    if(id=="1") clearInterval(time11);
+                    else if(id=="2") clearInterval(time12);
+                    else if(id=="3") clearInterval(time13);
+                    else clearInterval(time14);
+                }
+            }
+            function move2r(id){
+                if(parseInt($("#side"+id).css("left").replace("px",""))>-100){
+                    $("#side"+id).css({"left":(parseInt($("#side"+id).css("left").replace("px",""))-5)+"px"});}
+                else{
+                    if(id=="1") clearInterval(time21);
+                    else if(id=="2") clearInterval(time22);
+                    else if(id=="3") clearInterval(time23);
+                    else clearInterval(time24);
+                }
+            }
+            {% endif %}
+            $("#dot1").mouseover(function() {
+                $("#dot1").fadeOut(1000);
+                $("#ldot1").fadeIn(1000);
+                $("#ldot1").fadeOut(2000);
+                $("#dot1").fadeIn(2500);
+            });
+            $("#dot2").mouseover(function() {
+                $("#dot2").fadeOut(1000);
+                $("#ldot2").fadeIn(1000);
+                $("#ldot2").fadeOut(2000);
+                $("#dot2").fadeIn(2500);
+            });
+            $("#dot3").mouseover(function() {
+                $("#dot3").fadeOut(1000);
+                $("#ldot3").fadeIn(1000);
+                $("#ldot3").fadeOut(2000);
+                $("#dot3").fadeIn(2500);
+            });
+            $("#dot4").mouseover(function() {
+                $("#dot4").fadeOut(1000);
+                $("#ldot4").fadeIn(1000);
+                $("#ldot4").fadeOut(2000);
+                $("#dot4").fadeIn(2500);
+            });
+            $("#dot5").mouseover(function() {
+                $("#dot5").fadeOut(1000);
+                $("#ldot5").fadeIn(1000);
+                $("#ldot5").fadeOut(2000);
+                $("#dot5").fadeIn(2500);
+            });
 
-{% block content %}
-<div class="page-header">
-    <h1>这是主页。</h1>
+        })
+        function pwck(){
+            if($("#name").val().length==0){
+                $(".text-err").text("未输入用户名！");
+            }
+            else if($("#pw").val().length==0){
+                $(".text-err").text("未输入密码！");
+            }
+            else return true;
+            return false;
+        }
+    </script>
+</head>
+<body>
+<nav>
+    <a href="/"><img src="/static/image/logo.gif" class="logo"></a>
+    <p class="text-song-large nav-text">欢迎</p>
+        <div class="collapse navbar-collapse">
+        {% if user %}
+        <div class="nav-div">
+            <p class="nav-link">欢迎
+                <a href="/user/{{ user.id }}" class="nav-link">{{ user.name }}</a>
+                <a href="/logout" class="nav-link">退出</a>
+                <button class="nav-button" data-toggle="modal" data-target="#modal">关于我们</button>
+            </p>
+        </div>
+        {% else %}
+        <div class="nav-div">
+            <a href="/login" class="nav-link">登录</a>
+            <a href="/register" class="nav-link">注册</a>
+            <button class="nav-button" data-toggle="modal" data-target="#modal">关于我们</button>
+        </div>
+        {% endif %}
+        <div class="modal fade" id="modal" role="dialog" aria-labelledby="modalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="modalLabel">关于我们</h4>
+                    </div>
+                    <div class="modal-body">
+                        我们是来自山东大学的一支队伍，由两位指导老师和七名大三学生组成。<br>
+                        我们对设计和编程有着浓厚的兴趣，乐于看见一个软件作品从我们手里诞生。<br>
+                        做实用、高效、友好的应用是我们的目标。<br>
+                        希望正在使用的您能感到愉悦！<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="div-outer">
+        <div class="home-div-outer">
+    <div class="home-div-left">
+        <p class="text-hei-large">让计算即刻发生</p>
+        <p class="text-hei">No delay, no tolerance.</p>
+        <br>
+        <p class="text-hei">海量数据处理</p>
+        <p class="text-hei">高性能计算应用服务</p>
+        <p class="text-hei">便携、可扩展的计算环境</p>
+    </div>
+    <div class="home-div-right">
+        <img src="/static/image/homeimg.gif" class="home-img">
+        <img src="/static/image/homedot.gif" class="home-dot1" name="dot" id="dot1">
+        <img src="/static/image/homedot.gif" class="home-dot2" name="dot" id="dot2">
+        <img src="/static/image/homedot.gif" class="home-dot3" name="dot" id="dot3">
+        <img src="/static/image/homedot.gif" class="home-dot4" name="dot" id="dot4">
+        <img src="/static/image/homedot.gif" class="home-dot5" name="dot" id="dot5">
+        <img src="/static/image/homedot_large.gif" class="home-dot6" name="dot_large" id="ldot1" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot7" name="dot_large" id="ldot2" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot8" name="dot_large" id="ldot3" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot9" name="dot_large" id="ldot4" style="display: none">
+        <img src="/static/image/homedot_large.gif" class="home-dot10" name="dot_large" id="ldot5" style="display: none">
+    </div>
 </div>
-{% endblock %}
+<div class="home-footer">
+    <p class="text-hei-black" align="center">版权信息@联系方式</p>
+</div>
+{% if action %}
+<div>
+    <a href="/"><img src="/static/image/hide.gif" class="home-hide"></a>
+    <div class="home-login">
+        <form method="POST" onsubmit="return pwck()">
+            {% csrf_token %}
+            <div class="input-group inputText home-login-usr">
+                <div class="input-group-addon"><img src="/static/image/usr.gif"></div>
+                <input type="text" class="form-control" name="name" id="name" placeholder="用户名">
+            </div>
+            <div class="input-group inputText home-login-pwd">
+                <div class="input-group-addon"><img src="/static/image/pwd.gif"></div>
+                <input type="password" class="form-control" name="pw" id="pw" placeholder="密码">
+            </div>
+            <label class="text-song-small home-login-ckb"><input type="checkbox" name="remember">&nbsp;记住我</label>
+            <p class="text-err home-login-err">{% if loginerr %}{{ loginerr }}{% endif %}</p>
+            <button type="submit" class="mybutton-prim home-login-sub">登录</button>
+            <a href="#"><button class="mybutton home-login-fgt">忘记密码</button></a>
+        </form>
+    </div>
+</div>
+{% endif %}
+    </div>
+</div>
+{% if user %}
+    <a href="/user/"><div id="side1" class="home-side home-side-user">用户管理<img class="home-side-img" src="/static/image/user_selected.gif"></div></a>
+    <a href="/jobs/"><div id="side2" class="home-side home-side-jobs">作业管理<img class="home-side-img" src="/static/image/job_selected.gif"></div></a>
+    <a href="/data/iv_record/"><div id="side3" class="home-side home-side-data">数据管理<img class="home-side-img" src="/static/image/data_selected.gif"></div></a>
+    <a href="/apps/"><div id="side4" class="home-side home-side-apps">应用管理<img class="home-side-img" src="/static/image/app_selected.gif"></div></a>
+{% endif %}
+</body>
+</html>

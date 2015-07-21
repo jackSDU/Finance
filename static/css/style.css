@@ -1,7 +1,186 @@
+body{
+    background: url("/static/image/bkg.gif");
+}
+nav{
+    margin: 0px 0px auto;
+    width: 1350px;
+    height: 100px;
+    background: rgb(0,130,222);
+}
+
+
+.nav-text{
+    position:absolute;
+    left:480px;
+    top:45px;
+}
+
+.nav-div{
+    float: right;
+    margin:45px;
+}
+
+.nav-link{
+    margin-right: 30px;
+    color: white;
+    font-family: "微软雅黑",Microsoft Yahei;
+}
+
+.nav-link:hover{
+    color:gainsboro;
+    text-decoration: none;
+}
+
+.nav-button{
+    background: none;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    font-family: "微软雅黑",Microsoft Yahei;
+    margin-right: 70px;
+}
+
+.nav-button:hover{
+    background: white;
+    color: rgb(0,130,222);
+}
+
+.logo{
+    position: absolute;
+    left: 100px;
+    top: 20px;
+}
+
+.div-outer{
+    width:1280px;
+}
+
+.div-left{
+    float: left;
+    width:200px;
+}
+
+.div-right{
+    float:left;
+    margin-left: 30px;
+    width: 1000px;
+}
+
 .page-header{
     margin-top:0px;
 }
 
 td{
     vertical-align: middle !important;
+}
+
+.text-hei-large{
+    color: white;
+    font-size: x-large;
+    font-family: "微软雅黑",Microsoft Yahei;
+    font-weight: bold;
+}
+
+.text-hei-black{
+    color: black;
+    font-family: "微软雅黑",Microsoft Yahei;
+    font-weight: bold;
+}
+
+.text-hei-gray{
+    color:rgb(121,126,137);
+    font-family: "微软雅黑",Microsoft Yahei;
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.text-hei{
+    color: white;
+    font-family: "微软雅黑",Microsoft Yahei;
+    font-weight: bold;
+}
+
+.text-song-large{
+    color: white;
+    font-size: large;
+    font-family: "宋体", STSong;
+}
+
+.text-song-small{
+    color: rgb(131,136,146);
+    font-size: small;
+    font-weight: lighter;
+    font-family: "宋体", STSong;
+}
+
+.text-err{
+    color: red;
+    font-size: x-small;
+    font-weight: lighter;
+    font-family: "宋体", STSong;
+}
+
+.mybutton{
+    width: 90px;
+    height: 30px;
+    background: white;
+    border: 0px;
+    box-shadow: 1px 1px 4px rgb(131,136,146);
+    border-radius: 5px;
+    color: rgb(131,136,146);
+    font-family: "微软雅黑",Microsoft Yahei;
+}
+
+.mybutton-prim{
+    width: 90px;
+    height: 30px;
+    background: rgb(0,130,222);
+    border: 0px;
+    box-shadow: 1px 1px 4px rgb(131,136,146);
+    border-radius: 5px;
+    color: white;
+    font-family: "微软雅黑",Microsoft Yahei;
+}
+
+.inputText{
+    width: 200px;
+    height: 34px;
+    border: 0px;
+    box-shadow: 1px 1px 4px rgb(131,136,146);
+    border-radius: 5px;
+}
+
+.a{
+    background: rgb(220,220,220);
+    width:200px;
+    height: 100%;
+    border:0px
+}
+
+.side-heading{
+    height: 50px;
+    padding-top: 13px;
+    padding-left:10px;
+    background: none;
+}
+.side-heading:hover,.side-heading-in{
+    background: white;
+    color:black;
+    box-shadow:0px -1px 3px gray;
+}
+
+.list-group{
+    margin-top: 10px;
+}
+
+a.list-group-item{
+    background: none;
+    border:0px;
+    height: 40px;
+    padding-top:8px;
+    padding-left:70px;
+}
+
+.modal{
+    margin-top:100px;
 }
