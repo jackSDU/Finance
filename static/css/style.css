@@ -8,6 +8,9 @@ nav{
     background: rgb(0,130,222);
 }
 
+nav.nav-pagination{
+    background: #ffffff
+}
 
 .nav-text{
     position:absolute;
