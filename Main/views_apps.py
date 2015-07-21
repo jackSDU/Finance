@@ -162,7 +162,7 @@ def host(req):
             return HttpResponseRedirect('/info/not_admin')
     hostlist = Host.objects.all()
     if req.method =='GET':
-        return ren2res("apps/test.html", req, paginate(req, hostlist))
+        return ren2res("apps/apps_host.html", req, paginate(req, hostlist))
     elif req.method == 'POST':
         i = 0
         page = paginate(req, hostlist)
