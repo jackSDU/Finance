@@ -1,3 +1,4 @@
+import os
 from math import ceil
 from datetime import datetime
 
@@ -106,18 +107,48 @@ def not_admin(req):
     return ren2err("info/not_admin.html",req.GET.get('next'))
 
 @require_POST
-def finished(req,id,status):
+def started(req,id):
     try:
         job=Job.objects.get(pk=id)
     except:
         return HttpResponseNotFound()
+    if job.status <= 0 and job.status!=-1:
+        return HttpResponse()
     if job.status != 2:
         return HttpResponseBadRequest()
-    f=open(RESULT_DIR+'out_'+str(id),mode='w')
-    f.write(req.POST.get('out'))
+    job.status=3
+    job.start_time=datetime.utcnow()
+    job.save()
+    return HttpResponse()
+
+@require_POST
+def stopped(req,id):
+    try:
+        job=Job.objects.get(pk=id)
+    except:
+        return HttpResponseNotFound()
+    if job.status <= 0 and job.status !=-1:
+        return HttpResponse()
+    if job.status != 4:
+        return HttpResponseBadRequest()
+    job.status=-1
+    job.end_time=datetime.utcnow()
+    job.save()
+    return HttpResponse()
+
+@require_POST
+def finished(req,id,ok):
+    try:
+        job=Job.objects.get(pk=id)
+    except:
+        return HttpResponseNotFound()
+    if job.status != 2 and job.status != 3 and job.status != 4:
+        return HttpResponseBadRequest()
+    f=open(os.path.join(RESULT_DIR,'out_'+str(id)),mode='w')
+    f.write(req.POST.get('out',''))
     f.close()
-    f=open(RESULT_DIR+'err_'+str(id),mode='w')
-    f.write(req.POST.get('err'))
+    f=open(os.path.join(RESULT_DIR,'err_'+str(id)),mode='w')
+    f.write(req.POST.get('err',''))
     f.close()
     ret=req.POST.get('ret')
     try:
@@ -125,10 +156,7 @@ def finished(req,id,status):
         job.ret=ret
     except:
         pass
-    if status:
-        job.status=0
-    else:
-        job.status=-2
+    job.status=(0 if ok else -2)
     job.end_time=datetime.utcnow()
     job.save()
     client.count-=1
