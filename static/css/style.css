@@ -23,7 +23,7 @@ nav.nav-pagination{
     margin:45px;
 }
 
-.nav-link{
+.nav-p, .nav-link{
     margin-right: 30px;
     color: white;
     font-family: "微软雅黑",Microsoft Yahei;
