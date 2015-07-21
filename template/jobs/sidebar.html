@@ -1,58 +1,14 @@
-{% block head %}
-<script>
-    $(document).ready(function()
-    {
 
-        $("#img11,#img31,#img41").hide();
-        $("#heading1").mouseover(function()
-        {
-            $(this).next('.collapse').collapse('show');
-            $("#img10").hide();
-            $("#img11").show();
-        });
-        $("#heading3").mouseover(function()
-        {
-            $(this).next('.collapse').collapse('show');
-            $("#img30").hide();
-            $("#img31").show();
-        });
-        $("#heading4").mouseover(function()
-        {
-            $(this).next('.collapse').collapse('show');
-            $("#img40").hide();
-            $("#img41").show();
-        });
-        $("#one").mouseleave(function()
-        {
-            $(this).children('.collapse').collapse('hide');
-            $("#img11").hide();
-            $("#img10").show();
-        });
-        $("#three").mouseleave(function()
-        {
-            $(this).children('.collapse').collapse('hide');
-            $("#img31").hide();
-            $("#img30").show();
-        });
-        $("#four").mouseleave(function()
-        {
-            $(this).children('.collapse').collapse('hide');
-            $("#img41").hide();
-            $("#img40").show();
-        });
-    })
-</script>
-{% endblock %}
 
         <div class="a" id="all" role="tablist" aria-multiselectable="true">
             <div>&nbsp;</div>
                             <!--<a href="/jobs/" class="list-group-item">作业管理</a>-->
-                <div id="two" role="tab">
-                    <div id="heading2" class="side-heading text-hei-gray side-heading-in" role="button" data-toggle="collapse" href="/jobs/" data-parent="#all" data-target="#list2" aria-expanded="true" aria-controls="list2">
-                        <img id="img21" class="img" src="/static/image/job_selected.gif">
+                <div id="one" role="tab">
+                    <div id="heading1" class="side-heading text-hei-gray side-heading-in" role="button" data-toggle="collapse" href="/jobs/" data-parent="#all" data-target="#list2" aria-expanded="true" aria-controls="list2">
+                        <img id="img11" class="img" src="/static/image/job_selected.gif">
                         作业管理
                     </div>
-                    <div id="list2" class="panel-collapse collapse in" role="tabpanel" aria-expanded="true">
+                    <div id="list1" class="panel-collapse collapse in" role="tabpanel" aria-expanded="true">
                         <ul class="list-group">
                             <a class="list-group-item text-hei-gray" href="/jobs/submit">作业提交</a>
                             <a class="list-group-item text-hei-gray" href="/jobs">作业查看</a>
@@ -60,13 +16,13 @@
                     </div>
                 </div>
                 <!--<a href="/user/" class="list-group-item">用户管理</a>-->
-            <div id="one" role="tab">
-                 <div id="heading1" class="side-heading text-hei-gray" role="button" data-toggle="collapse" href="/user/" data-parent="#all" data-target="#list1" aria-expanded="true" aria-controls="list1">
-                     <img id="img10" class="img" src="/static/image/user.gif">
-                     <img id="img11" class="img" src="/static/image/user_selected.gif">
+            <div id="two" role="tab">
+                 <div id="heading2" class="side-heading text-hei-gray" role="button" data-toggle="collapse" href="/user/" data-parent="#all" data-target="#list1" aria-expanded="true" aria-controls="list1">
+                     <img id="img20" class="img" src="/static/image/user.gif">
+                     <img id="img21" class="img" src="/static/image/user_selected.gif">
                      用户管理
                  </div>
-                 <div id="list1" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
+                 <div id="list2" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
                  <ul class="list-group">
                     <a class="list-group-item text-hei-gray" href="/user/">个人资料</a>
                     <a class="list-group-item text-hei-gray" href="/user/edit/">资料修改</a>
