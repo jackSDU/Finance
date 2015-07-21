@@ -12,6 +12,9 @@
 
 
 {% block script %}
+$(document).ready(function(){
+    $("body").css({"background":"none"});
+})
 function pwck(){
     if($("#name").val().length==0){
         $(".text-err").text("未输入用户名！");
@@ -31,6 +34,7 @@ function pwck(){
 {% endblock %}
 
 {% block content %}
+<br><br><br>
 <form class="form-horizontal container-fluid" method="POST" onsubmit="return pwck()">
     {% csrf_token %}
     <div class="row">
