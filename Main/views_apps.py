@@ -156,13 +156,13 @@ def app_arg_check(req):
         i += 1
     dict.update(list_submit=list_submit)
     return dict
-
+@login_required
 def host(req):
     if not req.user.is_superuser:
             return HttpResponseRedirect('/err/not_admin')
     hostlist = Host.objects.all()
     if req.method =='GET':
-        return ren2res("apps/apps_host.html", req, paginate(req, hostlist))
+        return ren2res("apps/test.html", req, paginate(req, hostlist))
     elif req.method == 'POST':
         i = 0
         page = paginate(req, hostlist)
@@ -191,7 +191,7 @@ def host(req):
             x.save()
         page.update(info='修改成功')
         return ren2res("apps/apps_host.html", req, page)
-
+@login_required
 def host_add(req):
     if not req.user.is_superuser:
         return HttpResponseRedirect('/err/not_admin')
@@ -207,7 +207,7 @@ def host_add(req):
             return ren2res("apps/apps_host_add.html", req, {'err':error})
         Host(name=name, ip=ip, port=port).save()
         return ren2res("apps/apps_host_add.html", req, {'info':'主机添加成功'})
-
+@login_required
 def host_delete(req, n):
     if not req.user.is_superuser:
         return HttpResponseRedirect("/err/not_admin")
