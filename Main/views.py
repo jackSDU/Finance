@@ -1,9 +1,10 @@
 import os
 from math import ceil
-from datetime import datetime
 
+from django.utils import timezone
 from django.http import HttpResponse,HttpResponseBadRequest,HttpResponseNotFound
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext
 from django.shortcuts import render_to_response,HttpResponseRedirect
 from django.contrib import auth
@@ -107,6 +108,7 @@ def not_admin(req):
     return ren2err("info/not_admin.html",req.GET.get('next'))
 
 @require_POST
+@csrf_exempt
 def started(req,id):
     try:
         job=Job.objects.get(pk=id)
@@ -117,11 +119,12 @@ def started(req,id):
     if job.status != 2:
         return HttpResponseBadRequest()
     job.status=3
-    job.start_time=datetime.utcnow()
+    job.start_time=timezone.now()
     job.save()
     return HttpResponse()
 
 @require_POST
+@csrf_exempt
 def stopped(req,id):
     try:
         job=Job.objects.get(pk=id)
@@ -132,11 +135,12 @@ def stopped(req,id):
     if job.status != 4:
         return HttpResponseBadRequest()
     job.status=-1
-    job.end_time=datetime.utcnow()
+    job.end_time=timezone.now()
     job.save()
     return HttpResponse()
 
 @require_POST
+@csrf_exempt
 def finished(req,id,ok):
     try:
         job=Job.objects.get(pk=id)
@@ -157,7 +161,7 @@ def finished(req,id,ok):
     except:
         pass
     job.status=(0 if ok else -2)
-    job.end_time=datetime.utcnow()
+    job.end_time=timezone.now()
     job.save()
     client.count-=1
     client.start()
