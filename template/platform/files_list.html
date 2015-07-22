@@ -15,7 +15,7 @@
         {% for file in item %}
             <tr>
                 <td>
-                    <a href="/platform/download/{{ file.name }}">{{ file.name }}</a>
+                    <a href="/platform/download/{{ file.name }}_{{ file.id }}">{{ file.name }}</a>
                 </td>
                 <td>
                     {{ file.uid.username }}
@@ -23,4 +23,5 @@
             </tr>
         {% endfor %}
     </table>
+    {% include "pagination.html" %}
 {% endblock %}

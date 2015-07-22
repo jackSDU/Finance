@@ -9,6 +9,8 @@ from Main.models import *
 
 @login_required
 def upload(req):
+    if not req.user.is_superuser:
+            return HttpResponseRedirect('/info/not_admin')
     if req.method == 'GET':
         return ren2res("platform/upload.html", req)
     elif req.method == 'POST':
@@ -16,27 +18,23 @@ def upload(req):
         print(req.FILES)
         files = req.FILES.getlist('file')
         for f in files:
-            print("ok")
+
+            submit = File(name=f.name, uid_id=req.user.id, path=UPLOAD_DIR)
+            submit.save()
             try:
-                destination = open(UPLOAD_DIR + str(f.name), 'wb+')
+                destination = open(UPLOAD_DIR + '\\' + str(submit.id) + '_' + str(f.name) , 'wb+')
                 for chunk in f.chunks():
                     destination.write(chunk)
                     destination.close()
-                submit = File(name=f, uid_id=req.user.id, path=UPLOAD_DIR)
-                submit.save()
             except:
+                submit.delete()
                 return ren2res("platform/upload.html", req, {'err': "文件上传失败"})
         return ren2res("platform/upload.html", req, {'info': "上传成功"})
 
 @login_required
-def download(req):
-    # 工作开始的地方
-    return
-
-@login_required
 def list(req):
     if req.method == 'GET':
-        f=File.objects.all()
+        f = File.objects.all()
         return ren2res("platform/files_list.html", req, paginate(req, f))
 
 
