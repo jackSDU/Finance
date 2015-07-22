@@ -6,6 +6,9 @@
 {% include "platform/sidebar.html" %}
 {% endblock %}
 {% block content %}
+    <style type="text/css">
+    #progress{width:90%}
+    </style>
 <script>
 /*jslint unparam: true, regexp: true */
 /*global window, $ */
@@ -93,6 +96,7 @@ $(function () {
             'width',
             progress + '%'
         );
+        $('#progressbar').text(progress+'%');
     }).on('fileuploaddone', function (e, data) {
         $.each(data.result.files, function (index, file) {
             var link = $('<a>')
@@ -156,8 +160,8 @@ $(function () {
     <br>
     <br>
     <!-- The global progress bar -->
-    <div id="progress" class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+    <div id="progress" class="progress" width="90%">
+        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;" id="progressbar">0%</div>
     </div>
     <!-- The container for the uploaded files -->
     <div id="files" class="files"></div>
