@@ -120,5 +120,6 @@ APP_DEPLOY_DIR = '/'
 
 RESULT_DIR = os.path.join(BASE_DIR, "result")
 UPLOAD_DIR = os.path.join(BASE_DIR, "upload")
+DBDATA_DIR = os.path.join(BASE_DIR, "dbdata")
 
 SERVANT_PORT=2333

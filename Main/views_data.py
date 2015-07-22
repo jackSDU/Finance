@@ -1,9 +1,12 @@
+import os
+from time import asctime,localtime
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.http import QueryDict
 from django.db.models import F
 
+from Finance.settings import DBDATA_DIR
 from Main.views import ren2res,paginate
 from Main.models_data import *
 
@@ -53,4 +56,9 @@ def yield_rate(req):
 @login_required
 def download(req):
     if req.method=='GET':
-        return ren2res('data/download.html',req)
+        item=[]
+        for f in os.listdir(DBDATA_DIR):
+            nm=os.path.join(DBDATA_DIR,f)
+            if os.path.isfile(nm):
+                item.append({'name':f,'date':asctime(localtime(os.path.getmtime(nm))),'size':os.path.getsize(nm),'url':'/dbdata/'+f})
+        return ren2res('data/download.html',req,paginate(req,item))
