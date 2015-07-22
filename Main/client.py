@@ -19,9 +19,7 @@ def start(id=None):
         job=Job.objects.get(pk=int(id))
         if job.status != 1:
             continue
-        url="http://"+str(job.app.host.ip)+':'+str(job.app.host.port)+'/start/'+str(job.pk)
-        print(url)
-        requests.post("http://"+str(job.app.host.ip)+':'+str(job.app.host.port)+'/start/'+str(job.pk),
+        requests.post("http://"+str(job.app.host.ip)+':'+str(job.app.host.port)+'/start/'+str(job.pk)+'/',
                       {'cmd':str(job.app.path)+' '+str(job.cmd)})
         count+=1
         job.status=2
@@ -32,6 +30,6 @@ def stop(id):
     job=Job.objects.get(pk=int(id))
     if job.status != 3 and job.status != 4:
         return
-    r=requests.post("http://"+str(job.app.host.ip)+':'+str(job.app.host.port)+'/stop/'+str(job.pk))
+    r=requests.post("http://"+str(job.app.host.ip)+':'+str(job.app.host.port)+'/stop/'+str(job.pk)+'/')
     job.status=4
     job.save()
