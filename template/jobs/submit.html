@@ -13,11 +13,9 @@
 
 {% block content %}
 {% if app %}
-<center>
-    <div class="page-header">
-        <h1>{{ app.name }}</h1>
-    </div>
-</center>
+<div class="page-header">
+    <h1>{{ app.name }}</h1>
+</div>
 <form class="form-horizontal" action="" method="POST">
 {% csrf_token %}
     <input type="hidden" value="{{ app.id }}" name="id">
