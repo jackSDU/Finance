@@ -23,10 +23,10 @@
   <div class="form-group">
     <label class="col-sm-4 control-label">{{ param.name }}</label>
     <div class="col-sm-5">
-      <input type="text" class="form-control" name="{{ param.order }}">
+      <input type="text" class="form-control" name="{{ param.order }}" value="{{ param.value }}">
     </div>
     {% if not param.blank %}
-        <a style="text-decoration:none;color:#ff0000">*</a>
+        <span> *</span>
     {% endif %}
   </div>
   {% endfor %}

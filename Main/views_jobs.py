@@ -22,60 +22,71 @@ def submit(req,aid):
         try:
             app = App.objects.get(id=aid)
         except:
-            raise Http404
-        params = Param.objects.filter(app=app)
-        dict={'app':app,'params':params,'length':params.count()}
-        if req.GET.get("msg"):
-            dict.update({'err':"带*的参数不能为空！"})
+            raise Http404()
+        params = Param.objects.filter(app=app).filter(name__isnull=False).order_by("order")
+        dict={'app':app,'params':params}
         return ren2res("jobs/submit.html",req,dict)
     elif req.method == 'POST':
         id = req.POST['id']
-        params = Param.objects.filter(app=App.objects.get(id=id)).order_by("order")
-        for param in params:
-           value=req.POST.get(str(param.order))
-           if value.strip()=="" and param.blank==False:
-               return HttpResponseRedirect("?msg=err")
+        params = Param.objects.filter(app=int(id)).order_by("order")
         cmd=""
         for param in params:
-            cmd += req.POST[str(param.order)]
-            cmd += " "
-        job=Job(uid=req.user,app=App.objects.get(id=id),cmd=cmd.strip())
+            value=req.POST.get(str(param.order))
+            if value is None:
+                cmd+=str(param.value)+" "
+            elif not value.strip() and not param.blank:
+                try:
+                    return ren2res("jobs/submit.html",req,{'app':App.objects.get(id=aid),
+                                                           'params':params.filter(name__isnull=False),
+                                                           'err':"带*的参数不能为空！"})
+                except:
+                    raise Http404()
+            else:
+                cmd+=value+" "
+        job=Job(uid=req.user,app_id=id,cmd=cmd.strip())
         job.save()
         client.start(job.id)
-        return HttpResponseRedirect("/jobs?page=1&msg=info")
+        return HttpResponseRedirect("/jobs/")
 
 @login_required
 def list(req):
     if req.method=='GET':
-        if req.user.is_superuser and Job.objects.all().exists():
-            job=Job.objects.all().order_by("-add_time")
-        elif Job.objects.filter(uid=req.user).exists():
-            job=Job.objects.filter(uid=req.user).order_by("-add_time")
+        jobs=Job.objects.all()
+        if not req.user.is_superuser:
+            jobs=jobs.filter(uid=req.user)
+        if jobs.exists():
+            jobs=jobs.order_by("-add_time")
+            return ren2res("jobs/list.html",req,paginate(req,jobs))
         else:
-            return ren2res("jobs/list.html", req, {'info':"没有提交的作业！"})
-        dict=paginate(req,job)
-        if req.GET.get("msg"):
-            dict.update({'info':"作业提交成功!"})
-        return ren2res("jobs/list.html",req,dict)
+            return ren2res("jobs/list.html",req,{'info':"没有提交的作业！"})
 
 @login_required
 def detail(req,jid):
     if req.method=='GET':
         try:
+
             job=Job.objects.get(id=jid)
         except:
-            raise Http404
+            raise Http404()
+        dict={'job':job}
         try:
-            with open("a.txt","r") as result:
-                res=result.read()
-        except IOError as error:
-            res="作业还未执行完成！"
-        dict={'job':job,'result':res}
+            out=open("out_"+str(job.id))
+            dict.update(out=out.read())
+            out.close()
+        except:
+            dict.update(out="")
+        try:
+            err=open("err_"+str(job.id))
+            dict.update(err=err.read())
+            err.close()
+        except:
+            dict.update(err="")
         return ren2res("jobs/detail.html",req,dict)
 
 def stop(req,jid):
     if req.method=='GET':
         client.stop(jid)
+        return HttpResponseRedirect("/jobs/")
 
 
 
