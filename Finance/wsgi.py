@@ -14,10 +14,3 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Finance.settings")
 
 application = get_wsgi_application()
-
-from multiprocessing import Process
-from Main import client
-
-p=Process(name="daemon",target=client.daemon,args=(client.rcon,))
-p.daemon=True
-p.start()

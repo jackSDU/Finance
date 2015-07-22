@@ -8,7 +8,7 @@ import requests
 from flask import Flask,request
 
 CLIENT_HOST="127.0.0.1"
-CLIENT_PORT=80
+CLIENT_PORT=8000
 
 PORT=2333
 
@@ -28,11 +28,11 @@ def worker_daemon(cmd,stop):
             try:
                 dict[c[0]]=subprocess.Popen(c[1].split(),stdout=of,stderr=ef)
                 result_dict[c[0]]=(of,ef,)
-                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/started/'+str(c[0]))
+                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/api/started/'+str(c[0])+'/')
             except Exception as ex:
                 of.close()
                 ef.close()
-                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/wrong/'+str(c[0]),{"err":str(ex)})
+                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/api/wrong/'+str(c[0])+'/',{"err":str(ex)})
         while stop.poll():
             id=stop.recv()
             try:
@@ -40,17 +40,19 @@ def worker_daemon(cmd,stop):
                 of,ef=result_dict.pop(id)
                 of.close()
                 ef.close()
-                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/stopped/'+str(id))
+                requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+'/api/stopped/'+str(id)+'/')
             except:
                 pass
         todel=[]
-        for id,p in dict:
+        for id,p in dict.items():
             ret=p.poll()
             if ret==None:
                 continue
             todel.append(id)
             of,ef=result_dict.pop(id)
-            requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+("/right/" if ret==0 else "/wrong/")+str(id),
+            of.seek(0)
+            ef.seek(0)
+            requests.post("http://"+CLIENT_HOST+":"+str(CLIENT_PORT)+"/api/"+("right/" if ret==0 else "wrong/")+str(id)+'/',
                           {"out":of.read(),"err":ef.read(),"ret":ret})
             of.close()
             ef.close()
@@ -58,7 +60,7 @@ def worker_daemon(cmd,stop):
             dict.pop(id)
         time.sleep(5)
 
-app=Flask('Server')
+app=Flask(__name__)
 
 @app.route('/start/<int:id>',methods=['POST'])
 def start(id):
@@ -70,5 +72,12 @@ def stop(id):
     stop_write.send(id)
     return ''
 
+@app.route('/')
+def home():
+    return "welcome"
+
 if __name__ == '__main__':
-    app.run(port=PORT)
+    p=Process(target=worker_daemon,name='Server',args=(cmd_read,stop_read))
+    p.daemon=True
+    p.start()
+    app.run(host='0.0.0.0',port=PORT,debug=True)
