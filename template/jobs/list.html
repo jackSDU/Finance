@@ -41,11 +41,9 @@
   </tr>
   {% endfor %}
 </table>
-<center>
 {% include "pagination.html" %}
 <a href="/jobs?pg={{ pg }}">
   <button class="btn btn-default">刷新</button>
 </a>
-</center>
 {% endif %}
 {% endblock %}
