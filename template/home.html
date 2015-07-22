@@ -10,12 +10,11 @@
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="/static/css/home.css">
-    <link rel="stylesheet" href="/static/css/font-awesome/css">
 
     <script>
         $(document).ready(function(){
             {% if user %}
-            var time11,time21,time12,time22,time13,time23,time14,time24;
+            var time11,time21,time12,time22,time13,time23,time14,time24,time15,time25;
             $("#side1").mouseover(function(){
                 clearInterval(time21);
                 time11=setInterval(move2l,10,"1");
@@ -48,6 +47,14 @@
                 clearInterval(time14);
                 time24=setInterval(move2r,30,"4");
             });
+            $("#side5").mouseover(function(){
+                clearInterval(time25);
+                time15=setInterval(move2l,10,"5");
+            });
+            $("#side5").mouseout(function(){
+                clearInterval(time15);
+                time25=setInterval(move2r,30,"5");
+            });
             function move2l(id){
                 if(parseInt($("#side"+id).css("left").replace("px",""))<-5){
                     $("#side"+id).css({"left":(parseInt($("#side"+id).css("left").replace("px",""))+5)+"px"});}
@@ -55,7 +62,8 @@
                     if(id=="1") clearInterval(time11);
                     else if(id=="2") clearInterval(time12);
                     else if(id=="3") clearInterval(time13);
-                    else clearInterval(time14);
+                    else if(id=="4") clearInterval(time14);
+                    else clearInterval(time15);
                 }
             }
             function move2r(id){
@@ -65,7 +73,8 @@
                     if(id=="1") clearInterval(time21);
                     else if(id=="2") clearInterval(time22);
                     else if(id=="3") clearInterval(time23);
-                    else clearInterval(time24);
+                    else if(id=="4") clearInterval(time24);
+                    else clearInterval(time25);
                 }
             }
             {% endif %}
@@ -210,6 +219,7 @@
     <a href="/jobs/"><div id="side2" class="home-side home-side-jobs">作业管理<img class="home-side-img" src="/static/image/job_selected.gif"></div></a>
     <a href="/data/iv_record/"><div id="side3" class="home-side home-side-data">数据管理<img class="home-side-img" src="/static/image/data_selected.gif"></div></a>
     <a href="/apps/"><div id="side4" class="home-side home-side-apps">应用管理<img class="home-side-img" src="/static/image/app_selected.gif"></div></a>
+    <a href="/platform/"><div id="side5" class="home-side home-side-course">网络课堂<img class="home-side-img" src="/static/image/course_selected.gif"></div></a>
 {% endif %}
 </body>
 </html>
