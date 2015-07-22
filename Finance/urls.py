@@ -64,9 +64,8 @@ urlpatterns = [
     url(r'^apps/host/add/$',views_apps.host_add),
     url(r'^apps/host/delete/([0-9]+)/$', views_apps.host_delete),
 
+    url(r'^platform/$', views_platform.list),
     url(r'^platform/upload/$', views_platform.upload),
-    url(r'^platform/files/$', views_platform.list),
-    url(r'^platform/download/([0-9])$', views_platform.download),
 
     url(r'^admin/', include(admin.site.urls)),
 ] + staticfiles_urlpatterns()

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404,HttpResponseRedirect
-from Finance.settings import FILE_UPLOAD_DIR
+from Finance.settings import UPLOAD_DIR
 from Main.models import Files
 
 from Main.views import ren2res
@@ -18,11 +18,11 @@ def upload(req):
         for f in files:
             print("ok")
             try:
-                destination = open(FILE_UPLOAD_DIR + f.name, 'wb+')
+                destination = open(UPLOAD_DIR + str(f.name), 'wb+')
                 for chunk in f.chunks():
                     destination.write(chunk)
                     destination.close()
-                submit = Files(name=f, uid_id=req.user.id, path=FILE_UPLOAD_DIR)
+                submit = Files(name=f, uid_id=req.user.id, path=UPLOAD_DIR)
                 submit.save()
             except:
                 return ren2res("platform/upload.html", req, {'err': "文件上传失败"})
