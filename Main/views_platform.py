@@ -22,7 +22,7 @@ def upload(req):
             submit = File(name=f.name, uid_id=req.user.id, path=UPLOAD_DIR)
             submit.save()
             try:
-                destination = open(UPLOAD_DIR + '\\' + str(submit.id) + '_' + str(f.name) , 'wb+')
+                destination = open(UPLOAD_DIR + '/' + str(submit.id) + '_' + str(f.name) , 'wb+')
                 for chunk in f.chunks():
                     destination.write(chunk)
                     destination.close()
