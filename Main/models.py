@@ -69,7 +69,7 @@ class Job(models.Model):
         return str(self.uid).join(' -- ').join(str(self.app))
 
 
-class Files(models.Model):
+class File(models.Model):
     uid = models.ForeignKey(User)
     name = models.CharField(max_length=30)
     path = models.FilePathField(UPLOAD_DIR, recursive=True)

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import Http404,HttpResponseRedirect
 from Finance.settings import UPLOAD_DIR
-from Main.models import Files
+from Main.models import File
 
 from Main.views import ren2res
 from Main.views import paginate
@@ -22,7 +22,7 @@ def upload(req):
                 for chunk in f.chunks():
                     destination.write(chunk)
                     destination.close()
-                submit = Files(name=f, uid_id=req.user.id, path=UPLOAD_DIR)
+                submit = File(name=f, uid_id=req.user.id, path=UPLOAD_DIR)
                 submit.save()
             except:
                 return ren2res("platform/upload.html", req, {'err': "文件上传失败"})
@@ -36,7 +36,7 @@ def download(req):
 @login_required
 def list(req):
     if req.method == 'GET':
-        f=Files.objects.all()
+        f=File.objects.all()
         return ren2res("platform/files_list.html", req, paginate(req, f))
 
 
