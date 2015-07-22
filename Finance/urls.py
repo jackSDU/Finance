@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from Main import views,views_user,views_jobs,views_data,views_apps
+from Main import views,views_user,views_jobs,views_data,views_apps,views_platform
 
 urlpatterns = [
     url(r'^login/$',views.login),
@@ -61,10 +61,11 @@ urlpatterns = [
     url(r'^api/wrong/([0-9]+)/$',views.finished,{'ok':False}),
 
     url(r'^apps/host/$',views_apps.host),
-    # url(r'^apps/host/modify/$',views_apps.host_modify),
-    # url(r'^apps/host/delete/([0-9]+)',views_apps.host_delete),
-    url(r'^apps/host/add$',views_apps.host_add),
-    url(r'^apps/host/delete/([0-9]+)$',views_apps.host_delete),
+    url(r'^apps/host/add/$',views_apps.host_add),
+    url(r'^apps/host/delete/([0-9]+)/$', views_apps.host_delete),
+
+    url(r'^platform/$', views_platform.list),
+    url(r'^platform/upload/$', views_platform.upload),
 
     url(r'^admin/', include(admin.site.urls)),
 ] + staticfiles_urlpatterns()

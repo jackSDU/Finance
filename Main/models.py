@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from Finance.settings import APP_DEPLOY_DIR,SERVANT_PORT
+from Finance.settings import APP_DEPLOY_DIR,SERVANT_PORT,UPLOAD_DIR
 
 # Create your models here.
 
@@ -67,3 +67,12 @@ class Job(models.Model):
 
     def __str__(self):
         return str(self.uid).join(' -- ').join(str(self.app))
+
+
+class File(models.Model):
+    uid = models.ForeignKey(User)
+    name = models.CharField(max_length=30)
+    path = models.FilePathField(UPLOAD_DIR, recursive=True)
+
+    def __str__(self):
+        return str(self.name)
