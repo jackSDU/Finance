@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block header %}
+文件列表
+{% endblock %}
+
+{% block sidebar %}
+    {% include "apps/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-hover table-bordered">
+        <td>文件名称</td>
+        <td>上传者</td>
+        {% for file in item %}
+            <tr>
+                <td>
+                    <a href="/platform/download/{{ file.id }}">{{ file.name }}</a>
+                </td>
+                <td>
+                    {{ file.uid.username }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
