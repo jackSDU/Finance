@@ -37,13 +37,23 @@
         {% for p in param_i %}
             <tr id="{{ p.order }}">
                 <td>{{ p.order }}</td>
-                <td><input  class='form-control' id="argname{{ p.order }}" name="argname{{ p.order }}" value="{{ p.name }}" maxlength="50"></td>
+                {% if p.name == "" %}
+                    <td><input  class='form-control' id="argname{{ p.order }}" name="argname{{ p.order }}" value="{{ p.name }}" maxlength="50" readonly="true"></td>
+                {% else %}
+                    <td><input  class='form-control' id="argname{{ p.order }}" name="argname{{ p.order }}" value="{{ p.name }}" maxlength="50"></td>
+                {% endif %}
                 <td><input class='form-control' id="value{{ p.order }}" name="value{{ p.order }}" value="{{ p.value }}" maxlength="200"></td>
                 {% if p.blank  == True %}
                     <td><select class='form-control' id="blank{{ p.order }}" name="blank{{ p.order }}"><option>否</option><option selected>是</option></select></td>
                 {% else %}
                     <td><select class='form-control' id="blank{{ p.order }}" name="blank{{ p.order }}"><option>否</option><option>是</option></select></td>
                 {% endif %}
+                {% if p.name  == "" %}
+                    <td><select class='form-control' id="static{{ p.order }}" name="static{{ p.order }}"><option>否</option><option selected>是</option></select></td>
+                {% else %}
+                    <td><select class='form-control' id="static{{ p.order }}" name="static{{ p.order }}"><option>否</option><option>是</option></select></td>
+                {% endif %}
+
                 <td><a href="javascript:void(0)" onclick="deltr({{ p.order }})">删除</a></td>
                 <td><a href="javascript:void(0)" onclick="ins_above_cur({{ p.order }})">插入</a></td>
             </tr>
