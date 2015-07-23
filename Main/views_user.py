@@ -11,14 +11,16 @@ from Main.models import *
 @login_required
 def info(req,id=None):
     if req.method=='GET':
+        super=req.user.is_superuser
         if id:
+            if not super:
+                return HttpResponseRedirect('/info/not_admin')
             try:
                 u=User.objects.get(id=id)
             except:
                 raise Http404()
         else:
             u=req.user
-        super=req.user.is_superuser
         return ren2res("user/info.html",req,{'super':super,'u':u})
 
 @login_required
@@ -77,6 +79,8 @@ def verify(req):
 @login_required
 def delete(req,id):
     if req.method=='GET':
+        if not req.user.is_superuser:
+            return HttpResponseRedirect('/info/not_admin/')
         try:
             a=User.objects.get(id=id)
         except:

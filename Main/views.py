@@ -96,16 +96,16 @@ def home(req):
     return ren2res("home.html",req)
 
 def page_not_found(req):
-    return ren2err("info/404.html",False)
+    return render_to_response("info/404.html",{'jump':False})
 
 def registered(req):
-    return ren2err("info/registered.html",'/')
+    return render_to_response("info/registered.html",{'jump':'/'})
 
 def not_active(req):
-    return ren2err("info/not_active.html",'/')
+    return render_to_response("info/not_active.html",{'jump':'/'})
 
 def not_admin(req):
-    return ren2err("info/not_admin.html",req.GET.get('next'))
+    return render_to_response("info/not_admin.html",{'jump':req.GET.get('next')})
 
 @require_POST
 @csrf_exempt
