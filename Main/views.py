@@ -32,7 +32,10 @@ def paginate(req,qs,num=None,r=5):
     num=int(num)if num else 10
     if num<1:
         num=10
-    cnt=ceil(len(qs)/num)
+    if type(qs)==list:
+        cnt=ceil(len(qs)/num)
+    else:
+        cnt=ceil(qs.count()/num)
     min=cur-r
     max=cur+r
     if min<1:
