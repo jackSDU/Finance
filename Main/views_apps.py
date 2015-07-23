@@ -115,19 +115,23 @@ def modify(req, n):
 # note:same name is allowed
 def app_info_check(req, app_id=None):
     dict = {'err': ""}
-    name = req.POST.get('name').strip()
-    if name == "":
-        dict.update(err="无效的应用名称")
+    try:
+        name = req.POST.get('name').strip()
+        if name == "":
+            dict.update(err="无效的应用名称")
+            return dict
+        host = req.POST.get('host')
+        host_id = host[host.rfind('(') + 1:-1]
+        path = req.POST.get('path').strip()
+        if path == "":
+            dict.update(err="无效的路径")
+            return dict
+        desc = req.POST.get('description').strip()
+        submit = App(id=app_id, name=name, host_id=host_id, path=path, desc=desc)
+        dict.update(submit=submit)
+    except:
+        dict.update(err="部署失败，应用信息异常")
         return dict
-    host = req.POST.get('host')
-    host_id = host[host.rfind('(') + 1:-1]
-    path = req.POST.get('path').strip()
-    if path == "":
-        dict.update(err="无效的路径")
-        return dict
-    desc = req.POST.get('description').strip()
-    submit = App(id=app_id, name=name, host_id=host_id, path=path, desc=desc)
-    dict.update(submit=submit)
     return dict
 
 # check parameters, if a empty name or same names found, return error warning
@@ -140,22 +144,34 @@ def app_arg_check(req):
     list_submit = []
     list_name = []
     while not (req.POST.get('argname' + str(i)) is None):
-        order = str(i)
-        argname = req.POST.get('argname' + order).strip()
-        if argname == "":
-            dict.update(err="无效的参数名称")
-            return dict
-        if argname in list_name:
-            dict.update(err="重复的参数名称")
-            return dict
-        list_name.append(argname)
-        value = req.POST.get('value' + order).strip()
-        blank = 1 if req.POST.get('blank' + order) == '是' else 0
-        submit = Param(order=order, name=argname, value=value, blank=blank)
-        list_submit.append(submit)
-        i += 1
+        try:
+            order = str(i)
+            argname = req.POST.get('argname' + order).strip()
+            static = req.POST.get('static' + order).strip()
+            value = req.POST.get('value' + order).strip()
+            if static == '是':
+                if value == "":
+                    dict.update(err="静态参数值不能为空")
+                    return dict
+            else:
+                if argname == "":
+                    dict.update(err="无效的参数名称")
+                    return dict
+                if argname in list_name:
+                    dict.update(err="重复的参数名称")
+                    return dict
+                list_name.append(argname)
+            value = req.POST.get('value' + order).strip()
+            blank = 1 if req.POST.get('blank' + order) == '是' else 0
+            submit = Param(order=order, name=argname, value=value, blank=blank)
+            list_submit.append(submit)
+            i += 1
+        except:
+            dict.update(err="部署失败,参数异常")
     dict.update(list_submit=list_submit)
     return dict
+
+# host management
 @login_required
 def host(req):
     if not req.user.is_superuser:
