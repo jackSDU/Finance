@@ -9,13 +9,23 @@
 {% endblock %}
 
 {% block script %}
+    var static_change = function(i){
+        if($("#static" + i).val() == "是"){
+            $("#argname" + i).val("");
+            $("#argname" + i).attr("readonly", true);
+        }
+        else
+            $("#argname" + i).attr("readonly", false);
+    }
+
     var add_row = function(){
             var _len = $("#tab tr").length;
             $("#tab").append("<tr id="+_len+" align='center'>"
                                 +"<td><label name ='order"+_len+"' id='order"+_len+"'>"+_len+"</label></td>"
                                 +"<td><input type='text'  name='argname"+_len+"' id='argname"+_len+"' class='form-control' maxlength='50' required/></td>"
                                 +"<td><input type='text'  name='value"+_len+"' id='value"+_len+"' class='form-control' maxlength='200' /></td>"
-                                +"<td><select name='blank"+_len+"' id='blank"+_len+"' class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><select name='blank"+_len+"' id='blank"+_len+"'  class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><select name='static"+_len+"' id='static"+_len+"'onchange='static_change("+_len+")' class='form-control'><option>否</option><option>是</option></select></td>"
                                 +"<td><a href='javascript:void(0)' onclick='deltr("+_len+")'>删除</a></td>"
                                 +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+_len+")'>插入</a></td>"
                             +"</tr>");
@@ -25,7 +35,7 @@
 
         $("#tab tr").attr("align","center");
 
-        $("#but").click(add_row)
+        $("#but").click(add_row);
     })
 
     //delete a row
@@ -38,7 +48,8 @@
         {
             var nextTxtVal1 = $("#argname"+i).val();
             var nextTxtVal2 = $("#value"+i).val();
-            var nextBlankVal =$("#blank"+i).val();
+            var nextBlankVal = $("#blank"+i).val();
+            var nextStaticVal = $("#static"+i).val();
             $("tr[id=\'"+i+"\']")
                 .replaceWith("<tr id="+(i-1)+" align='center'>"
                                 +"<td><label name ='order"+(i-1)+"' id='order"+(i-1)+"'>"+(i-1)+"</label></td>"
@@ -46,12 +57,14 @@
                                 +"<td><input type='text' name='argname"+(i-1)+"' value='"+nextTxtVal1+"' id='argname"+(i-1)+"' class='form-control' maxlength='50' required/></td>"
                                 +"<td><input type='text' name='value"+(i-1)+"' value='"+nextTxtVal2+"' id='value"+(i-1)+"' class='form-control' maxlength='200' /></td>"
                                 +"<td><select name='blank"+(i-1)+"' value='"+nextBlankVal+"' id='blank"+(i-1)+"' class='form-control'><option>否</option><option>是</option></select></td>"
+                                +"<td><select name='static"+(i-1)+"' value='"+nextStaticVal+"' onchange='static_change("+(i-1)+")' id='static"+(i-1)+"' class='form-control'><option>否</option><option>是</option></select></td>"
                                 +"<td><a href='javascript:void(0)' onclick='deltr("+(i-1)+")'>删除</a></td>"
                                 +"<td><a href='javascript:void(0)' onclick='ins_above_cur("+(i-1)+")'>插入</a></td>"
                             +"</tr>");
 
             $("#blank"+(i-1)).val(nextBlankVal);
-
+            $("#static"+(i-1)).val(nextStaticVal);
+            static_change(i-1);
         }
     }
     //insert a row above current row
@@ -62,14 +75,20 @@
             $("#argname"+i).val($("#argname"+(i-1)).val());
             $("#value"+i).val($("#value"+(i-1)).val());
             $("#blank"+i).val($("#blank"+(i-1)).val());
+            $("#static"+i).val($("#static"+(i-1)).val());
+            static_change(i);
+{#            $("#static"+i).val($("#static"+(i-1)).val());#}
         }
         $("#argname"+index).val("");
         $("#value"+index).val("");
         $("#blank"+index).val("否");
+        $("#static"+index).val("否");
+        static_change(i);
     }
 
     var check = function(){
         error = "";
+        warning = "";
         // basic info check
         if($("#app_name").val().trim() == "")
             error += "无效的应用名称" + "<br />";
@@ -80,14 +99,22 @@
         //empty name and same names check
         var list = new Array();
         for(i = 1;i< length; i++){
-            name = $("#argname"+i).val().trim();
-            if(name == "")
-                error += "无效的参数名称:" + i + "<br />";
-            else if(list[name] != undefined){
-                error += "重复的参数名称:" + i + "<br />";
+            static = $("#static"+i).val()
+            if(static == "否"){
+                name = $("#argname"+i).val().trim();
+                if(name == "")
+                    error += "非静态参数名不能为空:" + i + "<br />";
+                else if(list[name] != undefined){
+                    error += "重复的参数名称:" + i + "<br />";
+                }
+                else
+                    list[name] = name;
             }
-            else
-                list[name] = name;
+            else{
+                value = $("#value"+i).val().trim()
+                if(value == "")
+                    error +="静态参数值不能为空:" + i + "<br/>";
+            }
         }
         // if there is an error, warning
         if(error){
@@ -137,6 +164,7 @@
             <!--td>arg specify</td-->
             <td>值</td>
             <td>允许空值</td>
+            <td>静态</td>
             <td>删除</td>
             <td>插入</td>
        </tr>
