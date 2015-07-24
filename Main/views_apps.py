@@ -38,7 +38,6 @@ def deploy(req):
         return ren2res("apps/apps_deploy.html", req, {'host': hostlist})
     # request to deploy a new application
     elif req.method == 'POST':
-        print(req.POST)
         # add application info to app table
         info = app_info_check(req)
         if info['err']:
@@ -162,6 +161,7 @@ def app_arg_check(req):
                     return dict
                 list_name.append(argname)
             value = req.POST.get('value' + order).strip()
+            # note: if blank+order field doesn't exit(when "static" chosen, add "disabled" to #blank, return false
             blank = 1 if req.POST.get('blank' + order) == '是' else 0
             submit = Param(order=order, name=argname, value=value, blank=blank)
             list_submit.append(submit)
@@ -183,6 +183,7 @@ def host(req):
         i = 0
         page = paginate(req, hostlist)
         submit = []
+        # get host id, refer to apps_host_add.html
         for n in req.POST.keys():
             if n[0:6] == 'hostid':
                 host_id = n[6:]
@@ -218,6 +219,7 @@ def host_add(req):
         ip = req.POST['host_ip']
         port = req.POST['host_port']
         port = port if port != "" else SERVANT_PORT
+        # check ip and port, return error info if there is
         error = host_check(name, ip, port)
         if error:
             return ren2res("apps/apps_host_add.html", req, {'err':error})
@@ -236,11 +238,15 @@ def host_delete(req, n):
         hostlist = Host.objects.all()
         return HttpResponseRedirect("/apps/host/")
 
+# check ip and port
+# ip check support ipv4 and ipv6
+# port less than 65536(TCP/UDP)
 def host_check(name, ip, port):
     err = ""
     if name == "":
         err = "主机名称不能为空"
         return err
+    # if ip is an invalid value, throw Exception
     try:
         ipaddress.IPv4Address(ip)
     except ipaddress.AddressValueError:

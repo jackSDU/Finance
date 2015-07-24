@@ -13,9 +13,12 @@
         if($("#static" + i).val() == "是"){
             $("#argname" + i).val("");
             $("#argname" + i).attr("readonly", true);
+            $("#blank" + i).attr("disabled","disabled");
         }
-        else
+        else{
             $("#argname" + i).attr("readonly", false);
+            $("#blank" + i).removeAttr("disabled");
+        }
     }
 
     var add_row = function(){
