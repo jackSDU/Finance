@@ -57,7 +57,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'template'
+           os.path.join(BASE_DIR,'template')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -84,7 +84,7 @@ DATABASES = {
     },
     'data':{
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'finance',
+        'NAME': 'finance_data',
         'USER': 'finance',
         'PASSWORD': 'finance',
     }

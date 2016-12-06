@@ -18,7 +18,8 @@
     <tr align="center">
 
         <td style="vertical-align:middle;">应用名称</td>
-        <td width="62%" style="vertical-align:middle;">应用描述</td>
+        <td width="50%" style="vertical-align:middle;">应用描述</td>
+        <td width="20%" style="vertical-align:middle;">主机</td>
         <td style="vertical-align:middle;">操作</td>
     </tr>
     {% for a in item %}
@@ -26,6 +27,7 @@
 
             <td style="vertical-align:middle;">{{ a.name }}</td>
             <td style="vertical-align:middle;">{{ a.desc }}</td>
+            <td style="vertical-align:middle;">{{ a.host }}</td>
             <td style="vertical-align:middle;" ><a href="/apps/{{ a.id }}" class="btn btn-primary  active">详细</a></td>
         </tr>
     {% endfor %}

@@ -5,14 +5,15 @@ from Finance.settings import APP_DEPLOY_DIR,SERVANT_PORT,UPLOAD_DIR
 
 # Create your models here.
 
+#主机model
 class Host(models.Model):
     name=models.CharField(max_length=30)
     ip=models.GenericIPAddressField()
-    port=models.PositiveSmallIntegerField(default=SERVANT_PORT)
-
+    username=models.CharField(max_length=30)
+    password=models.CharField(max_length=30)
     def __str__(self):
         return str(self.name)
-
+#应用model
 class App(models.Model):
     uid=models.ForeignKey(User)
 
@@ -26,7 +27,7 @@ class App(models.Model):
 
     def __str__(self):
         return str(self.name)
-
+#参数model
 class Param(models.Model):
     app=models.ForeignKey(App)
 
@@ -41,7 +42,7 @@ class Param(models.Model):
 
     class Meta:
         ordering=['order']
-
+#作业model
 class Job(models.Model):
     uid=models.ForeignKey(User)
     app=models.ForeignKey(App)
@@ -68,7 +69,7 @@ class Job(models.Model):
     def __str__(self):
         return str(self.uid).join(' -- ').join(str(self.app))
 
-
+#文件model
 class File(models.Model):
     uid = models.ForeignKey(User)
     name = models.CharField(max_length=30)

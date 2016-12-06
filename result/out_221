@@ -1,0 +1,4 @@
+/home/peng/montecarlo_mic 100 100 0.33 0.03 0.2 1
+Callculate for 10000 times
+The resuilt is :     5.0677
+Total time is     10.3900 

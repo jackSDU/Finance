@@ -6,13 +6,16 @@ from Main.views import ren2res
 from Main.models import *
 from Main.views import paginate
 from Main import client
+import os
+from Finance.settings import RESULT_DIR
 
 # Create your views here.
 @login_required
 def choose(req):
     if req.method=='GET':
         if App.objects.exists():
-            return ren2res("jobs/choose.html",req,{'apps':App.objects.all()})
+            #p = App.objects.filter(hide=False).order_by("id")
+            return ren2res("jobs/choose.html",req,{'apps': App.objects.filter(hide=False).order_by("id")})
         else:
             return ren2res("jobs/choose.html",req,{'info':"抱歉，还没有可用的应用！"})
 
@@ -62,25 +65,35 @@ def list(req):
 
 @login_required
 def detail(req,jid):
+    print('in xiews_job,detail!!')
     if req.method=='GET':
+        print('in views_job,detail--if!!')
         try:
 
             job=Job.objects.get(id=jid)
         except:
             raise Http404()
         dict={'job':job}
+        print(os.path.join(RESULT_DIR,'out_'+str(job.id)))
         try:
-            out=open("out_"+str(job.id))
+            #f=open(os.path.join(RESULT_DIR,'out_'+str(id)),mode='w')
+            out=open(os.path.join(RESULT_DIR,'out_'+str(job.id)))
+            #print('job.id is--',job.id)
+            #print('read out_',job.id,'----',out.read)
             dict.update(out=out.read())
             out.close()
-        except:
+        except:##问题出在这，找不到文件
             dict.update(out="")
+            print('in except of readout detail')
         try:
-            err=open("err_"+str(job.id))
+            err=open(os.path.join(RESULT_DIR,'err_'+str(job.id)))
+           # err=open("err_"+str(job.id))
             dict.update(err=err.read())
             err.close()
         except:
             dict.update(err="")
+            print('in except of readerror detail')
+            
         return ren2res("jobs/detail.html",req,dict)
 
 def stop(req,jid):

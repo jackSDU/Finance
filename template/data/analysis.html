@@ -1,0 +1,350 @@
+{% extends "base.html" %}
+
+{% block header %}
+数据可视化
+{% endblock %}
+
+{% block sidebar %}
+{% include "data/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>数据可视化</h1>
+    <h5>微软（MSFT）最近一年股票价格走势图</h5>
+</div>
+<style>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+</style>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+ var data = [
+	{date: new Date(2015,07-1,17), close: 46.619999},
+	{date: new Date(2015,07-1,20), close: 46.919998},
+	{date: new Date(2015,07-1,21), close: 47.279999},
+	{date: new Date(2015,07-1,22), close: 45.540001},
+	{date: new Date(2015,07-1,23), close: 46.110001},
+	{date: new Date(2015,07-1,24), close: 45.939999},
+	{date: new Date(2015,07-1,27), close: 45.349998},
+	{date: new Date(2015,07-1,28), close: 45.34},
+	{date: new Date(2015,07-1,29), close: 46.290001},
+	{date: new Date(2015,07-1,30), close: 46.880001},
+	{date: new Date(2015,07-1,31), close: 46.700001},
+	{date: new Date(2015,08-1,03), close: 46.810001},
+	{date: new Date(2015,08-1,04), close: 47.540001},
+	{date: new Date(2015,08-1,05), close: 47.580002},
+	{date: new Date(2015,08-1,06), close: 46.619999},
+	{date: new Date(2015,08-1,07), close: 46.740002},
+	{date: new Date(2015,08-1,10), close: 47.330002},
+	{date: new Date(2015,08-1,11), close: 46.41},
+	{date: new Date(2015,08-1,12), close: 46.740002},
+	{date: new Date(2015,08-1,13), close: 46.73},
+	{date: new Date(2015,08-1,14), close: 47.0},
+	{date: new Date(2015,08-1,17), close: 47.32},
+	{date: new Date(2015,08-1,18), close: 47.27},
+	{date: new Date(2015,08-1,19), close: 46.610001},
+	{date: new Date(2015,08-1,20), close: 45.66},
+	{date: new Date(2015,08-1,21), close: 43.07},
+	{date: new Date(2015,08-1,24), close: 41.68},
+	{date: new Date(2015,08-1,25), close: 40.470001},
+	{date: new Date(2015,08-1,26), close: 42.709999},
+	{date: new Date(2015,08-1,27), close: 43.900002},
+	{date: new Date(2015,08-1,28), close: 43.93},
+	{date: new Date(2015,08-1,31), close: 43.52},
+	{date: new Date(2015,09-1,01), close: 41.82},
+	{date: new Date(2015,09-1,02), close: 43.360001},
+	{date: new Date(2015,09-1,03), close: 43.5},
+	{date: new Date(2015,09-1,04), close: 42.610001},
+	{date: new Date(2015,09-1,08), close: 43.889999},
+	{date: new Date(2015,09-1,09), close: 43.07},
+	{date: new Date(2015,09-1,10), close: 43.290001},
+	{date: new Date(2015,09-1,11), close: 43.48},
+	{date: new Date(2015,09-1,14), close: 43.040001},
+	{date: new Date(2015,09-1,15), close: 43.98},
+	{date: new Date(2015,09-1,16), close: 44.299999},
+	{date: new Date(2015,09-1,17), close: 44.25},
+	{date: new Date(2015,09-1,18), close: 43.48},
+	{date: new Date(2015,09-1,21), close: 44.110001},
+	{date: new Date(2015,09-1,22), close: 43.900002},
+	{date: new Date(2015,09-1,23), close: 43.869999},
+	{date: new Date(2015,09-1,24), close: 43.91},
+	{date: new Date(2015,09-1,25), close: 43.939999},
+	{date: new Date(2015,09-1,28), close: 43.290001},
+	{date: new Date(2015,09-1,29), close: 43.439999},
+	{date: new Date(2015,09-1,30), close: 44.259998},
+	{date: new Date(2015,10-1,01), close: 44.610001},
+	{date: new Date(2015,10-1,02), close: 45.57},
+	{date: new Date(2015,10-1,05), close: 46.630001},
+	{date: new Date(2015,10-1,06), close: 46.75},
+	{date: new Date(2015,10-1,07), close: 46.799999},
+	{date: new Date(2015,10-1,08), close: 47.450001},
+	{date: new Date(2015,10-1,09), close: 47.110001},
+	{date: new Date(2015,10-1,12), close: 47.0},
+	{date: new Date(2015,10-1,13), close: 46.889999},
+	{date: new Date(2015,10-1,14), close: 46.68},
+	{date: new Date(2015,10-1,15), close: 47.009998},
+	{date: new Date(2015,10-1,16), close: 47.509998},
+	{date: new Date(2015,10-1,19), close: 47.619999},
+	{date: new Date(2015,10-1,20), close: 47.77},
+	{date: new Date(2015,10-1,21), close: 47.200001},
+	{date: new Date(2015,10-1,22), close: 48.029999},
+	{date: new Date(2015,10-1,23), close: 52.869999},
+	{date: new Date(2015,10-1,26), close: 54.25},
+	{date: new Date(2015,10-1,27), close: 53.689999},
+	{date: new Date(2015,10-1,28), close: 53.98},
+	{date: new Date(2015,10-1,29), close: 53.360001},
+	{date: new Date(2015,10-1,30), close: 52.639999},
+	{date: new Date(2015,11-1,02), close: 53.240002},
+	{date: new Date(2015,11-1,03), close: 54.150002},
+	{date: new Date(2015,11-1,04), close: 54.400002},
+	{date: new Date(2015,11-1,05), close: 54.380001},
+	{date: new Date(2015,11-1,06), close: 54.919998},
+	{date: new Date(2015,11-1,09), close: 54.16},
+	{date: new Date(2015,11-1,10), close: 53.509998},
+	{date: new Date(2015,11-1,11), close: 53.650002},
+	{date: new Date(2015,11-1,12), close: 53.32},
+	{date: new Date(2015,11-1,13), close: 52.84},
+	{date: new Date(2015,11-1,16), close: 53.77},
+	{date: new Date(2015,11-1,17), close: 52.970001},
+	{date: new Date(2015,11-1,18), close: 53.849998},
+	{date: new Date(2015,11-1,19), close: 53.939999},
+	{date: new Date(2015,11-1,20), close: 54.189999},
+	{date: new Date(2015,11-1,23), close: 54.189999},
+	{date: new Date(2015,11-1,24), close: 54.25},
+	{date: new Date(2015,11-1,25), close: 53.689999},
+	{date: new Date(2015,11-1,27), close: 53.93},
+	{date: new Date(2015,11-1,30), close: 54.349998},
+	{date: new Date(2015,12-1,01), close: 55.220001},
+	{date: new Date(2015,12-1,02), close: 55.209999},
+	{date: new Date(2015,12-1,03), close: 54.200001},
+	{date: new Date(2015,12-1,04), close: 55.91},
+	{date: new Date(2015,12-1,07), close: 55.810001},
+	{date: new Date(2015,12-1,08), close: 55.790001},
+	{date: new Date(2015,12-1,09), close: 54.98},
+	{date: new Date(2015,12-1,10), close: 55.27},
+	{date: new Date(2015,12-1,11), close: 54.060001},
+	{date: new Date(2015,12-1,14), close: 55.139999},
+	{date: new Date(2015,12-1,15), close: 55.200001},
+	{date: new Date(2015,12-1,16), close: 56.130001},
+	{date: new Date(2015,12-1,17), close: 55.700001},
+	{date: new Date(2015,12-1,18), close: 54.130001},
+	{date: new Date(2015,12-1,21), close: 54.830002},
+	{date: new Date(2015,12-1,22), close: 55.349998},
+	{date: new Date(2015,12-1,23), close: 55.82},
+	{date: new Date(2015,12-1,24), close: 55.669998},
+	{date: new Date(2015,12-1,28), close: 55.950001},
+	{date: new Date(2015,12-1,29), close: 56.549999},
+	{date: new Date(2015,12-1,30), close: 56.310001},
+	{date: new Date(2015,12-1,31), close: 55.48},
+	{date: new Date(2016,01-1,04), close: 54.799999},
+	{date: new Date(2016,01-1,05), close: 55.049999},
+	{date: new Date(2016,01-1,06), close: 54.049999},
+	{date: new Date(2016,01-1,07), close: 52.169998},
+	{date: new Date(2016,01-1,08), close: 52.330002},
+	{date: new Date(2016,01-1,11), close: 52.299999},
+	{date: new Date(2016,01-1,12), close: 52.779999},
+	{date: new Date(2016,01-1,13), close: 51.639999},
+	{date: new Date(2016,01-1,14), close: 53.110001},
+	{date: new Date(2016,01-1,15), close: 50.990002},
+	{date: new Date(2016,01-1,19), close: 50.560001},
+	{date: new Date(2016,01-1,20), close: 50.790001},
+	{date: new Date(2016,01-1,21), close: 50.48},
+	{date: new Date(2016,01-1,22), close: 52.290001},
+	{date: new Date(2016,01-1,25), close: 51.790001},
+	{date: new Date(2016,01-1,26), close: 52.169998},
+	{date: new Date(2016,01-1,27), close: 51.220001},
+	{date: new Date(2016,01-1,28), close: 52.060001},
+	{date: new Date(2016,01-1,29), close: 55.09},
+	{date: new Date(2016,02-1,01), close: 54.709999},
+	{date: new Date(2016,02-1,02), close: 53.0},
+	{date: new Date(2016,02-1,03), close: 52.16},
+	{date: new Date(2016,02-1,04), close: 52.0},
+	{date: new Date(2016,02-1,05), close: 50.16},
+	{date: new Date(2016,02-1,08), close: 49.41},
+	{date: new Date(2016,02-1,09), close: 49.279999},
+	{date: new Date(2016,02-1,10), close: 49.709999},
+	{date: new Date(2016,02-1,11), close: 49.689999},
+	{date: new Date(2016,02-1,12), close: 50.5},
+	{date: new Date(2016,02-1,16), close: 51.09},
+	{date: new Date(2016,02-1,17), close: 52.419998},
+	{date: new Date(2016,02-1,18), close: 52.189999},
+	{date: new Date(2016,02-1,19), close: 51.82},
+	{date: new Date(2016,02-1,22), close: 52.650002},
+	{date: new Date(2016,02-1,23), close: 51.18},
+	{date: new Date(2016,02-1,24), close: 51.360001},
+	{date: new Date(2016,02-1,25), close: 52.099998},
+	{date: new Date(2016,02-1,26), close: 51.299999},
+	{date: new Date(2016,02-1,29), close: 50.880001},
+	{date: new Date(2016,03-1,01), close: 52.580002},
+	{date: new Date(2016,03-1,02), close: 52.950001},
+	{date: new Date(2016,03-1,03), close: 52.349998},
+	{date: new Date(2016,03-1,04), close: 52.029999},
+	{date: new Date(2016,03-1,07), close: 51.029999},
+	{date: new Date(2016,03-1,08), close: 51.650002},
+	{date: new Date(2016,03-1,09), close: 52.84},
+	{date: new Date(2016,03-1,10), close: 52.049999},
+	{date: new Date(2016,03-1,11), close: 53.07},
+	{date: new Date(2016,03-1,14), close: 53.169998},
+	{date: new Date(2016,03-1,15), close: 53.59},
+	{date: new Date(2016,03-1,16), close: 54.349998},
+	{date: new Date(2016,03-1,17), close: 54.66},
+	{date: new Date(2016,03-1,18), close: 53.490002},
+	{date: new Date(2016,03-1,21), close: 53.860001},
+	{date: new Date(2016,03-1,22), close: 54.07},
+	{date: new Date(2016,03-1,23), close: 53.970001},
+	{date: new Date(2016,03-1,24), close: 54.209999},
+	{date: new Date(2016,03-1,28), close: 53.540001},
+	{date: new Date(2016,03-1,29), close: 54.709999},
+	{date: new Date(2016,03-1,30), close: 55.049999},
+	{date: new Date(2016,03-1,31), close: 55.23},
+	{date: new Date(2016,04-1,01), close: 55.57},
+	{date: new Date(2016,04-1,04), close: 55.43},
+	{date: new Date(2016,04-1,05), close: 54.560001},
+	{date: new Date(2016,04-1,06), close: 55.119999},
+	{date: new Date(2016,04-1,07), close: 54.459999},
+	{date: new Date(2016,04-1,08), close: 54.419998},
+	{date: new Date(2016,04-1,11), close: 54.310001},
+	{date: new Date(2016,04-1,12), close: 54.650002},
+	{date: new Date(2016,04-1,13), close: 55.349998},
+	{date: new Date(2016,04-1,14), close: 55.360001},
+	{date: new Date(2016,04-1,15), close: 55.650002},
+	{date: new Date(2016,04-1,18), close: 56.459999},
+	{date: new Date(2016,04-1,19), close: 56.389999},
+	{date: new Date(2016,04-1,20), close: 55.59},
+	{date: new Date(2016,04-1,21), close: 55.779999},
+	{date: new Date(2016,04-1,22), close: 51.779999},
+	{date: new Date(2016,04-1,25), close: 52.110001},
+	{date: new Date(2016,04-1,26), close: 51.439999},
+	{date: new Date(2016,04-1,27), close: 50.939999},
+	{date: new Date(2016,04-1,28), close: 49.900002},
+	{date: new Date(2016,04-1,29), close: 49.869999},
+	{date: new Date(2016,05-1,02), close: 50.610001},
+	{date: new Date(2016,05-1,03), close: 49.779999},
+	{date: new Date(2016,05-1,04), close: 49.869999},
+	{date: new Date(2016,05-1,05), close: 49.939999},
+	{date: new Date(2016,05-1,06), close: 50.389999},
+	{date: new Date(2016,05-1,09), close: 50.07},
+	{date: new Date(2016,05-1,10), close: 51.02},
+	{date: new Date(2016,05-1,11), close: 51.049999},
+	{date: new Date(2016,05-1,12), close: 51.509998},
+	{date: new Date(2016,05-1,13), close: 51.080002},
+	{date: new Date(2016,05-1,16), close: 51.830002},
+	{date: new Date(2016,05-1,17), close: 50.509998},
+	{date: new Date(2016,05-1,18), close: 50.810001},
+	{date: new Date(2016,05-1,19), close: 50.32},
+	{date: new Date(2016,05-1,20), close: 50.619999},
+	{date: new Date(2016,05-1,23), close: 50.029999},
+	{date: new Date(2016,05-1,24), close: 51.59},
+	{date: new Date(2016,05-1,25), close: 52.119999},
+	{date: new Date(2016,05-1,26), close: 51.889999},
+	{date: new Date(2016,05-1,27), close: 52.32},
+	{date: new Date(2016,05-1,31), close: 53.0},
+	{date: new Date(2016,06-1,01), close: 52.849998},
+	{date: new Date(2016,06-1,02), close: 52.48},
+	{date: new Date(2016,06-1,03), close: 51.790001},
+	{date: new Date(2016,06-1,06), close: 52.130001},
+	{date: new Date(2016,06-1,07), close: 52.099998},
+	{date: new Date(2016,06-1,08), close: 52.040001},
+	{date: new Date(2016,06-1,09), close: 51.619999},
+	{date: new Date(2016,06-1,10), close: 51.48},
+	{date: new Date(2016,06-1,13), close: 50.139999},
+	{date: new Date(2016,06-1,14), close: 49.830002},
+	{date: new Date(2016,06-1,15), close: 49.689999},
+	{date: new Date(2016,06-1,16), close: 50.389999},
+	{date: new Date(2016,06-1,17), close: 50.130001},
+	{date: new Date(2016,06-1,20), close: 50.07},
+	{date: new Date(2016,06-1,21), close: 51.189999},
+	{date: new Date(2016,06-1,22), close: 50.990002},
+	{date: new Date(2016,06-1,23), close: 51.91},
+	{date: new Date(2016,06-1,24), close: 49.830002},
+	{date: new Date(2016,06-1,27), close: 48.43},
+	{date: new Date(2016,06-1,28), close: 49.439999},
+	{date: new Date(2016,06-1,29), close: 50.540001},
+	{date: new Date(2016,06-1,30), close: 51.169998},
+	{date: new Date(2016,07-1,01), close: 51.16},
+	{date: new Date(2016,07-1,05), close: 51.169998},
+	{date: new Date(2016,07-1,06), close: 51.380001},
+	{date: new Date(2016,07-1,07), close: 51.380001},
+	{date: new Date(2016,07-1,08), close: 52.299999},
+	{date: new Date(2016,07-1,11), close: 52.59},
+	{date: new Date(2016,07-1,12), close: 53.209999},
+	{date: new Date(2016,07-1,13), close: 53.509998},
+	{date: new Date(2016,07-1,14), close: 53.740002},
+	{date: new Date(2016,07-1,15), close: 53.700001},
+			];
+var margin = {top:100, right: 20, bottom: 30, left: 250},
+    width = 1000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var formatDate = d3.time.format("%b");
+
+var x = d3.time.scale()
+    .domain(d3.extent(data, function(d) { return d.date; }))
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .domain(d3.extent(data, function(d) { return d.close; }))
+    .nice(1)
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickFormat(formatDate)
+
+
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Price ($)");
+
+  svg.append("path")
+      .datum(data)
+      .attr("class", "line")
+      .attr("d", line);
+
+</script>
+{% endblock %}

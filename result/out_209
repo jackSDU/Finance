@@ -1,0 +1,37 @@
+/home/liuhui/cuda-7.0/samples/4_Finance/BlackScholes/BlackScholes 
+[/home/liuhui/cuda-7.0/samples/4_Finance/BlackScholes/BlackScholes] - Starting...
+GPU Device 0: "Tesla K40c" with compute capability 3.5
+
+Initializing data...
+...allocating CPU memory for options.
+...allocating GPU memory for options.
+...generating input data in CPU mem.
+...copying input data to GPU mem.
+Data init done.
+
+Executing Black-Scholes GPU kernel (512 iterations)...
+Options count             : 8000000     
+BlackScholesGPU() time    : 0.325758 msec
+Effective memory bandwidth: 245.581225 GB/s
+Gigaoptions per second    : 24.558123     
+
+BlackScholes, Throughput = 24.5581 GOptions/s, Time = 0.00033 s, Size = 8000000 options, NumDevsUsed = 1, Workgroup = 128
+
+Reading back GPU results...
+Checking the results...
+...running CPU calculations.
+
+Comparing the results...
+L1 norm: 1.771699E-07
+Max absolute error: 1.192093E-05
+
+Shutting down...
+...releasing GPU memory.
+...releasing CPU memory.
+Shutdown done.
+
+[BlackScholes] - Test Summary
+
+NOTE: The CUDA Samples are not meant for performance measurements. Results may vary when GPU Boost is enabled.
+
+Test passed

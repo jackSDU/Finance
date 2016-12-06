@@ -1,3 +1,26 @@
+##                       _oo0oo_
+##                      o8888888o
+##                      88" . "88
+##                      (| -_- |)
+##                      0\  =  /0
+##                    ___/`---'\___
+##                  .' \\|     |// '.
+##                 / \\|||  :  |||// \
+##                / _||||| -:- |||||- \
+##               |   | \\\  -  /// |   |
+##               | \_|  ''\---/''  |_/ |
+##               \  .-\__  '-'  ___/-. /
+##             ___'. .'  /--.--\  `. .'___
+##          ."" '<  `.___\_<|>_/___.' >' "".
+##         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+##         \  \ `_.   \_ __\ /__ _/   .-` /  /
+##     =====`-.____`.___ \_____/___.-`___.-'=====
+##                       `=---='
+##
+##
+##     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##
+##               佛祖保佑         永无BUG
 import os
 from math import ceil
 
@@ -151,6 +174,7 @@ def finished(req,id,ok):
         return HttpResponseNotFound()
     if job.status != 2 and job.status != 3 and job.status != 4:
         return HttpResponseBadRequest()
+    #打开输出和错误文件，写入输出和错误
     f=open(os.path.join(RESULT_DIR,'out_'+str(id)),mode='w')
     f.write(req.POST.get('out',''))
     f.close()
@@ -164,7 +188,7 @@ def finished(req,id,ok):
     except:
         pass
     job.status=(0 if ok else -2)
-    job.end_time=timezone.now()
+    job.end_time=timezone.now()#作业结束时间
     job.save()
     client.count-=1
     client.start()

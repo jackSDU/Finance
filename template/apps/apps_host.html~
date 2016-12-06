@@ -17,13 +17,11 @@
         dict[id] = html;
         var name = $("#"+id+" td:nth-child(2)")[0].innerText;
         var ip = $("#"+id+" td:nth-child(3)")[0].innerText;
-        var username = $("#"+id+" td:nth-child(4)")[0].innerText;
-        var password="password"
+        var port = $("#"+id+" td:nth-child(4)")[0].innerText;
         $("#"+id).replaceWith("<tr id ="+id+"><td>"+id+"<input name='hostid"+id+"'type='hidden'value='"+id+"'></td>"
                         +"<td ><input name='name"+id+"'id='name"+id+"' value="+name+" type='text' class='form-control' required maxlength='30'></td>"
                         +"<td><input name='ip"+id+"'id='ip"+id+"' value="+ip+" type='text' class='form-control' required maxlength='50'></td>"
-                        +"<td><input name='username"+id+"'id='port"+id+"' value="+username+" type='text' class='form-control' maxlength='50'></td>"
-                        +"<td><input name='password"+id+"'id='password"+id+"' value="+password+" type='password' class='form-control' maxlength='50'></td>"
+                        +"<td><input name='port"+id+"'id='port"+id+"' value="+port+" type='text' class='form-control' maxlength='10'></td>"
                         +"<td align='center'><button type='button' class='btn btn-danger' onclick='recover("+id+",dict["+id+"])'>放弃</button>"
                         +"</tr>");
     }
@@ -39,10 +37,10 @@
             <table class="table table-hover">
                 <tr>
                     <td width="1" nowrap>ID</td>
-                    <td width="25%">主机名称</td>
-                    <td width='25%'>ip地址</td>
-                    <td width="20%">用户名</td>
-                    <td width="14%"></td>
+                    <td width="37%">主机名称</td>
+                    <td width='31%'>ip地址</td>
+                    <td width="5%">用户名</td>
+                    <td width="5%">密码</td>
                     <td width="15%" align="center" nowrap>操作</td>
                 </tr>
                 {% for i in item %}
@@ -51,7 +49,7 @@
                         <td>{{ i.name }}</td>
                         <td>{{ i.ip }}</td>
                         <td>{{ i.username }}</td>
-                        <td></td>
+                        <td>{{ i.password }}</td>
                         <td  align="center">
                             <button type="button" class="btn btn-info" onclick="modify({{ i.id }})">修改</button>
                             <a href="/apps/host/delete/{{ i.id }}" id="delete{{ i.id }}" type="button" class="btn btn-danger" onclick="return confirm('确定要删除{{ i.id }}号主机么？')">删除</a>

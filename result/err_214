@@ -1,0 +1,2 @@
+/bin/ping -c www.baidu.com
+ping: bad number of packets to transmit.

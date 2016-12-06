@@ -194,15 +194,18 @@ def host(req):
                     return ren2res("apps/apps_host.html", req, page)
                 name = req.POST['name'+host_id].strip()
                 ip = req.POST['ip'+host_id].strip()
-                port = req.POST['port'+host_id].strip()
-                port = port if port != "" else SERVANT_PORT
-                error = host_check(name, ip, port)
+                username = req.POST['username'+host_id].strip()
+                passwd = req.POST['password'+host_id].strip()
+                #port = port if port != "" else SERVANT_PORT
+                error = host_check(name,ip,username,passwd)
                 if error:
                     page.update(err=error)
                     return ren2res("apps/apps_host.html", req, page)
                 item.name = name
                 item.ip = ip
-                item.port = port
+                item.username=username
+                if passwd !="password":
+                    item.password=passwd
                 submit.append(item)
         for x in submit:
             x.save()
@@ -217,13 +220,14 @@ def host_add(req):
     elif req.method == 'POST':
         name = req.POST['host_name']
         ip = req.POST['host_ip']
-        port = req.POST['host_port']
-        port = port if port != "" else SERVANT_PORT
+        username = req.POST['host_username']
+        password = req.POST['host_password']
+        #port = port if port != "" else SERVANT_PORT
         # check ip and port, return error info if there is
-        error = host_check(name, ip, port)
+        error = host_check(name, ip, username,password)
         if error:
             return ren2res("apps/apps_host_add.html", req, {'err':error})
-        Host(name=name, ip=ip, port=port).save()
+        Host(name=name, ip=ip, username=username,password=password).save()
         return ren2res("apps/apps_host_add.html", req, {'info':'主机添加成功'})
 @login_required
 def host_delete(req, n):
@@ -241,7 +245,7 @@ def host_delete(req, n):
 # check ip and port
 # ip check support ipv4 and ipv6
 # port less than 65536(TCP/UDP)
-def host_check(name, ip, port):
+def host_check(name, ip, username, password):
     err = ""
     if name == "":
         err = "主机名称不能为空"
@@ -255,7 +259,10 @@ def host_check(name, ip, port):
         except ipaddress.AddressValueError:
             err = '无效的IP地址'
             return err
-    if int(port) not in range(0, 65535):
-        err = '无效的端口号'
+    if username=="":
+        err = '用户名不能为空'
+        return err
+    if password=="":
+        err='密码不能为空'
         return err
     return err

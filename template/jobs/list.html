@@ -17,6 +17,7 @@
   <tr>
     <th>提交时间</th>
     <th>应用名称</th>
+    <th>主机</th>
     <th>作业状态</th>
     <th>详情</th>
     <th>停止任务</th>
@@ -25,6 +26,7 @@
   <tr>
     <td>{{ job.add_time }}</td>
     <td>{{ job.app.name }}</td>
+    <td>{{ job.app.host }}</td>
     {% if job.status == -2 %}
     <td>错误</td>
     {% elif job.status == -1 %}

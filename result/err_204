@@ -1,0 +1,2 @@
+/bin/ping -c 3 www.baidu.com 
+ping: unknown host www.baidu.com

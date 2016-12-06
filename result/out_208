@@ -1,0 +1,4 @@
+/home/peng/montecarlo_mic 
+calculate 1000 times
+option price with CPU:     5.0677
+CPU time:      1.360 sec
