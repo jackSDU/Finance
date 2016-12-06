@@ -5,7 +5,7 @@ from django.utils import timezone
 from Main.models import Job
 import requests
 import pexpect
-import pxssh
+from pexpect import pxssh
 from multiprocessing import Process,Pipe
 CLIENT_HOST="127.0.0.1"#作业结果返回本机IP
 CLIENT_PORT=80#Apache监视端口
